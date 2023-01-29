@@ -114,9 +114,7 @@ const AddEvent = ({route, navigation}) => {
       )}
       </View>
       <Button onPress={() => add()}
-          color="#f00"
-          border="2"
-          title="Add"
+          title="Create event"
       />
     </SafeAreaView>
   );

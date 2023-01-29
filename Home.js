@@ -103,12 +103,16 @@ const Home = ({route, navigation}) => {
 
     return (
       <SafeAreaView style={styles.container}>
-      <View>
+      <View style={styles.container}>
+      <Text style={styles.headingEvent}>
+        Events that made by you
+      </Text>
       <FlatList
         data={data}
         renderItem={({item}) => <Text onPress={() => {setModalData(item); setModalVisible(true)}} style={styles.event}>{item.event_name}</Text>}      
       />
       <Button onPress={() => logout()}
+          color="#f00"
           title="Logout"
       />
       <Button onPress={() => navigation.navigate("AddEvent", {
@@ -161,6 +165,7 @@ const Home = ({route, navigation}) => {
               title="Update"
             />
             <Button onPress={() => deleteEvent()}
+              color="#f00"
               title="Delete"
             />
             <Button onPress={() => setModalVisible(false)}
@@ -180,6 +185,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  headingEvent: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    top: 20,
   },
 
   event: {
