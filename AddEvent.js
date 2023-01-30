@@ -17,6 +17,7 @@ const AddEvent = ({route, navigation}) => {
     const [message, setMessage] = useState(''); 
 
     const add = async () => {
+      if(name.trim().length != 0 && type.trim().length != 0 && status.trim().length != 0 && location.trim().length != 0 && street.trim().length != 0) {
        await fetch('http://192.168.0.17/EventRain/api/events/create.php', {
         method: 'POST',
         headers: {
@@ -50,6 +51,10 @@ const AddEvent = ({route, navigation}) => {
         })
         .catch(err => console.log(err))
       }
+      else {
+        setMessage('Please fill all fields correctly!')
+      }
+    }
 
       const onChangeStart = (event, selectedDate) => {
         const currentDate = selectedDate;
@@ -69,7 +74,7 @@ const AddEvent = ({route, navigation}) => {
       <Text style={styles.headingEvent}>
         Create your own event
       </Text>
-      <Text>{message}</Text>
+      <Text style={styles.errorEmptyField}>{message}</Text>
       <TextInput
         style={styles.input}
         placeholder="Event name"
@@ -134,6 +139,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     top: -30,
+  },
+  errorEmptyField: {
+    fontSize: 15,
+    top: -20,
+    left: 10,
+    color: '#f00',
   },
   input: {
     height: 40,

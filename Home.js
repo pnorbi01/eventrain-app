@@ -118,7 +118,7 @@ const Home = ({route, navigation}) => {
       <Button onPress={() => navigation.navigate("AddEvent", {
                         token: token
                     })}
-          title="Add event"
+          title="Create event"
       />
       <Text>{message}</Text>
       <Modal
