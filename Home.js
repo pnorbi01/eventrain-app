@@ -105,7 +105,7 @@ const Home = ({route, navigation}) => {
       <SafeAreaView style={styles.container}>
       <View style={styles.container}>
       <Text style={styles.headingEvent}>
-        Events that made by you
+        Events made by you
       </Text>
       <FlatList
         data={data}

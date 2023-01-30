@@ -55,6 +55,9 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <Text>
+        Login with an exisiting account!
+      </Text>
       {loading ? (
         <ActivityIndicator
           visible={loading}
@@ -84,6 +87,9 @@ const Login = ({navigation}) => {
           <Text>{token}</Text>
         </>
       )}
+      <Text style={styles.footerText}>
+        EventRain
+      </Text>
     </View>
   );
 };
@@ -101,6 +107,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  footerText: {
+    bottom: -200,
   },
   spinnerTextStyle: {
     color: '#FFF',

@@ -66,6 +66,9 @@ const AddEvent = ({route, navigation}) => {
     return (
       <SafeAreaView style={styles.container}>
       <View>
+      <Text style={styles.headingEvent}>
+        Create your own event
+      </Text>
       <Text>{message}</Text>
       <TextInput
         style={styles.input}
@@ -126,6 +129,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headingEvent: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    top: -30,
   },
   input: {
     height: 40,
