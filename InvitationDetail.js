@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const InvitationDetail = ({route, navigation}) => {
     
-    const { token } = route.params;
-    const { name } = route.params;
-    const { type } = route.params;
-    const { status } = route.params;
-    const { location } = route.params;
-    const { street } = route.params;
-    const { start } = route.params;
-    const { close } = route.params;
-    const { id } = route.params;
+    const { token, name, type, status, location, street, start, close, id } = route.params;
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
     const [isButtonVisible, setIsButtonVisible] = useState(false); 
 
-    useEffect(() => {
-        invitationDetail();
-        setNotificationToRead();
-    });
+    useFocusEffect(
+        React.useCallback(() => {
+          invitationDetail();
+          setNotificationToRead();
+          console.log("InvDetail");
+        }, [])
+    );
 
     const handlePress = (value) => {
         const updateStatus = async () => {

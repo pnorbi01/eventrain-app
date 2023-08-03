@@ -1,13 +1,12 @@
 import React,  { useState, } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { StyleSheet, View, Text, Button, SafeAreaView, TextInput, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
 const AddEvent = ({route, navigation}) => {
 
-    const { token } = route.params;
-    const { image } = route.params;
+    const { token, image, username } = route.params;
     const [name, setName] = useState("");
     const [type, setType] = useState("");
     const [status, setStatus] = useState("");
@@ -44,7 +43,8 @@ const AddEvent = ({route, navigation}) => {
               setMessage(data.message)
               navigation.navigate("Home", {
                 token: token,
-                image: image
+                image: image,
+                username: username
             })
             })
             .catch(err => console.log(err))

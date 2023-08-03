@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
 import { formatDistanceToNow } from 'date-fns';
 import { enGB } from 'date-fns/locale';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const seperator = () => {
@@ -16,9 +17,12 @@ const Notifications = ({route, navigation}) => {
     const [data, setData] = useState([]);
     const [isCircleVisible, setIsCircleVisible] = useState({});
 
-    useEffect(() => {
-        listNotifications();
-    }, [isCircleVisible]);
+    useFocusEffect(
+        React.useCallback(() => {
+          listNotifications();
+          console.log("Notifik");
+        }, [])
+    );
 
     const listNotifications = async () => {
         const response = await fetch('http://192.168.0.17/EventRain/api/events/read-notifications.php', {
@@ -71,7 +75,7 @@ const Notifications = ({route, navigation}) => {
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                         {isCircleVisible[item.event_id] && (
                             <View stlye={styles.circle}>
-                                <Image source={require('./assets/circle.png')} style={{width: 8, height: 8, marginRight: 5}}/>
+                                <Image source={require('./assets/circle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
                             </View>
                         )}
                             <TouchableOpacity activeOpacity={ 1 } onPress={() => {navigation.navigate("Invitation Detail", { token: token, id: item.event_id, name: item.event_name, type: item.event_type, status: item.event_status, location: item.event_location, street: item.event_street, start: item.event_start, close: item.event_close })}} style={{width: '100%'}}>

@@ -1,6 +1,6 @@
-import { width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
-import React,  { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, SafeAreaView, FlatList, Modal, TextInput, Image, Dimensions, TouchableOpacity, ScrollView} from 'react-native';
+import React,  { useState } from 'react';
+import { StyleSheet, View, Text, Button, SafeAreaView, FlatList, Modal, TextInput, Image, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const seperator = () => {
   return (
@@ -10,20 +10,20 @@ const seperator = () => {
 
 const Home = ({route, navigation}) => {
 
-    const { token } = route.params;
-    const { username } = route.params;
-    const { email } = route.params;
-    const { image } = route.params;
+    const { token, username, email, image } = route.params;
     const [data, setData] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
     const [message, setMessage] = useState(''); 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({});
 
-    useEffect(() => {
-      list();
-      listUnreadNotifications();
-    }, [unreadNotifications, data]);
+    useFocusEffect(
+      React.useCallback(() => {
+        list();
+        listUnreadNotifications();
+        console.log("Home");
+      }, [])
+    );
 
     const list = async () => {
        await fetch('http://192.168.0.17/EventRain/api/events/read.php', {
@@ -129,7 +129,7 @@ const Home = ({route, navigation}) => {
               </View>
           </TouchableOpacity>
           <Image source={require('./assets/logo.png')} style={{width: 40, height: 40}}/>
-          <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Create Event", { token: token, image: image })}>
+          <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Create Event", { token: token, image: image, username: username })}>
             <Image source={require('./assets/navCreate.png')} style={{width: 30, height: 30}}/>
           </TouchableOpacity>
         </View>
@@ -156,8 +156,8 @@ const Home = ({route, navigation}) => {
                     <Text style={{color: '#A9A9A9'}}>{item.event_location}, {item.event_street}</Text>
                   </View>
                 </View>
-                <View>
-                  <Text style={{color: '#a9a9a9'}}>{item.event_status}</Text>
+                <View style={styles.eventStatus}>
+                  <Text style={{color: '#FFF'}}>{item.event_status}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -368,13 +368,22 @@ const styles = StyleSheet.create({
   unreadNotifications: {
     position: 'absolute',
     right: -10,
-    backgroundColor: '#D77165',
+    backgroundColor:  'rgba( 199, 38, 38, 0.7 )',
     paddingRight: 5,
     paddingLeft: 5,
     paddingTop: 1,
     paddingBottom: 1,
     borderRadius: 50
   },
+
+  eventStatus: {
+    backgroundColor: 'rgba( 2, 37, 74, 0.55 )',
+    borderRadius: '20',
+    paddingRight: 5,
+    paddingLeft: 5,
+    paddingTop: 3,
+    paddingBottom: 3
+  }
 
 });
 

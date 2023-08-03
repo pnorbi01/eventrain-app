@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Profile = ({route, navigation}) => {
 
-    const { token } = route.params;
-    const { username } = route.params;
-    const { email } = route.params;
-    const { image } = route.params;
+    const { token, username, email, image } = route.params;
     const [unreadNotifications, setUnreadNotifications] = useState([]);
 
-    useEffect(() => {
-        listUnreadNotifications();
-    }, [unreadNotifications]);
+    useFocusEffect(
+        React.useCallback(() => {
+          listUnreadNotifications();
+          console.log("Profil");
+        }, [])
+    );
 
     const logout = async () => {
         await fetch('http://192.168.0.17/EventRain/api/logout.php', {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     },
 
     badge: {
-        backgroundColor: '#D77165',
+        backgroundColor: 'rgba( 199, 38, 38, 0.7 )',
         paddingRight: 10,
         paddingLeft: 10,
         paddingTop: 5,

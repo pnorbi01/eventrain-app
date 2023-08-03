@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const AccountDetails = ({route, navigation}) => {
 
     const { token } = route.params;
     const [data, setData] = useState([]);
 
-    useEffect(() => {
-        readAccountInformation();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+          readAccountInformation();
+          console.log("Account");
+        }, [])
+    );
 
     const readAccountInformation = async () => {
         await fetch('http://192.168.0.17/EventRain/api/events/read-account-information.php', {
