@@ -1,11 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, Alert } from 'react-native';
 
 const AccountDetails = ({route, navigation}) => {
 
     const { token } = route.params;
-    const { username } = route.params;
-    const { email } = route.params;
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        readAccountInformation();
+    }, []);
+
+    const readAccountInformation = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/read-account-information.php', {
+         method: 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
+         }
+         }).then(response => {
+           if(response.ok) {
+             response.json()
+             .then(data => {
+               setData(data)
+             })
+             .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong retrieving the events')
+           }
+         })
+         .catch(err => console.log(err))
+    }
+
+    const formattedDate = data.length > 0 ? new Date(data[0].date_time).toLocaleDateString("en-GB") : "";
 
     return (
         <SafeAreaView style={styles.container}>
@@ -14,15 +42,31 @@ const AccountDetails = ({route, navigation}) => {
                 <Text style={{width: '100%', fontWeight: '200', marginBottom: 15}}>ACCOUNT INFORMATION</Text>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Username</Text>
-                    <Text style={styles.value}>{username}</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].username}</Text>}
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Email</Text>
-                    <Text style={styles.value}>{email}</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].email}</Text>}
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Firstname</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].firstname}</Text>}
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Lastname</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].lastname}</Text>}
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Level</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].level}</Text>}
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Registration Date</Text>
+                    {data.length > 0 && <Text style={styles.value}>{formattedDate}</Text>}
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Password</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Password", { token: token })}>
+                    <TouchableOpacity onPress={() => navigation.navigate("Identification", { token: token })}>
                         <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
                     </TouchableOpacity>
                 </View>

@@ -1,5 +1,6 @@
+import { width } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 import React,  { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, SafeAreaView, FlatList, Modal, TextInput, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Button, SafeAreaView, FlatList, Modal, TextInput, Image, Dimensions, TouchableOpacity, ScrollView} from 'react-native';
 
 const seperator = () => {
   return (
@@ -12,14 +13,17 @@ const Home = ({route, navigation}) => {
     const { token } = route.params;
     const { username } = route.params;
     const { email } = route.params;
+    const { image } = route.params;
     const [data, setData] = useState([]);
+    const [unreadNotifications, setUnreadNotifications] = useState([]);
     const [message, setMessage] = useState(''); 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({});
 
     useEffect(() => {
       list();
-  });
+      listUnreadNotifications();
+    }, [unreadNotifications, data]);
 
     const list = async () => {
        await fetch('http://192.168.0.17/EventRain/api/events/read.php', {
@@ -43,6 +47,29 @@ const Home = ({route, navigation}) => {
           }
         })
         .catch(err => console.log(err))
+      }
+
+      const listUnreadNotifications = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/unread-notifications.php', {
+         method: 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
+         }
+         }).then(response => {
+           if(response.ok) {
+             response.json()
+             .then(data => {
+              setUnreadNotifications(data.unreadNotifications)
+             })
+             .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong retrieving notifications')
+           }
+         })
+         .catch(err => console.log(err))
       }
 
       const update = async () => {
@@ -71,24 +98,6 @@ const Home = ({route, navigation}) => {
          .catch(err => console.log(err))
        }
 
-    const logout = async () => {
-      await fetch('http://192.168.0.17/EventRain/api/logout.php', {
-        method: 'POST',
-        headers: {
-          'Token': token
-        }
-      })
-      .then((response) => {
-        if(response.ok) {
-          navigation.navigate('Login')
-        }
-        else {
-          setMessage('Something went wrong')
-        }
-      })
-      .catch(err => console.log(err))
-    }
-
     const deleteEvent = async () => {
       await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + modalData.event_id, {
         method: 'DELETE',
@@ -113,17 +122,26 @@ const Home = ({route, navigation}) => {
       <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <View style={styles.profile}>
-          <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Profile", { token: token, username: username, email: email })}>
-            <Image 
-                source={require('./assets/profilePic.png')}
-                style={{width: 40, height: 40}}
-            />
+          <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Profile", { token: token, username: username, email: email, image: image })}>
+            <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+image }} style={{ width: 40, height: 40, borderRadius: 50 }} />
+              <View style={styles.unreadNotifications}>
+                  <Text style={{fontWeight: 'bold', fontSize: 12, color: '#FFF'}}>{unreadNotifications}</Text>
+              </View>
           </TouchableOpacity>
-          <Text style={{fontWeight: '200', fontSize: 20, marginLeft: 5}}>Hello, <Text style={{fontWeight: 'bold', color: '#274C77'}}>{username}</Text></Text>
+          <Image source={require('./assets/logo.png')} style={{width: 40, height: 40}}/>
+          <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Create Event", { token: token, image: image })}>
+            <Image source={require('./assets/navCreate.png')} style={{width: 30, height: 30}}/>
+          </TouchableOpacity>
         </View>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', width: '100%', left: 20}}>
           <Text style={styles.titleFlat}>MY EVENTS</Text>
         </View>
+        {data.length === 0 ? (
+              <View style={styles.noDataContainer}>
+                  <Image source={require('./assets/noEvents.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
+                  <Text style={styles.noDataText}>You have no events yet!</Text>
+              </View>
+        ) : (
         <FlatList
           style={styles.eventFlatList}
           data={data}
@@ -147,12 +165,7 @@ const Home = ({route, navigation}) => {
           )}
           ItemSeparatorComponent={seperator}
         />
-      <Button onPress={() => navigation.navigate("AddEvent", {
-                        token: token
-                    })}
-          title="Create event"
-      />
-      <Text>{message}</Text>
+        )}
       <Modal
         animationType="slide"
         transparent={true}
@@ -296,7 +309,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     padding: 10,
     borderBottomWidth: 0.5,
     borderColor: '#ddd'
@@ -336,8 +349,37 @@ const styles = StyleSheet.create({
     marginTop: 40,
     fontWeight: '200',
     fontSize: 23
-  }
+  },
+
+  noDataContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+
+  noDataText: {
+    fontWeight: '200',
+    fontSize: 15
+  },
+
+  unreadNotifications: {
+    position: 'absolute',
+    right: -10,
+    backgroundColor: '#D77165',
+    paddingRight: 5,
+    paddingLeft: 5,
+    paddingTop: 1,
+    paddingBottom: 1,
+    borderRadius: 50
+  },
 
 });
 
 export default Home;
+/*
+
+         <Button onPress={() => navigation.navigate("AddEvent", { token: token })} title="Create event"/>
+          <Text>{message}</Text>*/

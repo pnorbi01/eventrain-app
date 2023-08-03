@@ -35,7 +35,8 @@ const Login = ({navigation}) => {
                     navigation.navigate('Home', {
                         token: data.token,
                         username: data.username,
-                        email: data.email
+                        email: data.email,
+                        image: data.image
                     })
                 })
                 .catch(err => console.log(err));

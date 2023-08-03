@@ -10,6 +10,8 @@ import AccountDetails from './AccountDetails';
 import InvitationDetail from './InvitationDetail';
 import Token from './Token';
 import Password from './Password';
+import Identification from './Identification';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -20,13 +22,14 @@ const App = () => {
       <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false, headerShown: true, headerLeft: () => <></>}}/>
-        <Stack.Screen name="AddEvent" component={AddEvent} />
+        <Stack.Screen name="Create Event" component={AddEvent} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="Account Details" component={AccountDetails} />
         <Stack.Screen name="Invitation Detail" component={InvitationDetail} />
         <Stack.Screen name="Token" component={Token} />
         <Stack.Screen name="Password" component={Password} />
+        <Stack.Screen name="Identification" component={Identification} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,45 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
+import { formatDistanceToNow } from 'date-fns';
+import { enGB } from 'date-fns/locale';
 
-var width = Dimensions.get('window').width;
 
 const seperator = () => {
     return (
         <View style={styles.seperator} />
     )
-  }
+}
 
 const Notifications = ({route, navigation}) => {
     
     const { token } = route.params;
     const [data, setData] = useState([]);
+    const [isCircleVisible, setIsCircleVisible] = useState({});
 
     useEffect(() => {
         listNotifications();
-    });
+    }, [isCircleVisible]);
 
     const listNotifications = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-notifications.php', {
-         method: 'POST',
-         headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json',
-           'Token': token
-         }
-         }).then(response => {
-           if(response.ok) {
-             response.json()
-             .then(data => {
-               setData(data)
-             })
-             .catch(err => console.log(err))
-           }
-           else {
-             setMessage('Something went wrong retrieving the events')
-           }
-         })
-         .catch(err => console.log(err))
-       }
+        const response = await fetch('http://192.168.0.17/EventRain/api/events/read-notifications.php', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+
+            const circleVisibility = {};
+            data.forEach(item => {
+                circleVisibility[item.event_id] = item.state === 'unread';
+            });
+
+            setData(data);
+            setIsCircleVisible(circleVisibility);
+        } else {
+            setMessage('Something went wrong retrieving the events');
+        }
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return formatDistanceToNow(date, { addSuffix: true, locale: enGB });
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -47,15 +55,25 @@ const Notifications = ({route, navigation}) => {
             <View style={styles.notifyTitle}>
                 <Text style={{fontWeight: '200'}}>NOTIFICATIONS</Text>
             </View>
+            {data.length === 0 ? (
+                <View style={styles.noDataContainer}>
+                    <Image source={require('./assets/noNotifications.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
+                    <Text style={styles.noDataText}>You have no notifications!</Text>
+                </View>
+            ) : (
             <FlatList
                 style={styles.flat}
                 data={data}
-                renderItem={({item}) => (
+                renderItem={({item}) => {
+                    const formattedDate = formatDate(item.date_time);
+                    return (
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        {isCircleVisible[item.event_id] && (
                             <View stlye={styles.circle}>
                                 <Image source={require('./assets/circle.png')} style={{width: 8, height: 8, marginRight: 5}}/>
                             </View>
+                        )}
                             <TouchableOpacity activeOpacity={ 1 } onPress={() => {navigation.navigate("Invitation Detail", { token: token, id: item.event_id, name: item.event_name, type: item.event_type, status: item.event_status, location: item.event_location, street: item.event_street, start: item.event_start, close: item.event_close })}} style={{width: '100%'}}>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
                                     <View>
@@ -66,14 +84,17 @@ const Notifications = ({route, navigation}) => {
                                             <Text style={{color: '#A9A9A9'}}>From: {item.username}</Text>
                                         </View>
                                     </View>
-                                    <Text style={{color: '#a9a9a9'}}>{item.date_time}</Text>
+                                    {data.length > 0 && <Text style={{color: '#a9a9a9'}}>{formattedDate}</Text>}
                                 </View>
+                                
                             </TouchableOpacity>
                         </View>
                     </View>
-                )}
+                    );
+                }}
                 ItemSeparatorComponent={seperator}
             />
+            )}
         </SafeAreaView>
   );
 };
@@ -129,6 +150,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         padding: 23
+    },
+
+    noDataContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '50%'
+    },
+
+    noDataText: {
+        fontWeight: '200',
+        fontSize: 15
     }
   
 });

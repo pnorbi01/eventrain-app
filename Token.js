@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import Toast from 'react-native-root-toast';
+import * as Clipboard from 'expo-clipboard';
+import CustomToast from './CustomToast';
 
 const Token = ({ route, navigation }) => {
     const { token } = route.params;
@@ -11,6 +14,28 @@ const Token = ({ route, navigation }) => {
     const startLoading = () => {
         setLoading(true);
     };
+
+    
+
+    const copyToClipboard = async () => {
+        await Clipboard.setStringAsync(displayedToken);
+        showToast();
+    };
+
+
+    const showToast = () => {
+        Toast.show(<CustomToast text="Copied to clipboard!" />, {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM,
+            shadow: false,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+            backgroundColor: '#FFF',
+            opacity: 0.9,
+          });
+    };
+
 
     const checkToken = async () => {
         if (password.trim().length !== 0) {
@@ -119,7 +144,10 @@ const Token = ({ route, navigation }) => {
                 <Button onPress={() => checkToken()} title="Show my token" />
                 )}
                 {displayedToken ? (
-                    <Text style={styles.tokenText}>Your token: {displayedToken}</Text>
+                    <TouchableOpacity style={styles.tokenView} onPress={copyToClipboard}>
+                        <Text style={styles.tokenText}>{displayedToken}</Text>
+                        <Text style={styles.tokenInfo}>Copy your token by tapping on it.</Text>
+                    </TouchableOpacity>
                 ) : null}
             </View>
             <Text style={{ color: '#D77165' }}>{message}</Text>
@@ -171,7 +199,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         padding: 20,
-        backgroundColor: '#A7A7A7',
+        backgroundColor: '#AAB8C2',
         borderRadius: 10,
         marginBottom: 10
     },
@@ -184,9 +212,23 @@ const styles = StyleSheet.create({
     },
 
     tokenText: {
-        fontWeight: '200',
+        fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 15
+        fontSize: 14
+    },
+
+    tokenInfo: {
+        textAlign: 'center',
+        fontSize: 11,
+        marginTop: 10
+    },
+
+    tokenView: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 15
     }
   
 });

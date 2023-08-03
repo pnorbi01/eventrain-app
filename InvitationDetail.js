@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 
 const InvitationDetail = ({route, navigation}) => {
-
     
     const { token } = route.params;
     const { name } = route.params;
@@ -13,8 +12,14 @@ const InvitationDetail = ({route, navigation}) => {
     const { start } = route.params;
     const { close } = route.params;
     const { id } = route.params;
+    const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
-    const [isButtonVisible, setIsButtonVisible] = useState(true); 
+    const [isButtonVisible, setIsButtonVisible] = useState(false); 
+
+    useEffect(() => {
+        invitationDetail();
+        setNotificationToRead();
+    });
 
     const handlePress = (value) => {
         const updateStatus = async () => {
@@ -35,17 +40,17 @@ const InvitationDetail = ({route, navigation}) => {
                 .catch(err => console.log(err))
             }
             else {
-                setMessage('Something went wrong while updating the event')
+                setMessage('Something went wrong while updating your status')
             }
             })
             .catch(err => console.log(err))
         }
         updateStatus();
         setIsButtonVisible(false);
-        showLogoutAlert();
+        showUpdatedStatusAlert();
     };
 
-    const showLogoutAlert = () => {
+    const showUpdatedStatusAlert = () => {
         Alert.alert('Event Status', 'Your status has been changed, thank you!',
             [
                 {
@@ -54,6 +59,55 @@ const InvitationDetail = ({route, navigation}) => {
             ]
         )
     }
+
+    const invitationDetail = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/invitation-detail.php?eventId=' + id, {
+         method: 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
+         }
+         }).then(response => {
+           if(response.ok) {
+             response.json()
+             .then(data => {
+               setData(data)
+               setIsButtonVisible(data[0].status === 'tentative')
+             })
+             .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong while listing the details of the event')
+           }
+         })
+         .catch(err => console.log(err))
+    }
+
+    const setNotificationToRead = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/set-notification-to-read.php?eventId=' + id, {
+        method: 'PUT',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Token': token
+        },
+        body: JSON.stringify()
+        }).then(response => {
+        if(response.ok) {
+            response.json().then((data)=>
+            {
+                setMessage(data.message)
+            })
+            .catch(err => console.log(err))
+        }
+        else {
+            setMessage('Something went wrong while updating the state at the event')
+        }
+        })
+        .catch(err => console.log(err))
+    }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -81,6 +135,10 @@ const InvitationDetail = ({route, navigation}) => {
                 <View style={styles.datas}>
                     <Text style={styles.data}>Street</Text>
                     <Text style={styles.value}>{street}</Text>
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>My Station</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].status}</Text>}
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Starts At</Text>
@@ -192,7 +250,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: 15,
       marginTop: 10
-    }
+    },
+
+    map: {
+        flex: 1,
+      },
   
 });
 
