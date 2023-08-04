@@ -74,15 +74,17 @@ const Profile = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.profileContainer}>
             <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-                <Text style={{fontWeight: 'bold', fontSize: 15, paddingTop: 10}}>{username}</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 17, paddingTop: 10}}>{username}</Text>
             </View>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Notifications", { token: token, email: email })}>
                 <View style={styles.profileBtnView}>
                     <Image source={require('./assets/navNotifications.png')} style={{width: 20, height: 20}}/>
                     <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500', paddingRight: 5}}>Notifications</Text>
+                    {unreadNotifications > 0 &&
                     <View style={styles.badge}>
                         <Text style={{fontWeight: 'bold', color: '#FFF'}}>{unreadNotifications}</Text>
                     </View>
+                    }
                 </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Account Details", { token: token })}>
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
     },
 
     badge: {
-        backgroundColor: 'rgba( 199, 38, 38, 0.7 )',
+        backgroundColor: '#D77165',
         paddingRight: 10,
         paddingLeft: 10,
         paddingTop: 5,

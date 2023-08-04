@@ -145,23 +145,25 @@ const InvitationDetail = ({route, navigation}) => {
                     <Text style={styles.value}>{close}</Text>
                 </View>
             </View>
-            <View style={styles.text}>
-                <Text style={{textAlign: 'center', fontWeight: '300'}}>Please, let your friend know your choice as soon as possible!</Text>
-            </View>
             {isButtonVisible && (
             <View style={styles.choiceView}>
-                <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('accepted')}>
-                    <View style={styles.choiceBtn}>
-                        <Image source={require('./assets/accept.png')} style={{width: 18, height: 18}}/>
-                        <Text style={{color: '#699F4C', fontSize: 18, paddingLeft: 5}}>Accept</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('declined')}>
-                    <View style={styles.choiceBtn}>
-                        <Image source={require('./assets/decline.png')} style={{width: 20, height: 20}}/>
-                        <Text style={{color: '#D77165', fontSize: 18, paddingLeft: 5}}>Decline</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={styles.text}>
+                    <Text style={{textAlign: 'center', fontWeight: '300'}}>Please, let your friend know your choice as soon as possible!</Text>
+                </View>
+                <View style={styles.buttonsView}>
+                    <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('accepted')}>
+                        <View style={styles.choiceBtn}>
+                            <Image source={require('./assets/accept.png')} style={{width: 18, height: 18}}/>
+                            <Text style={{color: '#699F4C', fontSize: 18, paddingLeft: 5}}>Accept</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('declined')}>
+                        <View style={styles.choiceBtn}>
+                            <Image source={require('./assets/decline.png')} style={{width: 20, height: 20}}/>
+                            <Text style={{color: '#D77165', fontSize: 18, paddingLeft: 5}}>Decline</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
             )}
         </SafeAreaView>
@@ -217,7 +219,7 @@ const styles = StyleSheet.create({
 
     choiceView: {
         display: 'flex', 
-        flexDirection: 'row', 
+        flexDirection: 'column', 
         justifyContent: 'center', 
         alignItems: 'center', 
         width: '100%',
@@ -239,18 +241,21 @@ const styles = StyleSheet.create({
     },
 
     text: {
-      width: "90%",
-      display: 'flex', 
-      flexDirection: 'row', 
-      justifyContent: 'center', 
-      alignItems: 'center',
-      padding: 15,
-      marginTop: 10
+        width: "90%",
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        padding: 15,
+        marginTop: 10
     },
 
-    map: {
-        flex: 1,
-      },
+    buttonsView: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+    }
   
 });
 

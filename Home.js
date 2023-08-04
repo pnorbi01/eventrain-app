@@ -124,9 +124,11 @@ const Home = ({route, navigation}) => {
         <View style={styles.profile}>
           <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Profile", { token: token, username: username, email: email, image: image })}>
             <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+image }} style={{ width: 40, height: 40, borderRadius: 50 }} />
+            {unreadNotifications > 0 &&
               <View style={styles.unreadNotifications}>
-                  <Text style={{fontWeight: 'bold', fontSize: 12, color: '#FFF'}}>{unreadNotifications}</Text>
+                  <Text style={{fontSize: 11, color: '#FFF'}}>{unreadNotifications}</Text>
               </View>
+            }
           </TouchableOpacity>
           <Image source={require('./assets/logo.png')} style={{width: 40, height: 40}}/>
           <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Create Event", { token: token, image: image, username: username })}>
@@ -367,8 +369,9 @@ const styles = StyleSheet.create({
 
   unreadNotifications: {
     position: 'absolute',
-    right: -10,
-    backgroundColor:  'rgba( 199, 38, 38, 0.7 )',
+    right: -5,
+    top: -5,
+    backgroundColor:  '#D77165',
     paddingRight: 5,
     paddingLeft: 5,
     paddingTop: 1,

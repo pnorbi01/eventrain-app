@@ -1,6 +1,7 @@
 import React,  { useState, } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions } from 'react-native';
+import { RadioButton } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
 
@@ -9,7 +10,6 @@ const AddEvent = ({route, navigation}) => {
     const { token, image, username } = route.params;
     const [name, setName] = useState("");
     const [type, setType] = useState("");
-    const [status, setStatus] = useState("");
     const [location, setLocation] = useState("");
     const [street, setStreet] = useState("");
     const [openStart, setOpenStart] = useState(false);
@@ -17,6 +17,7 @@ const AddEvent = ({route, navigation}) => {
     const [openDeadline, setOpenDeadline] = useState(false);
     const [deadline, setDeadline] = useState(new Date());
     const [message, setMessage] = useState('');
+    const [status, setStatus] = useState('public');
 
     const add = async () => {
       if(name.trim().length != 0 && type.trim().length != 0 && status.trim().length != 0 && location.trim().length != 0 && street.trim().length != 0) {
@@ -97,10 +98,9 @@ const AddEvent = ({route, navigation}) => {
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollView}>
-          <Image source={require('./assets/createEvent.png')} style={{width: 150, height: 150, top: 10}}/>
           <View style={styles.createEventPageView}>
             <View style={styles.createEventView}>
-                <Text style={{fontWeight: '200'}}>CREATE YOUR OWN EVENT</Text>
+                <Text style={{fontSize: 20}}>Get started by creating your own event</Text>
             </View>
             <View style={styles.errorMsgView}>
               <Text style={{ color: '#D77165' }}>{message}</Text>
@@ -111,11 +111,13 @@ const AddEvent = ({route, navigation}) => {
                     placeholder="Event's name"
                     onChangeText={(name) => setName(name)}
                   />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Event's status"
-                    onChangeText={(status) => setStatus(status)}
-                  />
+                  <View style={styles.radioBtnView}>
+                    <Text style={{fontSize: 18, marginBottom: 10}}>Select the status of your event</Text>
+                    <RadioButton.Group onValueChange={newValue => setStatus(newValue)} value={status}>
+                      <RadioButton.Item label="Public" value="public" />
+                      <RadioButton.Item label="Private" value="private" />
+                    </RadioButton.Group>
+                  </View>
                   <TextInput
                     style={styles.input}
                     placeholder="Event's type"
@@ -153,11 +155,10 @@ const AddEvent = ({route, navigation}) => {
                     )}
                 </View>
             </View>
-            <TouchableOpacity style={styles.createBtn} onPress={() =>  add() }>
-                <View style={styles.createBtnView}>
-                    <Text style={{ color: '#000', fontSize: 18, paddingLeft: 5, fontWeight: '300'}}>Create</Text>
-                </View>
-            </TouchableOpacity>
+            <View style={styles.createButton}>
+              <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
+              <Image source={require('./assets/createEventArrow.png')} style={{width: 18, height: 18}} />
+            </View>
           </ScrollView>
         </View>
     );
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   },
 
   createEventView: {
-    alignItems: 'flex-start', 
+    alignItems: 'center', 
     display: 'flex',
     justifyContent: 'center',
     padding: 10,
@@ -211,25 +212,11 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
 
-  createBtnView: {
+  createButton: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-
-  createBtn: {
-    //backgroundColor: '#454B53',
-    borderWidth: 1,
-    height: 50,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30,
-    margin: 10,
-    paddingLeft: 20,
-    paddingRight: 20
   },
 
   errorMessage: {
@@ -245,8 +232,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10
+  },
+
+  radioBtnView: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: '100%',
+    paddingLeft: 13,
+    marginTop: 15
   }
 
 });
 
 export default AddEvent;
+
+/*
+
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Event's status"
+                    onChangeText={(status) => setStatus(status)}
+                  />*/
