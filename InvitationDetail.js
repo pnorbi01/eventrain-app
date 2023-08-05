@@ -31,7 +31,9 @@ const InvitationDetail = ({route, navigation}) => {
             if(response.ok) {
                 response.json().then((data)=>
                 {
-                    setMessage(data.message)
+                    updateStatus();
+                    setIsButtonVisible(false);
+                    showUpdatedStatusAlert();
                 })
                 .catch(err => console.log(err))
             }
@@ -41,9 +43,6 @@ const InvitationDetail = ({route, navigation}) => {
             })
             .catch(err => console.log(err))
         }
-        updateStatus();
-        setIsButtonVisible(false);
-        showUpdatedStatusAlert();
     };
 
     const showUpdatedStatusAlert = () => {

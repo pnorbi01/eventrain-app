@@ -169,7 +169,7 @@ const AddEvent = ({route, navigation}) => {
                   </View>
                   <View style={styles.giftContainer}>
                     <View style={styles.giftContainerTitle}>
-                      <Text style={{fontSize: 15}}>This part of event creating is optional</Text>
+                      <Text style={{fontSize: 15}}>This part is optional of event creating </Text>
                     </View>
                     <Button title="Add Gift" onPress={addInputField} />
                     {inputFields.map((value, index) => (

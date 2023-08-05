@@ -1,5 +1,5 @@
 import React,  { useState } from 'react';
-import { StyleSheet, View, Text, Button, SafeAreaView, FlatList, Modal, TextInput, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
 const seperator = () => {
@@ -139,51 +139,6 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
 
-  name: {
-    fontSize: 32,
-  },
-
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-
-  centeredView: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-
-  logout: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
   profile: {
     width: '100%',
     flexDirection: 'row',
@@ -192,12 +147,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 0.5,
     borderColor: '#ddd'
-  },
-
-  user: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 5,
   },
 
   eventFlatList: {

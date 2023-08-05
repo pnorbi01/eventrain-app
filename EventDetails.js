@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity, FlatList } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const EventDetails = ({route, navigation}) => {
 
@@ -7,59 +8,99 @@ const EventDetails = ({route, navigation}) => {
     const [message, setMessage] = useState('');
     const [data, setData] = useState([]);
 
-    const update = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/update.php?eventId=' + eventData.event_id, {
-         method: 'PUT',
+    useFocusEffect(
+        React.useCallback(() => {
+          readGifts();
+          console.log("gifts");
+        }, [])
+    );
+
+    const deleteEvent = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + eventData.event_id, {
+            method: 'DELETE',
+            headers: {
+            'Token': token
+            }
+        })
+        .then((response) => {
+            if(response.ok) {
+                navigation.navigate('Home', {
+                    token: token,
+                    image: image,
+                    username: username,
+                    email: email
+                })
+            }
+            else {
+            setMessage('Something went wrong while deleting')
+            }
+        })
+        .catch(err => console.log(err))
+    }
+
+    const readGifts = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/read-gifts.php?eventId='+eventData.event_id, {
+         method: 'POST',
          headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
            'Token': token
-         },
-         body: JSON.stringify(eventData)
-         }).then(response => {
+        }
+        }).then(response => {
            if(response.ok) {
-              response.json().then((data)=>
-              {
-                setMessage('Event has been updated successfully')
-              })
-              .catch(err => console.log(err))
+             response.json()
+             .then(data => {
+               setData(data)
+             })
+             .catch(err => console.log(err))
            }
            else {
-             setMessage('Something went wrong while updating the event')
+             setMessage('Something went wrong retrieving the gifts')
            }
-         })
-         .catch(err => console.log(err))
-       }
+        })
+        .catch(err => console.log(err))
+    }
 
-    const deleteEvent = async () => {
-      await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + eventData.event_id, {
-        method: 'DELETE',
-        headers: {
-          'Token': token
-        }
-      })
-      .then((response) => {
-        if(response.ok) {
-            navigation.navigate('Home', {
-                token: token,
-                image: image,
-                username: username,
-                email: email
-            })
-        }
-        else {
-          setMessage('Something went wrong while deleting')
-        }
-      })
-      .catch(err => console.log(err))
+    const deleteGift = async (giftId) => {
+        await fetch('http://192.168.0.17/EventRain/api/events/delete-gift.php?eventId=' + eventData.event_id + '&giftId=' + giftId, {
+            method: 'DELETE',
+            headers: {
+            'Token': token
+            }
+        })
+        .then((response) => {
+            if(response.ok) {
+                setMessage('Gift has been deleted successfully')
+                readGifts()
+            }
+            else {
+            setMessage('Something went wrong while deleting')
+            }
+        })
+        .catch(err => console.log(err))
     }
 
     const showDeleteAlert = () => {
-        Alert.alert('Deleting event', 'This is permanent and irreversible!',
+        Alert.alert('Deleting ' + eventData.event_name, 'This is permanent and irreversible!',
             [
                 {
                     text: 'Delete',
                     onPress: () => { deleteEvent() },
+                    style: 'destructive'
+                },
+                {
+                    text: 'Cancel'
+                }
+            ]
+        )
+    }
+
+    const showDeleteGiftAlert = (giftId, giftName) => {
+        Alert.alert('Deleting ' + giftName, 'This is permanent and irreversible!',
+            [
+                {
+                    text: 'Delete',
+                    onPress: () => { deleteGift(giftId) },
                     style: 'destructive'
                 },
                 {
@@ -75,62 +116,62 @@ const EventDetails = ({route, navigation}) => {
                 <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
                 <Text style={{ textAlign: 'left', left: 5 }}>Deleting the event is permanent and irreversible.</Text>
             </View>
-            <Text style={{fontSize: 17, fontWeight: '300'}}>The selected event is <Text style={{fontWeight: 'bold'}}>{eventData.event_name}</Text></Text>
+            <View style={styles.titleView}>
+                <Text style={{fontWeight: '200'}}>EVENT INFORMATION</Text>
+                <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={showDeleteAlert}>
+                    <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                    <Text style={{color: '#FFF'}}>Delete</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.eventDetails}>
-                <Text style={{width: '100%', fontWeight: '200', marginBottom: 15}}>EVENT INFORMATION</Text>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Name</Text>
-                    <TextInput 
-                        style={styles.value} 
-                        value={eventData.event_name}
-                        onChangeText={(name) => eventData.event_name = name}  
-                    />
+                    <Text style={styles.value}>{eventData.event_name}</Text>
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Status</Text>
-                    <TextInput 
-                        style={styles.value} 
-                        value={eventData.event_status}
-                        onChangeText={(status) => eventData.event_status = status}  
-                    />
+                    <Text style={styles.value}>{eventData.event_status}</Text>
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Type</Text>
-                    <TextInput 
-                        style={styles.value} 
-                        value={eventData.event_type}
-                        onChangeText={(type) => eventData.event_type = type}  
-                    />
+                    <Text style={styles.value}>{eventData.event_type}</Text>
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Location</Text>
-                    <TextInput 
-                        style={styles.value} 
-                        value={eventData.event_location}
-                        onChangeText={(location) => eventData.event_location = location}  
-                    />
+                    <Text style={styles.value}>{eventData.event_location}</Text>
                 </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Street</Text>
-                    <TextInput 
-                        style={styles.value} 
-                        value={eventData.event_street}
-                        onChangeText={(street) => eventData.event_street = street}  
-                    />
-                </View>
-                <View style={styles.messageView}>
-                    <Text>{message}</Text>
-                </View>
-                <View style={styles.buttons}>
-                    <Button onPress={() => update()}
-                        title="Update"
-                    />
-                    <Button onPress={() => showDeleteAlert()}
-                        color="#f00"
-                        title="Delete"
-                    />
+                    <Text style={styles.value}>{eventData.event_street}</Text>
                 </View>
             </View>
+            <View>
+                <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
+            </View>
+            {data.length === 0 ? (
+                <View style={styles.noDataContainer}>
+                    <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
+                    <Text style={styles.noDataText}>You have no gifts!</Text>
+                </View>
+            ) : (
+                <View style={styles.giftsView}>
+                    <FlatList
+                        data={data}
+                        contentContainerStyle={styles.giftsView}
+                        renderItem={({item}) => (
+                            <View style={styles.giftCard}>
+                                <View style={styles.giftStatus}>
+                                    <Text style={{fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                </View>
+                                <Text style={{textAlign: 'center'}}>{item.name}</Text>
+                                <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={() => showDeleteGiftAlert(item.gift_id, item.name)}>
+                                    <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    />
+                </View>
+            )}
         </SafeAreaView>
   );
 };
@@ -175,7 +216,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center', 
         width: '100%',
-        padding: 30
+        padding: 30,
+        paddingTop: 20
     },
 
     noteText: {
@@ -186,26 +228,117 @@ const styles = StyleSheet.create({
         width: '90%',
         padding: 20,
         backgroundColor: 'rgba( 2, 37, 74, 0.55 )',
-        borderRadius: 10,
+        borderRadius: 25,
         marginBottom: 10,
         marginTop: 10
     },
 
-    buttons: {
+    titleView: {
         display: 'flex', 
         flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center'
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        width: '100%',
+        paddingTop: 10,
+        paddingRight: 30,
+        paddingLeft: 30
     },
 
-    messageView: {
+    deleteView: {
         display: 'flex', 
         flexDirection: 'row', 
         justifyContent: 'center', 
         alignItems: 'center',
-        width: '100%'
-    }
+        backgroundColor: '#D77165',
+        padding: 5,
+        borderRadius: 10
+    },
+
+    giftsView: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        width: '100%',
+        flexWrap: 'wrap'
+    },
+
+    giftCard: {
+        height: 125,
+        width: 125,
+        borderTopLeftRadius: 15,
+        borderBottomRightRadius: 15,
+        margin: 25,
+        display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'space-around', 
+        alignItems: 'center',
+        backgroundColor: '#D3D3D3',
+        padding: 5
+    },
+
+    giftStatus: {
+        position: 'absolute',
+        right: -15,
+        top: -5,
+        backgroundColor:  '#2D4451',
+        paddingRight: 3,
+        paddingLeft: 3,
+        paddingTop: 1,
+        paddingBottom: 1,
+        borderRadius: 50
+    },
+
+    noDataContainer: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    
+    },
+    
+      noDataText: {
+        fontWeight: '200',
+        fontSize: 15
+    },
   
 });
 
 export default EventDetails;
+
+
+/*
+
+                <View style={styles.buttons}>
+                    <Button onPress={() => update()}
+                        title="Update"
+                    />
+                </View>
+                
+                
+                
+
+    const update = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/update.php?eventId=' + eventData.event_id, {
+         method: 'PUT',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
+         },
+         body: JSON.stringify(eventData)
+         }).then(response => {
+           if(response.ok) {
+              response.json().then((data)=>
+              {
+                setMessage('Event has been updated successfully')
+              })
+              .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong while updating the event')
+           }
+         })
+         .catch(err => console.log(err))
+       }*/
