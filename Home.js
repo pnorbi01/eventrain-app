@@ -13,9 +13,7 @@ const Home = ({route, navigation}) => {
     const { token, username, email, image } = route.params;
     const [data, setData] = useState([]);
     const [unreadNotifications, setUnreadNotifications] = useState([]);
-    const [message, setMessage] = useState(''); 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalData, setModalData] = useState({});
+    const [message, setMessage] = useState('');
 
     useFocusEffect(
       React.useCallback(() => {
@@ -49,7 +47,7 @@ const Home = ({route, navigation}) => {
         .catch(err => console.log(err))
       }
 
-      const listUnreadNotifications = async () => {
+    const listUnreadNotifications = async () => {
         await fetch('http://192.168.0.17/EventRain/api/events/unread-notifications.php', {
          method: 'POST',
          headers: {
@@ -70,52 +68,6 @@ const Home = ({route, navigation}) => {
            }
          })
          .catch(err => console.log(err))
-      }
-
-      const update = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/update.php?eventId=' + modalData.event_id, {
-         method: 'PUT',
-         headers: {
-           'Accept': 'application/json',
-           'Content-Type': 'application/json',
-           'Token': token
-         },
-         body: JSON.stringify(modalData)
-         }).then(response => {
-           if(response.ok) {
-              response.json().then((data)=>
-              {
-                setMessage(data.message)
-                setModalVisible(false)
-                list()
-              })
-              .catch(err => console.log(err))
-           }
-           else {
-             setMessage('Something went wrong while updating the event')
-           }
-         })
-         .catch(err => console.log(err))
-       }
-
-    const deleteEvent = async () => {
-      await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + modalData.event_id, {
-        method: 'DELETE',
-        headers: {
-          'Token': token
-        }
-      })
-      .then((response) => {
-        if(response.ok) {
-          setModalVisible(false)
-          list()
-          setMessage("Event deleted")
-        }
-        else {
-          setMessage('Something went wrong while deleting')
-        }
-      })
-      .catch(err => console.log(err))
     }
 
     return (
@@ -149,10 +101,10 @@ const Home = ({route, navigation}) => {
           data={data}
           renderItem={({item}) => (
           <View style={styles.eventFlatListBody}>
-            <TouchableOpacity activeOpacity = { 1 } onPress={() => {setModalData(item); setModalVisible(true)}}>
+            <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Event Details", { eventData: item, token: token, image: image, username: username, email: email })}>
               <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
                 <View>
-                  <Text onPress={() => {setModalData(item); setModalVisible(true)}} style={styles.event}>{item.event_name}</Text>
+                  <Text style={styles.event}>{item.event_name}</Text>
                   <View style={styles.eventLocationImg}>
                     <Image source={require('./assets/location.png')} style={{width: 20, height: 20}}/>
                     <Text style={{color: '#A9A9A9'}}>{item.event_location}, {item.event_street}</Text>
@@ -168,59 +120,6 @@ const Home = ({route, navigation}) => {
           ItemSeparatorComponent={seperator}
         />
         )}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Name</Text>
-            <TextInput
-              style={styles.input}
-              value={modalData.event_name}
-              onChangeText={(name) => modalData.event_name = name}
-            />
-            <Text style={styles.modalText}>Status</Text>
-            <TextInput
-              style={styles.input}
-              value={modalData.event_status}
-              onChangeText={(status) => modalData.event_status = status}
-            />
-            <Text style={styles.modalText}>Type</Text>
-            <TextInput
-              style={styles.input}
-              value={modalData.event_type}
-              onChangeText={(type) => modalData.event_type = type}
-            />
-            <Text style={styles.modalText}>Location</Text>
-            <TextInput
-              style={styles.input}
-              value={modalData.event_location}
-              onChangeText={(location) => modalData.event_location = location}
-            />
-            <Text style={styles.modalText}>Street</Text>
-            <TextInput
-              style={styles.input}
-              value={modalData.event_street}
-              onChangeText={(street) => modalData.event_street = street}
-            />
-
-            <Button onPress={() => update()}
-              title="Update"
-            />
-            <Button onPress={() => deleteEvent()}
-              color="#f00"
-              title="Delete"
-            />
-            <Button onPress={() => setModalVisible(false)}
-              title="Close"
-            />
-          </View>
-        </View>
-      </Modal>
       </View>
     </SafeAreaView>
   );
@@ -250,33 +149,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-
   centeredView: {
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
-  },
-
-  modalView: {
-    width: '100%',
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.35,
-    shadowRadius: 4,
-    elevation: 5
   },
 
   button: {
@@ -372,8 +249,8 @@ const styles = StyleSheet.create({
     right: -5,
     top: -5,
     backgroundColor:  '#D77165',
-    paddingRight: 5,
-    paddingLeft: 5,
+    paddingRight: 3,
+    paddingLeft: 3,
     paddingTop: 1,
     paddingBottom: 1,
     borderRadius: 50

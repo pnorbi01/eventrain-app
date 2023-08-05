@@ -1,7 +1,8 @@
 import React,  { useState, } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { RadioButton } from 'react-native-paper';
+import { Card } from 'react-native-elements';
 
 const { width } = Dimensions.get('window');
 
@@ -18,6 +19,7 @@ const AddEvent = ({route, navigation}) => {
     const [deadline, setDeadline] = useState(new Date());
     const [message, setMessage] = useState('');
     const [status, setStatus] = useState('public');
+    const [inputFields, setInputFields] = useState([]);
 
     const add = async () => {
       if(name.trim().length != 0 && type.trim().length != 0 && status.trim().length != 0 && location.trim().length != 0 && street.trim().length != 0) {
@@ -95,71 +97,103 @@ const AddEvent = ({route, navigation}) => {
         setDeadline(currentDate);
       };
 
+      const addInputField = () => {
+        setInputFields([...inputFields, ""]);
+      };
+    
+      const removeInputField = (index) => {
+        const updatedFields = [...inputFields];
+        updatedFields.splice(index, 1);
+        setInputFields(updatedFields);
+      };
+
     return (
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          <View style={styles.createEventPageView}>
-            <View style={styles.createEventView}>
-                <Text style={{fontSize: 20}}>Get started by creating your own event</Text>
-            </View>
-            <View style={styles.errorMsgView}>
-              <Text style={{ color: '#D77165' }}>{message}</Text>
-            </View>
-               <View style={styles.inputView}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Event's name"
-                    onChangeText={(name) => setName(name)}
-                  />
-                  <View style={styles.radioBtnView}>
-                    <Text style={{fontSize: 18, marginBottom: 10}}>Select the status of your event</Text>
-                    <RadioButton.Group onValueChange={newValue => setStatus(newValue)} value={status}>
-                      <RadioButton.Item label="Public" value="public" />
-                      <RadioButton.Item label="Private" value="private" />
-                    </RadioButton.Group>
+        <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled keyboardVerticalOffset={100}>
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            <View style={styles.createEventPageView}>
+              <View style={styles.createEventView}>
+                  <Text style={{fontSize: 20, fontWeight: '500'}}>Get started by creating your own event</Text>
+              </View>
+              <View style={styles.errorMsgView}>
+                <Text style={{ color: '#D77165' }}>{message}</Text>
+              </View>
+                <View style={styles.inputView}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Event's name"
+                      onChangeText={(name) => setName(name)}
+                    />
+                    <View style={styles.radioBtnView}>
+                      <Text style={{fontSize: 18, marginBottom: 10}}>Select the status of your event</Text>
+                      <RadioButton.Group onValueChange={newValue => setStatus(newValue)} value={status}>
+                        <RadioButton.Item label="Public" value="public" />
+                        <RadioButton.Item label="Private" value="private" />
+                      </RadioButton.Group>
+                    </View>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Event's type"
+                      onChangeText={(type) => setType(type)}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Event's location"
+                      onChangeText={(location) => setLocation(location)}
+                    />
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Event's street"
+                      onChangeText={(street) => setStreet(street)}
+                    />
+                      <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
+                      {openStart && (
+                        <DateTimePicker
+                          testID="dateTimePicker"
+                          value={start}
+                          mode={'date'}
+                          is24Hour={true}
+                          onChange={onChangeStart}
+                        />
+                      )}
+                      <Button onPress={() => setOpenDeadline(true)} title="Pick the deadline of event" />
+                      {openDeadline && (
+                        <DateTimePicker
+                          testID="dateTimePicker"
+                          value={deadline}
+                          mode={'date'}
+                          is24Hour={true}
+                          onChange={onChangeDeadline}
+                        />
+                      )}
                   </View>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Event's type"
-                    onChangeText={(type) => setType(type)}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Event's location"
-                    onChangeText={(location) => setLocation(location)}
-                  />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Event's street"
-                    onChangeText={(street) => setStreet(street)}
-                  />
-                    <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
-                    {openStart && (
-                      <DateTimePicker
-                        testID="dateTimePicker"
-                        value={start}
-                        mode={'date'}
-                        is24Hour={true}
-                        onChange={onChangeStart}
-                      />
-                    )}
-                    <Button onPress={() => setOpenDeadline(true)} title="Pick the deadline of event" />
-                    {openDeadline && (
-                      <DateTimePicker
-                        testID="dateTimePicker"
-                        value={deadline}
-                        mode={'date'}
-                        is24Hour={true}
-                        onChange={onChangeDeadline}
-                      />
-                    )}
-                </View>
-            </View>
-            <View style={styles.createButton}>
-              <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
-              <Image source={require('./assets/createEventArrow.png')} style={{width: 18, height: 18}} />
-            </View>
-          </ScrollView>
+                  <View style={styles.giftContainer}>
+                    <View style={styles.giftContainerTitle}>
+                      <Text style={{fontSize: 15}}>This part of event creating is optional</Text>
+                    </View>
+                    <Button title="Add Gift" onPress={addInputField} />
+                    {inputFields.map((value, index) => (
+                      <Card key={index} containerStyle={{ padding: 10}}>
+                        <TextInput
+                          placeholder={`Gift ${index + 1}`}
+                          value={value}
+                          onChangeText={(text) => {
+                            const updatedFields = [...inputFields];
+                            updatedFields[index] = text;
+                            setInputFields(updatedFields);
+                          }}
+                        />
+                        <Button title="Remove gift" color="#D77165" onPress={() => removeInputField(index)} />
+                      </Card>
+                    ))}
+                  </View>
+              </View>
+              <View style={styles.createButton}>
+                <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
+                <Image source={require('./assets/createEventArrow.png')} style={{width: 18, height: 18}} />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </View>
     );
   };
@@ -173,7 +207,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -242,6 +276,24 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 13,
     marginTop: 15
+  },
+
+  giftContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: 15
+  },
+
+  giftContainerTitle: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: 10
   }
 
 });

@@ -16,6 +16,7 @@ const Notifications = ({route, navigation}) => {
     const { token } = route.params;
     const [data, setData] = useState([]);
     const [isCircleVisible, setIsCircleVisible] = useState({});
+    const [message, setMessage] = useState('');
 
     useFocusEffect(
         React.useCallback(() => {

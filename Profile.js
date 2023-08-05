@@ -6,6 +6,7 @@ const Profile = ({route, navigation}) => {
 
     const { token, username, email, image } = route.params;
     const [unreadNotifications, setUnreadNotifications] = useState([]);
+    const [message, setMessage] = useState('');
 
     useFocusEffect(
         React.useCallback(() => {
@@ -78,7 +79,7 @@ const Profile = ({route, navigation}) => {
             </View>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Notifications", { token: token, email: email })}>
                 <View style={styles.profileBtnView}>
-                    <Image source={require('./assets/navNotifications.png')} style={{width: 20, height: 20}}/>
+                    <Image source={require('./assets/notifications.png')} style={{width: 20, height: 20}}/>
                     <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500', paddingRight: 5}}>Notifications</Text>
                     {unreadNotifications > 0 &&
                     <View style={styles.badge}>
@@ -89,7 +90,7 @@ const Profile = ({route, navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Account Details", { token: token })}>
                 <View style={styles.profileBtnView}>
-                    <Image source={require('./assets/navProfile.png')} style={{width: 25, height: 25}}/>
+                    <Image source={require('./assets/profile.png')} style={{width: 25, height: 25}}/>
                     <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500'}}>Account</Text>
                 </View>
             </TouchableOpacity>
