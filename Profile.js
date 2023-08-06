@@ -31,7 +31,7 @@ const Profile = ({route, navigation}) => {
           }
         })
         .catch(err => console.log(err))
-      }
+    }
 
     const showLogoutAlert = () => {
         Alert.alert('Logging out', 'Please confirm if you want to logout!',
@@ -69,7 +69,7 @@ const Profile = ({route, navigation}) => {
            }
          })
          .catch(err => console.log(err))
-      }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -86,6 +86,12 @@ const Profile = ({route, navigation}) => {
                         <Text style={{fontWeight: 'bold', color: '#FFF'}}>{unreadNotifications}</Text>
                     </View>
                     }
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Reserved Gifts", { token: token })}>
+                <View style={styles.profileBtnView}>
+                    <Image source={require('./assets/gifts.png')} style={{width: 20, height: 20}}/>
+                    <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500'}}>Reserved Gifts</Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Account Details", { token: token })}>

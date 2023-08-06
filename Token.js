@@ -118,7 +118,7 @@ const Token = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.tokenContainer}>
-                <Image source={require('./assets/token.png')} style={{ width: 100, height: 100 }} />
+                <Image source={require('./assets/token.png')} style={{ width: 100, height: 100, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }} />
             </View>
             <View style={styles.tokenValidation}>
                 <View style={styles.noteText}>

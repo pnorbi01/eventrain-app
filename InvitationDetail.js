@@ -83,9 +83,9 @@ const InvitationDetail = ({route, navigation}) => {
         await fetch('http://192.168.0.17/EventRain/api/events/set-notification-to-read.php?eventId=' + id, {
         method: 'PUT',
         headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Token': token
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Token': token
         },
         body: JSON.stringify()
         }).then(response => {
@@ -106,7 +106,7 @@ const InvitationDetail = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/notificationDetail.png')} style={{width: 150, height: 150, top: 10}}/>
+            <Image source={require('./assets/notificationDetail.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3}}/>
             <View style={styles.invitationTitle}>
                 <Text style={{fontWeight: '200'}}>EVENT INVITATION DETAIL</Text>
             </View>

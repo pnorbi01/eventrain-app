@@ -120,7 +120,7 @@ const EventDetails = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.noteText}>
                 <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
-                <Text style={{ textAlign: 'left', left: 5 }}>Deleting the event is permanent and irreversible.</Text>
+                <Text style={{ textAlign: 'left', left: 5 }}>Deleting either event or gift is permanent and irreversible.</Text>
             </View>
             <View style={styles.titleView}>
                 <Text style={{fontWeight: '200'}}>EVENT INFORMATION</Text>

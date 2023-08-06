@@ -42,7 +42,7 @@ const AccountDetails = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/accountInformation.png')} style={{width: 150, height: 150, top: 10}}/>
+            <Image source={require('./assets/accountInformation.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3}}/>
             <View style={styles.accountDetails}>
                 <Text style={{width: '100%', fontWeight: '200', marginBottom: 15}}>ACCOUNT INFORMATION</Text>
                 <View style={styles.datas}>

@@ -56,7 +56,7 @@ const Notifications = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/notifyImage.png')} style={{width: 150, height: 150, top: 10}}/>
+            <Image source={require('./assets/notifyImage.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3}}/>
             <View style={styles.notifyTitle}>
                 <Text style={{fontWeight: '200'}}>NOTIFICATIONS</Text>
             </View>
@@ -88,7 +88,8 @@ const Notifications = ({route, navigation}) => {
                                             Event Invite
                                         </Text>
                                         <View style={styles.locationFlat}>
-                                            <Text style={{color: '#A9A9A9'}}>From: {item.username}</Text>
+                                            <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ item.image }} style={{ width: 20, height: 20, borderRadius: 50 }} /> 
+                                            <Text style={{color: '#A9A9A9', marginLeft: 5}}>{item.username}</Text>
                                         </View>
                                     </View>
                                     {data.length > 0 && <Text style={{color: '#a9a9a9'}}>{formattedDate}</Text>}
@@ -131,6 +132,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+        paddingTop: 5
     },
 
     notification: {
