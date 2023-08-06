@@ -74,11 +74,13 @@ const Notifications = ({route, navigation}) => {
                     return (
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                        {isCircleVisible[item.event_id] && (
                             <View stlye={styles.circle}>
-                                <Image source={require('./assets/circle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
+                                {isCircleVisible[item.event_id] ? (
+                                    <Image source={require('./assets/circle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
+                                ) : (
+                                    <Image source={require('./assets/readCircle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
+                                )}
                             </View>
-                        )}
                             <TouchableOpacity activeOpacity={ 1 } onPress={() => {navigation.navigate("Invitation Detail", { token: token, id: item.event_id, name: item.event_name, type: item.event_type, status: item.event_status, location: item.event_location, street: item.event_street, start: item.event_start, close: item.event_close })}} style={{width: '100%'}}>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
                                     <View>

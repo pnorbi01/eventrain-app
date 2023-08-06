@@ -110,9 +110,15 @@ const Home = ({route, navigation}) => {
                     <Text style={{color: '#A9A9A9'}}>{item.event_location}, {item.event_street}</Text>
                   </View>
                 </View>
-                <View style={styles.eventStatus}>
-                  <Text style={{color: '#FFF'}}>{item.event_status}</Text>
-                </View>
+                {item.event_status === 'public' ? (
+                  <View style={styles.eventStatusPublic}>
+                    <Text style={{color: '#FFF', fontSize: 12}}>{item.event_status}</Text>
+                  </View>
+                ) : (
+                  <View style={styles.eventStatusPrivate}>
+                    <Text style={{color: '#FFF', fontSize: 12}}>{item.event_status}</Text>
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
           </View>
@@ -198,21 +204,30 @@ const styles = StyleSheet.create({
     right: -5,
     top: -5,
     backgroundColor:  '#D77165',
-    paddingRight: 3,
-    paddingLeft: 3,
+    paddingRight: 5,
+    paddingLeft: 5,
     paddingTop: 1,
     paddingBottom: 1,
     borderRadius: 50
   },
 
-  eventStatus: {
-    backgroundColor: 'rgba( 2, 37, 74, 0.55 )',
-    borderRadius: '20',
+  eventStatusPublic: {
+    backgroundColor:  '#699F4C',
     paddingRight: 5,
     paddingLeft: 5,
-    paddingTop: 3,
-    paddingBottom: 3
-  }
+    paddingTop: 1,
+    paddingBottom: 1,
+    borderRadius: 50
+  },
+
+  eventStatusPrivate: {
+    backgroundColor:  '#D77165',
+    paddingRight: 5,
+    paddingLeft: 5,
+    paddingTop: 1,
+    paddingBottom: 1,
+    borderRadius: 50
+  },
 
 });
 

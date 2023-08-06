@@ -144,7 +144,7 @@ const Token = ({ route, navigation }) => {
                 <Button onPress={() => checkToken()} title="Show my token" />
                 )}
                 {displayedToken ? (
-                    <TouchableOpacity style={styles.tokenView} onPress={copyToClipboard}>
+                    <TouchableOpacity style={styles.tokenView} onPress={() => copyToClipboard()}>
                         <Text style={styles.tokenText}>{displayedToken}</Text>
                         <Text style={styles.tokenInfo}>Copy your token by tapping on it.</Text>
                     </TouchableOpacity>

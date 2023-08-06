@@ -15,6 +15,12 @@ const EventDetails = ({route, navigation}) => {
         }, [])
     );
 
+    const seperator = () => {
+        return (
+            <View style={styles.seperator} />
+        )
+    }
+
     const deleteEvent = async () => {
         await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + eventData.event_id, {
             method: 'DELETE',
@@ -145,7 +151,7 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={styles.value}>{eventData.event_street}</Text>
                 </View>
             </View>
-            <View>
+            <View style={{padding: 10}}>
                 <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
             </View>
             {data.length === 0 ? (
@@ -154,23 +160,37 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={styles.noDataText}>You have no gifts!</Text>
                 </View>
             ) : (
-                <View style={styles.giftsView}>
-                    <FlatList
-                        data={data}
-                        contentContainerStyle={styles.giftsView}
-                        renderItem={({item}) => (
-                            <View style={styles.giftCard}>
-                                <View style={styles.giftStatus}>
-                                    <Text style={{fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                <FlatList
+                    style={styles.giftFlatList}
+                    data={data}
+                    renderItem={({item}) => (
+                    <View style={styles.giftFlatListBody}>
+                        <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
+                            <View style={styles.leftSide}>
+                                <View>
+                                    <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
                                 </View>
-                                <Text style={{textAlign: 'center'}}>{item.name}</Text>
-                                <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={() => showDeleteGiftAlert(item.gift_id, item.name)}>
-                                    <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
-                                </TouchableOpacity>
+                                <View style={styles.giftDescription}>
+                                    <Text style={{fontWeight: '400'}}>{item.name}</Text>
+                                    {item.status === 'available' ? (
+                                        <View style={styles.giftStatusAvailable}>
+                                            <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                        </View>
+                                    ) : (
+                                        <View style={styles.giftStatusReserved}>
+                                            <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                        </View>
+                                    )}
+                                </View>
                             </View>
-                        )}
-                    />
-                </View>
+                            <TouchableOpacity style={styles.deleteView}  activeOpacity = { 1 } onPress={() => showDeleteGiftAlert(item.gift_id, item.name)} >
+                                <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+                ItemSeparatorComponent={seperator}
+                />
             )}
         </SafeAreaView>
   );
@@ -254,36 +274,34 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
 
-    giftsView: {
-        display: 'flex', 
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        width: '100%',
-        flexWrap: 'wrap'
+    giftFlatList: {
+        width: '100%'
+    },
+    
+    giftFlatListBody: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        shadowColor: '#171717',
+        shadowOffset: {width: -2, height: 7},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
     },
 
-    giftCard: {
-        height: 125,
-        width: 125,
-        borderTopLeftRadius: 15,
-        borderBottomRightRadius: 15,
-        margin: 25,
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'space-around', 
-        alignItems: 'center',
-        backgroundColor: '#D3D3D3',
-        padding: 5
+    giftStatusReserved: {
+        backgroundColor:  '#D77165',
+        paddingRight: 5,
+        paddingLeft: 5,
+        paddingTop: 1,
+        paddingBottom: 1,
+        borderRadius: 50
     },
 
-    giftStatus: {
-        position: 'absolute',
-        right: -15,
-        top: -5,
-        backgroundColor:  '#2D4451',
-        paddingRight: 3,
-        paddingLeft: 3,
+    giftStatusAvailable: {
+        backgroundColor:  '#699F4C',
+        paddingRight: 5,
+        paddingLeft: 5,
         paddingTop: 1,
         paddingBottom: 1,
         borderRadius: 50
@@ -298,9 +316,30 @@ const styles = StyleSheet.create({
     
     },
     
-      noDataText: {
+    noDataText: {
         fontWeight: '200',
         fontSize: 15
+    },
+
+    leftSide: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    
+    giftDescription: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        marginLeft: 5
+    },
+
+    seperator: {
+        width: '100%',
+        height: 1,
+        backgroundColor: '#ddd'
     },
   
 });
@@ -341,4 +380,7 @@ export default EventDetails;
            }
          })
          .catch(err => console.log(err))
-       }*/
+       }
+       
+       
+       */
