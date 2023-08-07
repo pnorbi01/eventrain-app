@@ -36,12 +36,12 @@ const Password = ({route, navigation}) => {
                         data = response.json()
                         .then(data => {
                             setMessage(
-                                <View style={styles.errorMessage}>
+                                <View style={styles.successMessage}>
                                     <Image
                                     source={require('./assets/updated.png')}
-                                    style={{ width: 20, height: 20 }}
+                                    style={{ width: 25, height: 25 }}
                                     />
-                                    <Text style={{ color: '#699F4C', marginLeft: 5 }}>Your password has been changed successfully!</Text>
+                                    <Text style={{ color: '#FFF', marginLeft: 5 }}>Your password has been changed successfully!</Text>
                                 </View>
                             );
                             setTimeout(() => {
@@ -57,7 +57,7 @@ const Password = ({route, navigation}) => {
                             source={require('./assets/caution.png')}
                             style={{ width: 20, height: 20 }}
                         />
-                        <Text style={{color: '#D77165', marginLeft: 5}}>Wrong old password</Text>
+                        <Text style={{color: '#FFF', marginLeft: 5}}>Wrong old password</Text>
                         </View>
                     );
                         setTimeout(() => {
@@ -74,7 +74,7 @@ const Password = ({route, navigation}) => {
                         source={require('./assets/caution.png')}
                         style={{ width: 20, height: 20 }}
                         />
-                        <Text style={{color: '#D77165', marginLeft: 5}}>Wrong old password</Text>
+                        <Text style={{color: '#FFF', marginLeft: 5}}>Wrong old password</Text>
                     </View>
                     );
                     setTimeout(() => {
@@ -89,7 +89,7 @@ const Password = ({route, navigation}) => {
                         source={require('./assets/caution.png')}
                         style={{ width: 20, height: 20 }}
                     />
-                    <Text style={{color: '#D77165', marginLeft: 5}}>New password must be atleast 8 character length</Text>
+                    <Text style={{color: '#FFF', marginLeft: 5}}>New password must be atleast 8 character length</Text>
                     </View>
                 );
                 setTimeout(() => {
@@ -104,7 +104,7 @@ const Password = ({route, navigation}) => {
                 source={require('./assets/caution.png')}
                 style={{ width: 20, height: 20 }}
               />
-              <Text style={{color: '#D77165', marginLeft: 5}}>Please fill all required fields</Text>
+              <Text style={{color: '#FFF', marginLeft: 5}}>Please fill all required fields</Text>
             </View>
           );
           setTimeout(() => {
@@ -136,7 +136,7 @@ const Password = ({route, navigation}) => {
                 onChangeText={(newPassword) => setNewPassword(newPassword)}
                 />
                 <Button onPress={() => changePassword()} title="Change my password" />
-                <Text style={{ color: '#D77165' }}>{message}</Text>
+                {message}
             </View>
         </SafeAreaView>
   );
@@ -173,8 +173,21 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#D77165',
+        borderRadius: 20
     },
+
+    successMessage: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#699F4C',
+        borderRadius: 20
+    }
   
 });
 

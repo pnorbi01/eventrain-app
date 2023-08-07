@@ -44,7 +44,7 @@ const Identification = ({ route, navigation }) => {
                       source={require('./assets/caution.png')}
                       style={{ width: 20, height: 20 }}
                     />
-                    <Text style={{color: '#D77165', marginLeft: 5}}>Invalid token</Text>
+                    <Text style={{color: '#FFF', marginLeft: 5}}>Invalid token</Text>
                   </View>
                 );
                   setTimeout(() => {
@@ -61,7 +61,7 @@ const Identification = ({ route, navigation }) => {
                     source={require('./assets/caution.png')}
                     style={{ width: 20, height: 20 }}
                   />
-                  <Text style={{color: '#D77165', marginLeft: 5}}>Invalid token</Text>
+                  <Text style={{color: '#FFF', marginLeft: 5}}>Invalid token</Text>
                 </View>
               );
               setTimeout(() => {
@@ -76,7 +76,7 @@ const Identification = ({ route, navigation }) => {
               source={require('./assets/caution.png')}
               style={{ width: 20, height: 20 }}
             />
-            <Text style={{color: '#D77165', marginLeft: 5}}>Please fill all required fields</Text>
+            <Text style={{color: '#FFF', marginLeft: 5}}>Please fill all required fields</Text>
           </View>
         );
         setTimeout(() => {
@@ -114,7 +114,7 @@ const Identification = ({ route, navigation }) => {
                 <Button onPress={() => identification()} title="Identify" />
                 )}
             </View>
-            <Text style={{ color: '#D77165' }}>{message}</Text>
+            {message}
         </SafeAreaView>
     );
 };
@@ -172,7 +172,10 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#D77165',
+        borderRadius: 20
     },
 
     tokenText: {

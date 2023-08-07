@@ -69,7 +69,7 @@ const Token = ({ route, navigation }) => {
                     source={require('./assets/caution.png')}
                     style={{ width: 20, height: 20 }}
                     />
-                    <Text style={{ color: '#D77165', marginLeft: 5 }}>Token not found</Text>
+                    <Text style={{ color: '#FFF', marginLeft: 5 }}>Token not found</Text>
                 </View>
                 );
             }
@@ -81,7 +81,7 @@ const Token = ({ route, navigation }) => {
                     source={require('./assets/caution.png')}
                     style={{ width: 20, height: 20 }}
                 />
-                <Text style={{ color: '#D77165', marginLeft: 5 }}>Invalid password</Text>
+                <Text style={{ color: '#FFF', marginLeft: 5 }}>Invalid password</Text>
                 </View>
             );
             }
@@ -94,7 +94,7 @@ const Token = ({ route, navigation }) => {
                 source={require('./assets/caution.png')}
                 style={{ width: 20, height: 20 }}
                 />
-                <Text style={{ color: '#D77165', marginLeft: 5 }}>An error occurred</Text>
+                <Text style={{ color: '#FFF', marginLeft: 5 }}>An error occurred</Text>
             </View>
             );
         }
@@ -106,7 +106,7 @@ const Token = ({ route, navigation }) => {
                 source={require('./assets/caution.png')}
                 style={{ width: 20, height: 20 }}
             />
-            <Text style={{ color: '#D77165', marginLeft: 5 }}>Please fill all required fields</Text>
+            <Text style={{ color: '#FFF', marginLeft: 5 }}>Please fill all required fields</Text>
             </View>
         );
         }
@@ -150,7 +150,7 @@ const Token = ({ route, navigation }) => {
                     </TouchableOpacity>
                 ) : null}
             </View>
-            <Text style={{ color: '#D77165' }}>{message}</Text>
+            {message}
         </SafeAreaView>
     );
 };
@@ -208,7 +208,10 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#D77165',
+        borderRadius: 20
     },
 
     tokenText: {

@@ -59,7 +59,7 @@ const AddEvent = ({route, navigation}) => {
                   source={require('./assets/caution.png')}
                   style={{ width: 20, height: 20 }}
                   />
-                  <Text style={{ color: '#D77165', marginLeft: 5 }}>Something went wrong</Text>
+                  <Text style={{ color: '#FFF', marginLeft: 5 }}>Something went wrong</Text>
               </View>
             );
           }
@@ -76,7 +76,7 @@ const AddEvent = ({route, navigation}) => {
               source={require('./assets/caution.png')}
               style={{ width: 20, height: 20 }}
               />
-              <Text style={{ color: '#D77165', marginLeft: 5 }}>Please fill all fields</Text>
+              <Text style={{ color: '#FFF', marginLeft: 5 }}>Please fill all fields</Text>
           </View>
         );
       }
@@ -114,9 +114,7 @@ const AddEvent = ({route, navigation}) => {
             <View style={styles.createEventPageView}>
               <View style={styles.createEventView}>
                   <Text style={{fontSize: 20, fontWeight: '500'}}>Get started by creating your own event</Text>
-              </View>
-              <View style={styles.errorMsgView}>
-                <Text style={{ color: '#D77165' }}>{message}</Text>
+                  {message}
               </View>
                 <View style={styles.inputView}>
                     <TextInput
@@ -257,14 +255,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
-  },
-
-  errorMsgView: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#D77165',
+    borderRadius: 20,
     marginTop: 10
   },
 

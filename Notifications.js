@@ -172,7 +172,8 @@ const styles = StyleSheet.create({
 
     noDataText: {
         fontWeight: '200',
-        fontSize: 15
+        fontSize: 15,
+        marginTop: 10
     }
   
 });

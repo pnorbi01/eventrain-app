@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-const ReservedGifts = ({route, navigation}) => {
+const Gifts = ({route, navigation}) => {
 
-    const { token } = route.params;
+    const { token, id } = route.params;
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
 
@@ -16,36 +16,36 @@ const ReservedGifts = ({route, navigation}) => {
 
     useFocusEffect(
         React.useCallback(() => {
-          readReservedGifts();
-          console.log("reservedGifts");
+          readGifts();
+          console.log("Gifts");
         }, [])
     );
 
-    const readReservedGifts = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-reserved-gifts.php', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Token': token
+    const readGifts = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/read-gifts.php?eventId='+ id, {
+         method: 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
         }
         }).then(response => {
-        if(response.ok) {
-            response.json()
-            .then(data => {
-                    setData(data)
-            })
-            .catch(err => console.log(err))
-        }
-        else {
-             setMessage('Something went wrong retrieving the events')
-        }
+           if(response.ok) {
+             response.json()
+             .then(data => {
+               setData(data)
+             })
+             .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong retrieving the gifts')
+           }
         })
         .catch(err => console.log(err))
     }
 
-    const releaseGift = async (giftId) => {
-        await fetch('http://192.168.0.17/EventRain/api/events/release-gift.php?giftId=' + giftId, {
+    const reserveGift = async (giftId, eventId) => {
+        await fetch('http://192.168.0.17/EventRain/api/events/reserve-gift.php?giftId=' + giftId + '&eventId=' + eventId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -56,24 +56,32 @@ const ReservedGifts = ({route, navigation}) => {
         }).then(response => {
         if(response.ok) {
             response.json().then((data)=>
-            {
-                readReservedGifts()
+            {   
+                readGifts()
             })
             .catch(err => console.log(err))
         }
         else {
-            setMessage('Something went wrong while releasing your gift')
+            setMessage(
+                <View style={styles.errorMessage}>
+                    <Image source={require('./assets/caution.png')} style={{ width: 20, height: 20 }}/>
+                    <Text style={{color: '#FFF', marginLeft: 5}}>You can not reserve more than one gift for the same event.</Text>
+                </View>
+            );
+            setTimeout(() => {
+                setMessage(false);
+            }, 3000);
         }
         })
         .catch(err => console.log(err))
     }
 
-    const showReleaseGiftAlert = (giftId, giftName) => {
-        Alert.alert('Releasing ' + giftName, 'If you release the gift it will be available for others!',
+    const showReserveGiftAlert = (giftId, giftName, eventId) => {
+        Alert.alert('Reserving ' + giftName, 'Are you sure you want to reserve the following gift?',
             [
                 {
-                    text: 'Release',
-                    onPress: () => { releaseGift(giftId) }
+                    text: 'Reserve',
+                    onPress: () => { reserveGift(giftId, eventId) }
                 },
                 {
                     text: 'Cancel'
@@ -84,14 +92,15 @@ const ReservedGifts = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/reservedGifts.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }}/>
+            <Image source={require('./assets/ownersGift.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }}/>
             <View style={styles.reservedGifts}>
-                <Text style={{width: '100%', fontWeight: '200', marginBottom: 15}}>RESERVED GIFTS</Text>
+                <Text style={{width: '100%', fontWeight: '200', marginBottom: 5}}>GIFTS</Text>
             </View>
+            {message}
                 {data.length === 0 ? (
                 <View style={styles.noDataContainer}>
                     <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
-                    <Text style={styles.noDataText}>You have no reserved gifts!</Text>
+                    <Text style={styles.noDataText}>The owner has not given any gifts!</Text>
                 </View>
                 ) : (
                     <FlatList
@@ -106,14 +115,26 @@ const ReservedGifts = ({route, navigation}) => {
                                     </View>
                                     <View style={styles.giftDescription}>
                                         <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
-                                        <View style={styles.event}>
-                                            <Text style={{textAlign: 'center', fontSize: 13, color: '#000'}}>Event: {item.event_name}</Text>
-                                        </View>
+                                        {item.status === 'available' ? (
+                                            <View style={styles.giftStatusAvailable}>
+                                                <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                            </View>
+                                        ) : (
+                                            <View style={styles.giftStatusReserved}>
+                                                <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                            </View>
+                                        )}
                                     </View>
                                 </View>
-                                <TouchableOpacity style={styles.lockedGiftView}  activeOpacity = { 1 } onPress={() => showReleaseGiftAlert(item.gift_id, item.name)} >
-                                    <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
-                                </TouchableOpacity>
+                                {item.status === 'available' ? (
+                                    <TouchableOpacity style={styles.unReserveView}  activeOpacity = { 1 } onPress={() => showReserveGiftAlert(item.gift_id, item.name, item.event_id)} >
+                                        <Image source={require('./assets/unReserve.png')} style={{ width: 20, height: 20 }} />
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity style={styles.lockedGiftView} >
+                                        <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
+                                    </TouchableOpacity>
+                                )}
                             </View>
                         </View>
                     )}
@@ -151,6 +172,16 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
 
+    lockedGiftView: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: '#D77165',
+        padding: 5,
+        borderRadius: 10
+    },
+
     giftFlatList: {
         width: '100%'
     },
@@ -164,6 +195,15 @@ const styles = StyleSheet.create({
 
     giftStatusReserved: {
         backgroundColor:  '#D77165',
+        paddingRight: 5,
+        paddingLeft: 5,
+        paddingTop: 1,
+        paddingBottom: 1,
+        borderRadius: 50
+    },
+
+    giftStatusAvailable: {
+        backgroundColor:  '#699F4C',
         paddingRight: 5,
         paddingLeft: 5,
         paddingTop: 1,
@@ -205,17 +245,16 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#ddd'
     },
-
-    lockedGiftView: {
-        display: 'flex', 
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        backgroundColor: '#D77165',
-        padding: 5,
-        borderRadius: 10
-    }
   
+    errorMessage: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#D77165',
+        borderRadius: 20
+    }
 });
 
-export default ReservedGifts;
+export default Gifts;

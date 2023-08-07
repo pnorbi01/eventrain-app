@@ -13,6 +13,7 @@ import Password from './Password';
 import Identification from './Identification';
 import EventDetails from './EventDetails';
 import ReservedGifts from './ReservedGifts';
+import Gifts from './Gifts';
 
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const App = () => {
         <Stack.Screen name="Identification" component={Identification} />
         <Stack.Screen name="Event Details" component={EventDetails} />
         <Stack.Screen name="Reserved Gifts" component={ReservedGifts} />
+        <Stack.Screen name="Gifts" component={Gifts} />
       </Stack.Navigator>
     </NavigationContainer>
   );

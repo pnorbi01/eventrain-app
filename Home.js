@@ -107,7 +107,7 @@ const Home = ({route, navigation}) => {
                   <Text style={styles.event}>{item.event_name}</Text>
                   <View style={styles.eventLocationImg}>
                     <Image source={require('./assets/location.png')} style={{width: 20, height: 20}}/>
-                    <Text style={{color: '#A9A9A9'}}>{item.event_location}, {item.event_street}</Text>
+                    <Text style={{color: '#A9A9A9', marginLeft: 3}}>{item.event_location}, {item.event_street}</Text>
                   </View>
                 </View>
                 {item.event_status === 'public' ? (

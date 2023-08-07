@@ -150,6 +150,14 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={styles.data}>Street</Text>
                     <Text style={styles.value}>{eventData.event_street}</Text>
                 </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Starts At</Text>
+                    <Text style={styles.value}>{eventData.event_start}</Text>
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Closes At</Text>
+                    <Text style={styles.value}>{eventData.event_close}</Text>
+                </View>
             </View>
             <View style={{padding: 10}}>
                 <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
@@ -318,7 +326,8 @@ const styles = StyleSheet.create({
     
     noDataText: {
         fontWeight: '200',
-        fontSize: 15
+        fontSize: 15,
+        marginTop: 10
     },
 
     leftSide: {

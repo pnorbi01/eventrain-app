@@ -31,9 +31,7 @@ const InvitationDetail = ({route, navigation}) => {
             if(response.ok) {
                 response.json().then((data)=>
                 {
-                    updateStatus();
-                    setIsButtonVisible(false);
-                    showUpdatedStatusAlert();
+                    setMessage('Status has been changed successfully')
                 })
                 .catch(err => console.log(err))
             }
@@ -43,13 +41,17 @@ const InvitationDetail = ({route, navigation}) => {
             })
             .catch(err => console.log(err))
         }
+        updateStatus();
+        setIsButtonVisible(false);
+        showUpdatedStatusAlert();
     };
 
     const showUpdatedStatusAlert = () => {
         Alert.alert('Event Status', 'Your status has been changed, thank you!',
             [
                 {
-                    text: 'OK'
+                    text: 'OK',
+                    onPress: () => { invitationDetail() }
                 }
             ]
         )
@@ -143,6 +145,14 @@ const InvitationDetail = ({route, navigation}) => {
                     <Text style={styles.data}>Registration Closes At</Text>
                     <Text style={styles.value}>{close}</Text>
                 </View>
+                {data && data.length > 0 && data[0].status === 'accepted' && (
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Gifts</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Gifts", { token: token, id: id })}>
+                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
+                </View>
+                )}
             </View>
             {isButtonVisible && (
             <View style={styles.choiceView}>
