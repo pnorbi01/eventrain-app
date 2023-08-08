@@ -86,7 +86,11 @@ const ReservedGifts = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
             <Image source={require('./assets/reservedGifts.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }}/>
             <View style={styles.reservedGifts}>
-                <Text style={{width: '100%', fontWeight: '200', marginBottom: 15}}>RESERVED GIFTS</Text>
+                <Text style={{fontWeight: '200', marginBottom: 15}}>RESERVED GIFTS</Text>
+                <TouchableOpacity style={styles.clearAllView} activeOpacity = { 1 }>
+                    <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                    <Text style={{color: '#FFF'}}>Clear all</Text>
+                </TouchableOpacity>
             </View>
                 {data.length === 0 ? (
                 <View style={styles.noDataContainer}>
@@ -134,11 +138,13 @@ const styles = StyleSheet.create({
 
     reservedGifts: {
         display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        width: '100%',
-        padding: 30
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        marginTop: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
+        width: '100%'
     },
 
     unReserveView: {
@@ -207,6 +213,16 @@ const styles = StyleSheet.create({
     },
 
     lockedGiftView: {
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: '#D77165',
+        padding: 5,
+        borderRadius: 10
+    },
+
+    clearAllView: {
         display: 'flex', 
         flexDirection: 'row', 
         justifyContent: 'center', 

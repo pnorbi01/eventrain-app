@@ -114,7 +114,7 @@ const AddEvent = ({route, navigation}) => {
             <View style={styles.createEventPageView}>
               <View style={styles.createEventView}>
                   <Text style={{fontSize: 20, fontWeight: '500'}}>Get started by creating your own event</Text>
-                  {message}
+                  <Text>{message}</Text>
               </View>
                 <View style={styles.inputView}>
                     <TextInput

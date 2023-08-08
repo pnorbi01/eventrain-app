@@ -15,14 +15,6 @@ const Token = ({ route, navigation }) => {
         setLoading(true);
     };
 
-    
-
-    const copyToClipboard = async () => {
-        await Clipboard.setStringAsync(displayedToken);
-        showToast();
-    };
-
-
     const showToast = () => {
         Toast.show(<CustomToast text="Copied to clipboard!" />, {
             duration: Toast.durations.LONG,
@@ -36,6 +28,10 @@ const Token = ({ route, navigation }) => {
           });
     };
 
+    const copyToClipboard = async () => {
+        await Clipboard.setStringAsync(displayedToken);
+        showToast();
+    };
 
     const checkToken = async () => {
         if (password.trim().length !== 0) {
@@ -199,7 +195,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         padding: 20,
-        backgroundColor: 'rgba( 2, 37, 74, 0.55 )',
+        backgroundColor: '#F5CF87',
         borderRadius: 25,
         marginBottom: 10
     },

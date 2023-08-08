@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import MapView, { Marker } from 'react-native-maps';
 
 const InvitationDetail = ({route, navigation}) => {
     
@@ -8,11 +9,13 @@ const InvitationDetail = ({route, navigation}) => {
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
     const [isButtonVisible, setIsButtonVisible] = useState(false); 
+    const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
 
     useFocusEffect(
         React.useCallback(() => {
           invitationDetail();
           setNotificationToRead();
+          getLocationFromName(location + "," + street);
           console.log("InvDetail");
         }, [])
     );
@@ -44,6 +47,22 @@ const InvitationDetail = ({route, navigation}) => {
         updateStatus();
         setIsButtonVisible(false);
         showUpdatedStatusAlert();
+    };
+
+    const getLocationFromName = async (name) => {
+        await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(name)}&apiKey=2d884d75579c41d697d23a9d49ec1d3c`, {
+            method: 'GET'
+        }).then(response => {
+            if(response.ok) {
+                response.json()
+                .then(data => {
+                    setCoordinates({latitude: data.features[0].properties.lat, longitude: data.features[0].properties.lon})
+                    console.log(coordinates)
+                })
+            }
+        }).catch(e => {
+            console.error('Error fetching location from name:', e);
+        })
     };
 
     const showUpdatedStatusAlert = () => {
@@ -104,7 +123,6 @@ const InvitationDetail = ({route, navigation}) => {
         })
         .catch(err => console.log(err))
     }
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -175,6 +193,9 @@ const InvitationDetail = ({route, navigation}) => {
                 </View>
             </View>
             )}
+            <MapView style={{ width: '90%', height: '30%' }}>
+                <Marker coordinate={coordinates} title={location + "," + street} />
+            </MapView>
         </SafeAreaView>
   );
 };

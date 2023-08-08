@@ -159,7 +159,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center', 
         width: '100%',
-        padding: 30
+        paddingLeft: 20,
+        marginTop: 20
     },
 
     unReserveView: {
