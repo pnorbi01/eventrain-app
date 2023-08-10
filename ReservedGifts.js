@@ -68,6 +68,30 @@ const ReservedGifts = ({route, navigation}) => {
         .catch(err => console.log(err))
     }
 
+    const releaseAllGifts = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/release-all-reserved-gifts.php' , {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Token': token
+        },
+        body: JSON.stringify()
+        }).then(response => {
+        if(response.ok) {
+            response.json().then((data)=>
+            {
+                readReservedGifts()
+            })
+            .catch(err => console.log(err))
+        }
+        else {
+            setMessage('Something went wrong while releasing your gifts')
+        }
+        })
+        .catch(err => console.log(err))
+    }
+
     const showReleaseGiftAlert = (giftId, giftName) => {
         Alert.alert('Releasing ' + giftName, 'If you release the gift it will be available for others!',
             [
@@ -82,15 +106,31 @@ const ReservedGifts = ({route, navigation}) => {
         )
     }
 
+    const showReleaseAllGiftsAlert = () => {
+        Alert.alert('Releasing all gifts' , 'If you release the gifts it will be available for others!',
+            [
+                {
+                    text: 'Release All',
+                    onPress: () => { releaseAllGifts() }
+                },
+                {
+                    text: 'Cancel'
+                }
+            ]
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <Image source={require('./assets/reservedGifts.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }}/>
             <View style={styles.reservedGifts}>
                 <Text style={{fontWeight: '200', marginBottom: 15}}>RESERVED GIFTS</Text>
-                <TouchableOpacity style={styles.clearAllView} activeOpacity = { 1 }>
+                {data.length > 0 && (
+                <TouchableOpacity style={styles.clearAllView} activeOpacity = { 1 } onPress={() => showReleaseAllGiftsAlert()}>
                     <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
-                    <Text style={{color: '#FFF'}}>Clear all</Text>
+                    <Text style={{color: '#FFF'}}>Release all</Text>
                 </TouchableOpacity>
+                )}
             </View>
                 {data.length === 0 ? (
                 <View style={styles.noDataContainer}>

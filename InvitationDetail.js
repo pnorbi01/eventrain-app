@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
+
 
 const InvitationDetail = ({route, navigation}) => {
     
@@ -126,7 +127,6 @@ const InvitationDetail = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/notificationDetail.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3}}/>
             <View style={styles.invitationTitle}>
                 <Text style={{fontWeight: '200'}}>EVENT INVITATION DETAIL</Text>
             </View>
@@ -193,10 +193,13 @@ const InvitationDetail = ({route, navigation}) => {
                 </View>
             </View>
             )}
-            <MapView style={{ width: '90%', height: '30%' }}>
-                <Marker coordinate={coordinates} title={location + "," + street} />
+            <View style={{marginTop: 15, marginBottom: 10}}>
+                <Text style={{fontSize: 19, fontWeight: 'bold'}}>Check it out on map</Text>
+            </View>
+            <MapView style={{ width: '90%', height: '35%' }}>
+                <Marker coordinate={coordinates} title={location + ", " + street} />
             </MapView>
-        </SafeAreaView>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
@@ -276,8 +279,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'center', 
         alignItems: 'center',
-        padding: 15,
-        marginTop: 10
+        padding: 10,
+        marginTop: 5
     },
 
     buttonsView: {
