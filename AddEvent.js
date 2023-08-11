@@ -2,7 +2,7 @@ import React,  { useState, } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import { Card } from 'react-native-elements';
+import { Card, Tooltip } from 'react-native-elements';
 
 const { width } = Dimensions.get('window');
 
@@ -20,6 +20,7 @@ const AddEvent = ({route, navigation}) => {
     const [message, setMessage] = useState('');
     const [status, setStatus] = useState('public');
     const [inputFields, setInputFields] = useState([]);
+    const [gifts, setGifts] = useState(Array(inputFields.length).fill(''));
 
     const add = async () => {
       if(name.trim().length != 0 && type.trim().length != 0 && status.trim().length != 0 && location.trim().length != 0 && street.trim().length != 0) {
@@ -37,7 +38,8 @@ const AddEvent = ({route, navigation}) => {
           eventLocation: location,
           eventStreet: street,
           eventStart: start,
-          eventDeadline: deadline
+          eventDeadline: deadline,
+          gifts: gifts
 
         })
         }).then(response => {
@@ -113,15 +115,26 @@ const AddEvent = ({route, navigation}) => {
           <ScrollView contentContainerStyle={styles.scrollView}>
             <View style={styles.createEventPageView}>
               <View style={styles.createEventView}>
-                  <Text style={{fontSize: 20, fontWeight: '500'}}>Get started by creating your own event</Text>
-                  <Text>{message}</Text>
+                <View style={styles.noteText}>
+                    <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
+                    <Text style={{ textAlign: 'left', left: 5 }}>Gifts are not required part of event creating. Please fill out the fields correctly as instructed in the guide. To see the guide tap on the info icon.</Text>
+                </View>
+                <Text>{message}</Text>
               </View>
-                <View style={styles.inputView}>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inputView}>
                     <TextInput
                       style={styles.input}
                       placeholder="Event's name"
                       onChangeText={(name) => setName(name)}
                     />
+                    <Tooltip
+                      popover={<Text>e.g. My Birthday</Text>}
+                      backgroundColor="#F5CF87"
+                      withOverlay={false}>
+                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                    </Tooltip>
+                  </View>
                     <View style={styles.radioBtnView}>
                       <Text style={{fontSize: 18, marginBottom: 10}}>Select the status of your event</Text>
                       <RadioButton.Group onValueChange={newValue => setStatus(newValue)} value={status}>
@@ -129,28 +142,55 @@ const AddEvent = ({route, navigation}) => {
                         <RadioButton.Item label="Private" value="private" />
                       </RadioButton.Group>
                     </View>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Event's type"
-                      onChangeText={(type) => setType(type)}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Event's location"
-                      onChangeText={(location) => setLocation(location)}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Event's street"
-                      onChangeText={(street) => setStreet(street)}
-                    />
+                    <View style={styles.inputView}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Event's type"
+                        onChangeText={(type) => setType(type)}
+                      />
+                      <Tooltip
+                        popover={<Text>e.g. Birthday</Text>}
+                        backgroundColor="#F5CF87"
+                        withOverlay={false}>
+                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      </Tooltip>
+                    </View>
+                    <View style={styles.inputView}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Event's location"
+                        onChangeText={(location) => setLocation(location)}
+                      />
+                      <Tooltip
+                        popover={<Text>e.g. Serbia, Subotica</Text>}
+                        backgroundColor="#F5CF87"
+                        withOverlay={false}
+                        width={200}>
+                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      </Tooltip>
+                    </View>
+                    <View style={styles.inputView}>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="Event's street"
+                        onChangeText={(street) => setStreet(street)}
+                      />
+                      <Tooltip
+                        popover={<Text>e.g. Marka Oreskovica 16</Text>}
+                        backgroundColor="#F5CF87"
+                        withOverlay={false}
+                        width={200}>
+                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      </Tooltip>
+                    </View>
                       <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
                       {openStart && (
                         <DateTimePicker
                           testID="dateTimePicker"
                           value={start}
-                          mode={'date'}
+                          mode={'datetime'}
                           is24Hour={true}
+                          display="default"
                           onChange={onChangeStart}
                         />
                       )}
@@ -159,16 +199,14 @@ const AddEvent = ({route, navigation}) => {
                         <DateTimePicker
                           testID="dateTimePicker"
                           value={deadline}
-                          mode={'date'}
+                          mode={'datetime'}
                           is24Hour={true}
+                          display="default"
                           onChange={onChangeDeadline}
                         />
                       )}
                   </View>
                   <View style={styles.giftContainer}>
-                    <View style={styles.giftContainerTitle}>
-                      <Text style={{fontSize: 15}}>This part is optional of event creating </Text>
-                    </View>
                     <Button title="Add Gift" onPress={addInputField} />
                     {inputFields.map((value, index) => (
                       <Card key={index} containerStyle={{ padding: 10}}>
@@ -179,6 +217,10 @@ const AddEvent = ({route, navigation}) => {
                             const updatedFields = [...inputFields];
                             updatedFields[index] = text;
                             setInputFields(updatedFields);
+
+                            const updatedGifts = [...gifts];
+                            updatedGifts[index] = text;
+                            setGifts(updatedGifts);
                           }}
                         />
                         <Button title="Remove gift" color="#D77165" onPress={() => removeInputField(index)} />
@@ -236,12 +278,19 @@ const styles = StyleSheet.create({
     width: '60%'
   },
 
-  inputView: {
+  inputContainer: {
     display: 'flex',
     flexDirection: 'column', 
     alignItems: 'flex-start',  
     justifyContent: 'center',
     marginBottom: 20
+  },
+
+  inputView: {
+    display: 'flex',
+    flexDirection: 'row', 
+    alignItems: 'center',  
+    justifyContent: 'space-between'
   },
 
   createButton: {
@@ -281,13 +330,19 @@ const styles = StyleSheet.create({
     padding: 15
   },
 
-  giftContainerTitle: {
+  noteText: {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
-    padding: 10
+    paddingRight: 30,
+    paddingLeft: 30,
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: '#F5CF87',
+    borderRadius: 25,
+    marginBottom: 10
   }
 
 });
