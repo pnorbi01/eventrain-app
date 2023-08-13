@@ -22,6 +22,7 @@ const Notifications = ({route, navigation}) => {
     const [modalImage, setModalImage] = useState('');
     const [modalUsername, setModalUsername] = useState('');
     const [modalLevel, setModalLevel] = useState('');
+    const [formattedRegisteredDate, setFormattedRegisteredDate] = useState('');
 
 
     useFocusEffect(
@@ -31,10 +32,14 @@ const Notifications = ({route, navigation}) => {
         }, [])
     );
 
-    const toggleModal = (modalImage, modalUsername, modalLevel) => {
+    const toggleModal = (modalImage, modalUsername, modalLevel, modalRegisteredAt) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formatRegisteredDate = new Date(modalRegisteredAt);
+        const formattedRegisteredDate = new Intl.DateTimeFormat('en-US', options).format(formatRegisteredDate);
         setModalImage(modalImage);
         setModalUsername(modalUsername);
         setModalLevel(modalLevel);
+        setFormattedRegisteredDate(formattedRegisteredDate);
         setModalVisible(!isModalVisible);
     };
 
@@ -42,6 +47,7 @@ const Notifications = ({route, navigation}) => {
         setModalImage('');
         setModalUsername('');
         setModalLevel('');
+        setFormattedRegisteredDate('');
         setModalVisible(false);
     };
 
@@ -108,7 +114,7 @@ const Notifications = ({route, navigation}) => {
                                             Event Invite
                                         </Text>
                                         <View style={styles.locationFlat}>
-                                            <TouchableOpacity style={styles.locationFlat} onPress={() => toggleModal(item.image, item.username, item.level)}>
+                                            <TouchableOpacity style={styles.locationFlat} onPress={() => toggleModal(item.image, item.username, item.level, item.registered_at)}>
                                                 <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ item.image }} style={{ width: 20, height: 20, borderRadius: 50 }} /> 
                                                 <Text style={{color: '#A9A9A9', marginLeft: 5}}>{item.username}</Text>
                                             </TouchableOpacity>
@@ -126,8 +132,6 @@ const Notifications = ({route, navigation}) => {
             />
             )}
             <Modal
-                onBackdropPress={() => setModalVisible(false)}
-                onBackButtonPress={() => setModalVisible(false)}
                 isVisible={isModalVisible}
                 swipeDirection="down"
                 onSwipeComplete={closeModal}
@@ -145,16 +149,16 @@ const Notifications = ({route, navigation}) => {
                         <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ modalImage }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                         <Text style={styles.text}>{modalUsername}</Text>
                     </View>
-                    {modalLevel === 'admin' ? (
+                    {modalLevel === 'admin' && (
                         <View style={styles.accountDescriptionVerified}>
                             <Image source={require('./assets/verified.png')} style={{width: 20, height: 20}}/>
                             <Text style={{color: '#FFF', marginLeft: 5}}>The following account is verified, bacause is a developer at EventRain.</Text>
                         </View>
-                    ) : (
-                        <View style={styles.accountDescriptionNotVerified}>
-                            <Text style={{color: '#FFF'}}>The following account is not verified.</Text>
-                        </View>
                     )}
+                    <View style={styles.accountDescriptionRegisteredAt}>
+                        <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
+                        <Text style={{color: '#FFF', marginLeft: 5}}>Registered at: {formattedRegisteredDate}</Text>
+                    </View>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -236,11 +240,11 @@ const styles = StyleSheet.create({
     },
     
     modalContent: {
-        backgroundColor: "#161616",
+        backgroundColor: "#14171A",
         paddingTop: 12,
         paddingHorizontal: 12,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
         minHeight: 300,
         display: 'flex',
         flexDirection: 'column',
@@ -266,7 +270,8 @@ const styles = StyleSheet.create({
     text: {
         color: "#bbb",
         fontSize: 24,
-        marginTop: 10
+        marginTop: 10,
+        marginBottom: 5
     },
 
     accountInformation: {
@@ -280,19 +285,19 @@ const styles = StyleSheet.create({
     accountDescriptionVerified: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: '100%',
-        padding: 25
+        padding: 10
     },
 
-    accountDescriptionNotVerified: {
+    accountDescriptionRegisteredAt: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
         width: '100%',
-        padding: 25
+        padding: 10
     }
   
 });
