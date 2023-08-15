@@ -105,9 +105,17 @@ const MyGuestlist = ({route, navigation}) => {
                     <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
                         <View style={styles.leftSide}>
                             <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ item.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
-                            <View style={styles.guestDetail}>
+                            <View style={styles.guestDetailView}>
                                 <Text style={{fontWeight: '400', fontSize: 17, marginLeft: 5}}>{item.username}</Text>
-                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>{item.status}</Text>
+                                <View style={styles.guestDetail}>
+                                    <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>{item.status}</Text>
+                                    <Text style={{fontSize: 5, color: '#BBB', marginLeft: 3}}>{'\u2B24'}</Text>
+                                    {item.state === 'read' ? (
+                                    <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Seen</Text>
+                                    ) : (
+                                    <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Unseen</Text>   
+                                    )}
+                                </View>
                             </View>
                         </View>
                         <View style={styles.editGuestView} >
@@ -223,10 +231,17 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
 
-    guestDetail: {
+    guestDetailView: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
+        justifyContent: 'center'
+    },
+
+    guestDetail: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'center'
     }
 });

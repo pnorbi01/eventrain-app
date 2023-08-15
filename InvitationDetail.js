@@ -155,8 +155,15 @@ const InvitationDetail = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.invitationTitle}>
-                <Text style={{fontWeight: '700', fontSize: 30}}>{name}</Text>
+            <View style={styles.eventDetailTitleView}>
+                <View style={styles.eventDetailTitle}>
+                    <Text style={{fontWeight: '700', fontSize: 30}}>{name}</Text>
+                    <View>
+                        <TouchableOpacity style={styles.moreInfo} onPress={() => toggleModal(type, status, location, street, start, close)}>
+                            <Text style={{color: '#000', fontSize: 12}}>More info</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
             <View style={styles.accountDetails}>
                 <View style={styles.datas}>
@@ -177,12 +184,6 @@ const InvitationDetail = ({route, navigation}) => {
                     </TouchableOpacity>
                 </View>
                 )}
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Further details</Text>
-                    <TouchableOpacity onPress={() => toggleModal(type, status, location, street, start, close)}>
-                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
-                    </TouchableOpacity>
-                </View>
             </View>
             {isButtonVisible && (
             <View style={styles.choiceView}>
@@ -208,7 +209,7 @@ const InvitationDetail = ({route, navigation}) => {
             <View style={{marginTop: 15, marginBottom: 10}}>
                 <Text style={{fontSize: 19, fontWeight: 'bold'}}>Check it out on map</Text>
             </View>
-            <MapView style={{ width: '90%', height: '50%' }}>
+            <MapView style={{ width: '90%', height: '50%', borderRadius: 5}}>
                 <Marker coordinate={coordinates} title={location + ", " + street} />
             </MapView>
             <Modal
@@ -266,14 +267,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start'
-    },
-
-    invitationTitle: {
-        alignItems: 'flex-start', 
-        display: 'flex',
-        justifyContent: 'center',
-        width: '100%',
-        padding: 23
     },
 
     data: {
@@ -403,6 +396,36 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         marginBottom: 15
+    },
+
+    moreInfo: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5CF87',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 10
+    },
+
+    eventDetailTitleView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        padding: 20
+    },
+
+    eventDetailTitle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%'
     }
   
 });
