@@ -45,7 +45,7 @@ const EventDetails = ({route, navigation}) => {
     }
 
     const readGifts = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-gifts.php?eventId='+eventData.event_id, {
+        await fetch('http://192.168.0.17/EventRain/api/events/read-gifts.php?eventId='+ eventData.event_id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -151,18 +151,24 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={styles.value}>{eventData.event_street}</Text>
                 </View>
                 <View style={styles.datas}>
-                    <Text style={styles.data}>Starts At</Text>
+                    <Text style={styles.data}>Start</Text>
                     <Text style={styles.value}>{eventData.event_start}</Text>
                 </View>
                 <View style={styles.datas}>
-                    <Text style={styles.data}>Closes At</Text>
+                    <Text style={styles.data}>Close</Text>
                     <Text style={styles.value}>{eventData.event_close}</Text>
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Guestlist</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id })}>
+                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={{padding: 10}}>
                 <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
             </View>
-            {data.length === 0 ? (
+            {data.numberOfGifts === 0 ? (
                 <View style={styles.noDataContainer}>
                     <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
                     <Text style={styles.noDataText}>You have no gifts!</Text>
@@ -170,7 +176,7 @@ const EventDetails = ({route, navigation}) => {
             ) : (
                 <FlatList
                     style={styles.giftFlatList}
-                    data={data}
+                    data={data.gifts}
                     renderItem={({item}) => (
                     <View style={styles.giftFlatListBody}>
                         <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
@@ -218,8 +224,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         alignItems: 'center', 
         width: '100%',
-        paddingTop: 12,
-        paddingBottom: 12
+        paddingTop: 9,
+        paddingBottom: 9
     },
 
     data: {

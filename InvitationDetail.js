@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
+import Modal from 'react-native-modal';
 
 
 const InvitationDetail = ({route, navigation}) => {
@@ -11,6 +12,13 @@ const InvitationDetail = ({route, navigation}) => {
     const [message, setMessage] = useState('');
     const [isButtonVisible, setIsButtonVisible] = useState(false); 
     const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [modalType, setModalType] = useState('');
+    const [modalStatus, setModalStatus] = useState('');
+    const [modalLocation, setModalLocation] = useState('');
+    const [modalStreet, setModalStreet] = useState('');
+    const [modalStart, setModalStart] = useState('');
+    const [modalClose, setModalClose] = useState('');
 
     useFocusEffect(
         React.useCallback(() => {
@@ -20,6 +28,26 @@ const InvitationDetail = ({route, navigation}) => {
           console.log("InvDetail");
         }, [])
     );
+
+    const toggleModal = (modalType, modalStatus, modalLocation, modalStreet, modalStart, modalClose) => {
+        setModalType(modalType);
+        setModalStatus(modalStatus);
+        setModalLocation(modalLocation);
+        setModalStreet(modalStreet);
+        setModalStart(modalStart);
+        setModalClose(modalClose);
+        setModalVisible(!isModalVisible);
+    };
+
+    const closeModal = () => {
+        setModalType('');
+        setModalStatus('');
+        setModalLocation('');
+        setModalStreet('');
+        setModalStart('');
+        setModalClose('');
+        setModalVisible(false);
+    };
 
     const handlePress = (value) => {
         const updateStatus = async () => {
@@ -128,49 +156,33 @@ const InvitationDetail = ({route, navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.invitationTitle}>
-                <Text style={{fontWeight: '200'}}>EVENT INVITATION DETAIL</Text>
+                <Text style={{fontWeight: '700', fontSize: 30}}>{name}</Text>
             </View>
             <View style={styles.accountDetails}>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Name</Text>
-                    <Text style={styles.value}>{name}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Type</Text>
-                    <Text style={styles.value}>{type}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Status</Text>
-                    <Text style={styles.value}>{status}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Location</Text>
-                    <Text style={styles.value}>{location}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Street</Text>
-                    <Text style={styles.value}>{street}</Text>
-                </View>
                 <View style={styles.datas}>
                     <Text style={styles.data}>My Station</Text>
                     {data.length > 0 && <Text style={styles.value}>{data[0].status}</Text>}
                 </View>
                 <View style={styles.datas}>
-                    <Text style={styles.data}>Starts At</Text>
-                    <Text style={styles.value}>{start}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Registration Closes At</Text>
-                    <Text style={styles.value}>{close}</Text>
+                    <Text style={styles.data}>Guestlist</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Guestlist", { token: token, id: id })}>
+                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
                 </View>
                 {data && data.length > 0 && data[0].status === 'accepted' && (
                 <View style={styles.datas}>
-                    <Text style={styles.data}>Gifts</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Gifts", { token: token, id: id })}>
+                    <Text style={styles.data}>Wishlist</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Wishlist", { token: token, id: id })}>
                         <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
                     </TouchableOpacity>
                 </View>
                 )}
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Further details</Text>
+                    <TouchableOpacity onPress={() => toggleModal(type, status, location, street, start, close)}>
+                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
+                </View>
             </View>
             {isButtonVisible && (
             <View style={styles.choiceView}>
@@ -196,9 +208,54 @@ const InvitationDetail = ({route, navigation}) => {
             <View style={{marginTop: 15, marginBottom: 10}}>
                 <Text style={{fontSize: 19, fontWeight: 'bold'}}>Check it out on map</Text>
             </View>
-            <MapView style={{ width: '90%', height: '35%' }}>
+            <MapView style={{ width: '90%', height: '50%' }}>
                 <Marker coordinate={coordinates} title={location + ", " + street} />
             </MapView>
+            <Modal
+                isVisible={isModalVisible}
+                swipeDirection="down"
+                onSwipeComplete={closeModal}
+                animationIn="slideInUp"
+                animationOut="slideOutDown"
+                animationInTiming={900}
+                animationOutTiming={500}
+                backdropTransitionInTiming={1000}
+                backdropTransitionOutTiming={500}
+                style={styles.modal}
+            >
+                <View style={styles.modalContent}>
+                    <View style={styles.barIcon} />
+                    <View style={styles.eventInformation}>
+                        <View style={styles.modalTitle}>
+                            <Text style={{fontWeight: '700', fontSize: 30, color: '#bbb'}}>Further details</Text>
+                        </View>
+                        <View style={styles.datas}>
+                            <Text style={styles.modalData}>Type</Text>
+                            <Text style={styles.modalValue}>{modalType}</Text>
+                        </View>
+                        <View style={styles.datas}>
+                            <Text style={styles.modalData}>Status</Text>
+                            <Text style={styles.modalValue}>{modalStatus}</Text>
+                        </View>
+                        <View style={styles.datas}>
+                            <Text style={styles.modalData}>Location</Text>
+                            <Text style={styles.modalValue}>{modalLocation}</Text>
+                        </View>
+                        <View style={styles.datas}>
+                            <Text style={styles.modalData}>Street</Text>
+                            <Text style={styles.modalValue}>{modalStreet}</Text>
+                        </View>
+                        <View style={styles.datas}>
+                            <Text style={styles.modalData}>Start</Text>
+                            <Text style={styles.modalValue}>{modalStart}</Text>
+                        </View>
+                        <View style={styles.datas}>
+                            <Text style={styles.modalData}>Close</Text>
+                            <Text style={styles.modalValue}>{modalClose}</Text>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
     </SafeAreaView>
   );
 };
@@ -288,6 +345,64 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'center', 
         alignItems: 'center',
+    },
+
+    modal: {
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+    
+    modalContent: {
+        backgroundColor: "#141d26",
+        paddingTop: 12,
+        paddingHorizontal: 12,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        minHeight: 350,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+      
+    barIcon: {
+        width: 40,
+        height: 5,
+        backgroundColor: "#bbb",
+        borderRadius: 3,
+        position: 'absolute',
+        top: 10
+    },
+
+    eventInformation: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 25,
+        width: '100%',
+        padding: 10
+    },
+
+    modalData: {
+        fontWeight: 'bold',
+        fontSize: 15,
+        color: '#FFF'
+    },
+
+    modalValue: {
+        fontWeight: '600',
+        fontSize: 12,
+        color: '#A9A9A9'
+    },
+
+    modalTitle: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: 15
     }
   
 });

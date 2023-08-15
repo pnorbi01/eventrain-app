@@ -38,7 +38,7 @@ const AccountDetails = ({route, navigation}) => {
          .catch(err => console.log(err))
     }
 
-    const formattedDate = data.length > 0 ? new Date(data[0].date_time).toLocaleDateString("en-GB") : "";
+    const formattedDate = data.length > 0 ? new Date(data[0].registered_at).toLocaleDateString("en-GB") : "";
 
     return (
         <SafeAreaView style={styles.container}>

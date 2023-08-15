@@ -87,8 +87,8 @@ const Home = ({route, navigation}) => {
             <Image source={require('./assets/navCreate.png')} style={{width: 30, height: 30}}/>
           </TouchableOpacity>
         </View>
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', width: '100%', left: 20}}>
-          <Text style={styles.titleFlat}>MY EVENTS</Text>
+        <View style={styles.wishlistTitleView}>
+            <Text style={{fontWeight: '700', fontSize: 30}}>Overview</Text>
         </View>
         {data.length === 0 ? (
               <View style={styles.noDataContainer}>
@@ -102,7 +102,7 @@ const Home = ({route, navigation}) => {
           renderItem={({item}) => (
           <View style={styles.eventFlatListBody}>
             <TouchableOpacity activeOpacity = { 1 } onPress={() => navigation.navigate("Event Details", { eventData: item, token: token, image: image, username: username, email: email })}>
-              <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
+              <View style={{paddingTop: 20, paddingLeft: 15, paddingRight: 15, paddingBottom: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start',  width: '100%'}}>
                 <View>
                   <Text style={styles.event}>{item.event_name}</Text>
                   <View style={styles.eventLocationImg}>
@@ -228,6 +228,15 @@ const styles = StyleSheet.create({
     paddingBottom: 1,
     borderRadius: 50
   },
+
+  wishlistTitleView: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+    padding: 15
+  }
 
 });
 

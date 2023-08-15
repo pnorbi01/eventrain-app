@@ -92,11 +92,16 @@ const Gifts = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/ownersGift.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }}/>
-            <View style={styles.reservedGifts}>
-                <Text style={{width: '100%', fontWeight: '200', marginBottom: 5}}>GIFTS</Text>
+            <View style={styles.wishlistTitleView}>
+                <View style={styles.wishlistTitle}>
+                    <Text style={{fontWeight: '700', fontSize: 30}}>Wishlist</Text>
+                    <View style={styles.wishlistInformation}>
+                        <Text style={{fontWeight: '300', fontSize: 13, color: '#141d26'}}>{data.numberOfGifts} gift(s) added</Text>
+                        <Text style={{fontWeight: '300', fontSize: 13, color: '#141d26'}}>{data.reservedGifts} reserved</Text>
+                    </View>
+                </View>
             </View>
-            {message}
+            <Text>{message}</Text>
                 {data.length === 0 ? (
                 <View style={styles.noDataContainer}>
                     <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
@@ -105,7 +110,7 @@ const Gifts = ({route, navigation}) => {
                 ) : (
                     <FlatList
                         style={styles.giftFlatList}
-                        data={data}
+                        data={data.gifts}
                         renderItem={({item}) => (
                         <View style={styles.giftFlatListBody}>
                             <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
@@ -255,6 +260,30 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: '#D77165',
         borderRadius: 20
+    },
+
+    wishlistInformation: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+    },
+
+    wishlistTitleView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        padding: 20
+    },
+
+    wishlistTitle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
     }
 });
 

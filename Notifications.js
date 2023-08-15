@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
 import { formatDistanceToNow } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import { useFocusEffect } from '@react-navigation/native';
@@ -108,7 +108,7 @@ const Notifications = ({route, navigation}) => {
                                 )}
                             </View>
                             <TouchableOpacity activeOpacity={ 1 } onPress={() => {navigation.navigate("Invitation Detail", { token: token, id: item.event_id, name: item.event_name, type: item.event_type, status: item.event_status, location: item.event_location, street: item.event_street, start: item.event_start, close: item.event_close })}} style={{width: '100%'}}>
-                                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+                                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%'}}>
                                     <View>
                                         <Text style={styles.notification}>
                                             Event Invite
@@ -147,18 +147,31 @@ const Notifications = ({route, navigation}) => {
                     <View style={styles.barIcon} />
                     <View style={styles.accountInformation}>
                         <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ modalImage }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-                        <Text style={styles.text}>{modalUsername}</Text>
+                        <Text style={styles.username}>{modalUsername}</Text>
                     </View>
-                    {modalLevel === 'admin' && (
-                        <View style={styles.accountDescriptionVerified}>
-                            <Image source={require('./assets/verified.png')} style={{width: 20, height: 20}}/>
-                            <Text style={{color: '#FFF', marginLeft: 5}}>The following account is verified, bacause is a developer at EventRain.</Text>
+                    {modalLevel === 'admin' ? (
+                        <View style={styles.accountDescription}>
+                            <View style={styles.information}>
+                                <Image source={require('./assets/verified.png')} style={{width: 20, height: 20}}/>
+                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is Verified, because is a developer at EventRain.</Text>
+                            </View>
+                            <View style={styles.information}>
+                                <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
+                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
+                            </View>
                         </View>
-                    )}
-                    <View style={styles.accountDescriptionRegisteredAt}>
-                        <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
-                        <Text style={{color: '#FFF', marginLeft: 5}}>Registered at: {formattedRegisteredDate}</Text>
-                    </View>
+                    ) : (
+                    	<View style={styles.accountDescription}>
+                            <View style={styles.information}>
+                                <Image source={require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
+                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is neither Premium or Verified.</Text>
+                            </View>
+                            <View style={styles.information}>
+                                <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
+                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
+                            </View>
+                    	</View>
+		            )}
                 </View>
             </Modal>
         </SafeAreaView>
@@ -190,7 +203,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingTop: 5
+        paddingTop: 2
     },
 
     notification: {
@@ -240,26 +253,20 @@ const styles = StyleSheet.create({
     },
     
     modalContent: {
-        backgroundColor: "#14171A",
+        backgroundColor: "#141d26",
         paddingTop: 12,
         paddingHorizontal: 12,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
-        minHeight: 300,
+        minHeight: 400,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
-    
-    center: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
       
     barIcon: {
-        width: 60,
+        width: 40,
         height: 5,
         backgroundColor: "#bbb",
         borderRadius: 3,
@@ -267,7 +274,7 @@ const styles = StyleSheet.create({
         top: 10
     },
       
-    text: {
+    username: {
         color: "#bbb",
         fontSize: 24,
         marginTop: 10,
@@ -282,22 +289,22 @@ const styles = StyleSheet.create({
         marginTop: 25
     },
 
-    accountDescriptionVerified: {
+    accountDescription: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        padding: 25
+    },
+
+    information: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         width: '100%',
-        padding: 10
-    },
-
-    accountDescriptionRegisteredAt: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        width: '100%',
-        padding: 10
+        paddingBottom: 25
     }
   
 });
