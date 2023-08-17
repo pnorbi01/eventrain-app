@@ -1,25 +1,18 @@
 import React, { useState } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  SafeAreaView
-} from 'react-native'
+import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import { height } from 'deprecated-react-native-prop-types/DeprecatedImagePropType'
 
 const Home = ({ route, navigation }) => {
   const { token, username, email, image } = route.params
   const [data, setData] = useState([])
   const [unreadNotifications, setUnreadNotifications] = useState([])
   const [message, setMessage] = useState('')
+  const [publicEvents, setPublicEvents] = useState([])
 
   useFocusEffect(
     React.useCallback(() => {
       list()
+      readPublicEvents()
       listUnreadNotifications()
       console.log('Home')
     }, [])
@@ -41,6 +34,31 @@ const Home = ({ route, navigation }) => {
             .then(data => {
               setData(data)
               setMessage('Events retrieved')
+            })
+            .catch(err => console.log(err))
+        } else {
+          setMessage('Something went wrong retrieving the events')
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
+  const readPublicEvents = async () => {
+    await fetch('http://192.168.0.17/EventRain/api/events/read-public-events.php', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Token: token
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          response
+            .json()
+            .then(data => {
+              setPublicEvents(data)
+              setMessage('Public events retrieved')
             })
             .catch(err => console.log(err))
         } else {
@@ -204,8 +222,9 @@ const Home = ({ route, navigation }) => {
       </View>
       <View style={styles.eventListTitle}>
         <Text style={{ fontWeight: '700', fontSize: 25 }}>Overview</Text>
+        <Text style={{ fontWeight: '300', fontSize: 11 }}>{data.numberOfEvents} event(s) on record</Text>
       </View>
-      {data.length === 0 ? (
+      {data && data.events && Array.isArray(data.events) && data.events.length === 0 ? (
         <View style={styles.noDataContainer}>
           <Image
             source={require('./assets/noEvents.png')}
@@ -215,7 +234,7 @@ const Home = ({ route, navigation }) => {
         </View>
       ) : (
         <FlatList
-          data={data}
+          data={data.events}
           showsHorizontalScrollIndicator={false}
           horizontal
           renderItem={({ item }) => (
@@ -238,8 +257,9 @@ const Home = ({ route, navigation }) => {
       )}
       <View style={styles.eventListTitle}>
         <Text style={{ fontWeight: '700', fontSize: 25 }}>Explore</Text>
+        <Text style={{ fontWeight: '300', fontSize: 11 }}>{publicEvents.numberOfPublicEvents} public event(s) on record</Text>
       </View>
-      {data.length === 0 ? (
+      {publicEvents && publicEvents.events && Array.isArray(publicEvents.events) && publicEvents.events.length === 0 ? (
         <View style={styles.noDataContainer}>
           <Image
             source={require('./assets/noEvents.png')}
@@ -249,14 +269,14 @@ const Home = ({ route, navigation }) => {
         </View>
       ) : (
         <FlatList
-          data={data}
+          data={publicEvents.events}
           showsHorizontalScrollIndicator={false}
           horizontal
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={1}
               onPress={() =>
-                navigation.navigate('Event Details', {
+                navigation.navigate('Public Event', {
                   eventData: item,
                   token: token,
                   image: image,
@@ -318,7 +338,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     width: '100%',
     padding: 15
   },

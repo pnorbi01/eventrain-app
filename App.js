@@ -17,6 +17,7 @@ import Wishlist from './Wishlist';
 import Guestlist from './Guestlist';
 import MyGuestlist from './MyGuestlist';
 import LandingPage from './LandingPage';
+import PublicEvent from './PublicEvent';
 
 
 const Stack = createNativeStackNavigator();
@@ -42,6 +43,7 @@ const App = () => {
         <Stack.Screen name="Wishlist" component={Wishlist} />
         <Stack.Screen name="Guestlist" component={Guestlist} />
         <Stack.Screen name="My Guestlist" component={MyGuestlist} />
+        <Stack.Screen name="Public Event" component={PublicEvent} />
       </Stack.Navigator>
     </NavigationContainer>
   );

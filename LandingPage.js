@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity } from 'react-native';
 
 const LandingPage = ({route, navigation}) => {
