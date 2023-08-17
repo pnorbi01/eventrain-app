@@ -23,7 +23,7 @@ const Token = ({ route, navigation }) => {
             animation: true,
             hideOnPress: true,
             delay: 0,
-            backgroundColor: '#FFF',
+            backgroundColor: 'rgba(255, 255, 255, 0)',
             opacity: 0.9,
           });
     };
@@ -146,7 +146,7 @@ const Token = ({ route, navigation }) => {
                     </TouchableOpacity>
                 ) : null}
             </View>
-            {message}
+            <Text>{message}</Text>
         </SafeAreaView>
     );
 };

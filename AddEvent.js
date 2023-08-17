@@ -111,7 +111,7 @@ const AddEvent = ({route, navigation}) => {
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled keyboardVerticalOffset={100}>
+        <KeyboardAvoidingView style={{ flexGrow: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled keyboardVerticalOffset={1}>
           <ScrollView contentContainerStyle={styles.scrollView}>
             <View style={styles.createEventPageView}>
               <View style={styles.createEventView}>
@@ -162,10 +162,10 @@ const AddEvent = ({route, navigation}) => {
                         onChangeText={(location) => setLocation(location)}
                       />
                       <Tooltip
-                        popover={<Text>e.g. Serbia, Subotica</Text>}
+                        popover={<Text>e.g. Magyarország, Budapest</Text>}
                         backgroundColor="#F5CF87"
                         withOverlay={false}
-                        width={200}>
+                        width={210}>
                       <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
@@ -176,10 +176,9 @@ const AddEvent = ({route, navigation}) => {
                         onChangeText={(street) => setStreet(street)}
                       />
                       <Tooltip
-                        popover={<Text>e.g. Marka Oreskovica 16</Text>}
+                        popover={<Text>e.g. Margit híd</Text>}
                         backgroundColor="#F5CF87"
-                        withOverlay={false}
-                        width={200}>
+                        withOverlay={false}>
                       <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
@@ -305,7 +304,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    paddingRight: 10,
+    paddingLeft: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
     backgroundColor: '#D77165',
     borderRadius: 20,
     marginTop: 10
@@ -342,7 +344,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#F5CF87',
     borderRadius: 25,
-    marginBottom: 10
+    marginBottom: 10,
+    marginTop: 20
   }
 
 });

@@ -15,12 +15,6 @@ const EventDetails = ({route, navigation}) => {
         }, [])
     );
 
-    const seperator = () => {
-        return (
-            <View style={styles.seperator} />
-        )
-    }
-
     const deleteEvent = async () => {
         await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + eventData.event_id, {
             method: 'DELETE',
@@ -116,6 +110,35 @@ const EventDetails = ({route, navigation}) => {
         )
     }
 
+    const GiftCards = ({ item }) => {
+        return (
+            <View style={styles.giftFlatListBody}>
+                <View style={styles.giftView}>
+                    <View style={styles.leftSide}>
+                        <View>
+                            <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
+                        </View>
+                        <View style={styles.giftDescription}>
+                            <Text style={{fontWeight: '400'}}>{item.name}</Text>
+                            {item.status === 'available' ? (
+                                <View style={styles.giftStatusAvailable}>
+                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                </View>
+                            ) : (
+                                <View style={styles.giftStatusReserved}>
+                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                </View>
+                            )}
+                        </View>
+                    </View>
+                    <TouchableOpacity style={styles.deleteView}  activeOpacity = { 1 } onPress={() => showDeleteGiftAlert(item.gift_id, item.name)} >
+                        <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.noteText}>
@@ -178,32 +201,8 @@ const EventDetails = ({route, navigation}) => {
                     style={styles.giftFlatList}
                     data={data.gifts}
                     renderItem={({item}) => (
-                    <View style={styles.giftFlatListBody}>
-                        <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
-                            <View style={styles.leftSide}>
-                                <View>
-                                    <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
-                                </View>
-                                <View style={styles.giftDescription}>
-                                    <Text style={{fontWeight: '400'}}>{item.name}</Text>
-                                    {item.status === 'available' ? (
-                                        <View style={styles.giftStatusAvailable}>
-                                            <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                        </View>
-                                    ) : (
-                                        <View style={styles.giftStatusReserved}>
-                                            <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                        </View>
-                                    )}
-                                </View>
-                            </View>
-                            <TouchableOpacity style={styles.deleteView}  activeOpacity = { 1 } onPress={() => showDeleteGiftAlert(item.gift_id, item.name)} >
-                                <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                )}
-                ItemSeparatorComponent={seperator}
+                        <GiftCards item={item} />
+                    )}
                 />
             )}
         </SafeAreaView>
@@ -297,10 +296,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        shadowColor: '#171717',
-        shadowOffset: {width: -2, height: 7},
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        margin: 8
     },
 
     giftStatusReserved: {
@@ -351,11 +347,20 @@ const styles = StyleSheet.create({
         marginLeft: 5
     },
 
-    seperator: {
+    giftView: {
+        padding: 15, 
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',  
         width: '100%',
-        height: 1,
-        backgroundColor: '#ddd'
-    },
+        backgroundColor: '#DBDBDB',
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 7 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3
+    }
   
 });
 

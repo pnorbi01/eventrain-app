@@ -120,9 +120,32 @@ const ReservedGifts = ({route, navigation}) => {
         )
     }
 
+    const ReservedGiftCards = ({ item }) => {
+        return (
+            <View style={styles.giftFlatListBody}>
+                <View style={styles.giftView}>
+                    <View style={styles.leftSide}>
+                        <View>
+                            <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
+                        </View>
+                        <View style={styles.giftDescription}>
+                            <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
+                            <View style={styles.event}>
+                                <Text style={{textAlign: 'center', fontSize: 13, color: '#000'}}>Event: {item.event_name}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={styles.lockedGiftView}  activeOpacity = { 1 } onPress={() => showReleaseGiftAlert(item.gift_id, item.name)} >
+                        <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/reservedGifts.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }}/>
+            <Image source={require('./assets/reservedGifts.png')} style={{width: 260, height: 230}}/>
             <View style={styles.reservedGifts}>
                 <Text style={{fontWeight: '200', marginBottom: 15}}>RESERVED GIFTS</Text>
                 {data.length > 0 && (
@@ -142,26 +165,8 @@ const ReservedGifts = ({route, navigation}) => {
                         style={styles.giftFlatList}
                         data={data}
                         renderItem={({item}) => (
-                        <View style={styles.giftFlatListBody}>
-                            <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
-                                <View style={styles.leftSide}>
-                                    <View>
-                                        <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
-                                    </View>
-                                    <View style={styles.giftDescription}>
-                                        <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
-                                        <View style={styles.event}>
-                                            <Text style={{textAlign: 'center', fontSize: 13, color: '#000'}}>Event: {item.event_name}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                                <TouchableOpacity style={styles.lockedGiftView}  activeOpacity = { 1 } onPress={() => showReleaseGiftAlert(item.gift_id, item.name)} >
-                                    <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                            <ReservedGiftCards item={item} />
                     )}
-                    ItemSeparatorComponent={seperator}
                     />
                 )}
         </SafeAreaView>
@@ -205,7 +210,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        margin: 8
     },
 
     giftStatusReserved: {
@@ -270,6 +276,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#D77165',
         padding: 5,
         borderRadius: 10
+    },
+
+    giftView: {
+        padding: 15, 
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',  
+        width: '100%',
+        backgroundColor: '#DBDBDB',
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 7 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3
     }
   
 });

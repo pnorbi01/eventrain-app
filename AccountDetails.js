@@ -42,9 +42,13 @@ const AccountDetails = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/accountInformation.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3}}/>
+            <Image source={require('./assets/accountInformation.png')} style={{ width: 200, height: 200 }} />
+            <View style={styles.accountTitleView}>
+                <View style={styles.accountTitle}>
+                    <Text style={{fontWeight: '700', fontSize: 30}}>Account details</Text>
+                </View>
+            </View>
             <View style={styles.accountDetails}>
-                <Text style={{width: '100%', fontWeight: '200', marginBottom: 15}}>ACCOUNT INFORMATION</Text>
                 <View style={styles.datas}>
                     <Text style={styles.data}>Username</Text>
                     {data.length > 0 && <Text style={styles.value}>{data[0].username}</Text>}
@@ -62,25 +66,32 @@ const AccountDetails = ({route, navigation}) => {
                     {data.length > 0 && <Text style={styles.value}>{data[0].lastname}</Text>}
                 </View>
                 <View style={styles.datas}>
-                    <Text style={styles.data}>Level</Text>
-                    {data.length > 0 && <Text style={styles.value}>{data[0].level}</Text>}
-                </View>
-                <View style={styles.datas}>
                     <Text style={styles.data}>Registration Date</Text>
                     {data.length > 0 && <Text style={styles.value}>{formattedDate}</Text>}
                 </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Password</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Identification", { token: token })}>
-                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
-                    </TouchableOpacity>
+                {data.length > 0 && data[0].level === 'admin' ? ( 
+                <View style={styles.cardView}>
+                    <Image source={require('./assets/verified.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is Verified, because is a developer at EventRain.</Text>
                 </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Token</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Token", { token: token })}>
-                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
-                    </TouchableOpacity>
+                ) : ( 
+                <View style={styles.cardView}>
+                    <Image source={require('./assets/freeAccount.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is neither Premium or Verified.</Text>
                 </View>
+                )}
+                <TouchableOpacity onPress={() => navigation.navigate("Token", { token: token })}>
+                    <View style={styles.cardView}>
+                        <Image source={require('./assets/token.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check your token to be able to update your password.</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("Identification", { token: token })}>
+                    <View style={styles.cardView}>
+                        <Image source={require('./assets/password.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Update your password by clicking on the card.</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
   );
@@ -100,8 +111,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         alignItems: 'center', 
         width: '100%',
-        paddingTop: 12,
-        paddingBottom: 12
+        paddingTop: 10,
+        paddingBottom: 10
     },
 
     data: {
@@ -132,9 +143,63 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'center', 
         width: '100%',
-        padding: 30
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingTop: 20
     },
+
+    accountTitleView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        paddingLeft: 20,
+        paddingTop: 20
+    },
+
+    accountTitle: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width: '100%',
+    },
+
+    cardView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        backgroundColor: '#ccc',
+        width: '100%',
+        padding: 15,
+        borderRadius: 30,
+        margin: 5
+    }
+
   
 });
 
 export default AccountDetails;
+
+/*
+<View style={styles.datas}>
+                    <Text style={styles.data}>Level</Text>
+                    {data.length > 0 && <Text style={styles.value}>{data[0].level}</Text>}
+                </View>
+
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Password</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Identification", { token: token })}>
+                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.datas}>
+                    <Text style={styles.data}>Token</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Token", { token: token })}>
+                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
+                    </TouchableOpacity>
+                </View>
+
+*/

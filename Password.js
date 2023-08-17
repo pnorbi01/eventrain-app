@@ -115,7 +115,7 @@ const Password = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/passwordChange.png')} style={{width: 150, height: 150, top: 10}}/>
+            <Image source={require('./assets/password.png')} style={{width: 150, height: 150, top: 10}}/>
             <View style={styles.passwordUpdate}>
                 <Text style={{width: '100%', fontSize: 20, fontWeight: 'bold', marginBottom: 15, textAlign: 'center'}}>Update your password</Text>
                 <View>

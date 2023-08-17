@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
-import { formatDistanceToNow } from 'date-fns';
-import { enGB } from 'date-fns/locale';
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 
@@ -82,7 +80,7 @@ const Notifications = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/notifyImage.png')} style={{width: 150, height: 150, top: 10, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3}}/>
+            <Image source={require('./assets/notificationsPage.png')} style={{width: 250, height: 200}}/>
             <View style={styles.notifyTitle}>
                 <Text style={{fontWeight: '200'}}>NOTIFICATIONS</Text>
             </View>
@@ -96,7 +94,9 @@ const Notifications = ({route, navigation}) => {
                 style={styles.flat}
                 data={data}
                 renderItem={({item}) => {
-                    const formattedDate = formatDate(item.date_time);
+                    const options = { month: 'short', day: 'numeric' };
+                    const formatNotificationTime = new Date(item.date_time);
+                    const formattedNotificationTime = new Intl.DateTimeFormat('en-US', options).format(formatNotificationTime);
                     return (
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -120,7 +120,7 @@ const Notifications = ({route, navigation}) => {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    {data.length > 0 && <Text style={{color: '#a9a9a9'}}>{formattedDate}</Text>}
+                                    {data.length > 0 && <Text style={{color: '#a9a9a9'}}>{formattedNotificationTime}</Text>}
                                 </View>
                                 
                             </TouchableOpacity>

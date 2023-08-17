@@ -1,153 +1,163 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  TextInput,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity
+} from 'react-native'
 
-const Login = ({navigation}) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [token, setToken] = useState('');
-  const [loading, setLoading] = useState(false);
+const Login = ({ navigation }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const [token, setToken] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const startLoading = () => {
-    setLoading(true);
-  };
+    setLoading(true)
+  }
 
   const login = async () => {
     if (username.trim().length != 0 && password.trim().length != 0) {
-      startLoading();
+      startLoading()
 
-        await fetch('http://192.168.0.17/EventRain/api/login.php', {
-          method: 'POST',
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          }),
-          headers: {
-            'Accept': 'application/json',
-            'Content-type': 'application/json',
-          },
-        })
-          .then((response) => {
-            setLoading(false)
-            if(response.ok) {
-                data = response.json()
-                .then(data => {
-                    navigation.navigate('Home', {
-                        token: data.token,
-                        username: data.username,
-                        email: data.email,
-                        image: data.image
-                    })
+      await fetch('http://192.168.0.17/EventRain/api/login.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          username: username,
+          password: password
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json'
+        }
+      })
+        .then(response => {
+          setLoading(false)
+          if (response.ok) {
+            data = response
+              .json()
+              .then(data => {
+                navigation.navigate('Home', {
+                  token: data.token,
+                  username: data.username,
+                  email: data.email,
+                  image: data.image
                 })
-                .catch(err => console.log(err));
-            }
-            else {
-              setMessage(
-                <View style={styles.errorMessage}>
-                  <Image 
-                    source={require('./assets/caution.png')}
-                    style={{ width: 20, height: 20 }}
-                  />
-                  <Text style={{color: '#FFF', marginLeft: 5}}>Invalid username or password</Text>
-                </View>
-              );
-                setTimeout(() => {
-                  setMessage(false);
-                }, 1500);
-            }
-            }
-            )
-          .catch(() => {
-            setLoading(false)
+              })
+              .catch(err => console.log(err))
+          } else {
             setMessage(
               <View style={styles.errorMessage}>
-                <Image 
+                <Image
                   source={require('./assets/caution.png')}
                   style={{ width: 20, height: 20 }}
                 />
-                <Text style={{color: '#FFF', marginLeft: 5}}>Invalid username or password</Text>
+                <Text style={{ color: '#FFF', marginLeft: 5 }}>
+                  Invalid username or password
+                </Text>
               </View>
-            );
+            )
             setTimeout(() => {
-                setMessage(false);
-            }, 1500);
-        });
-    }
-    else {
+              setMessage(false)
+            }, 1500)
+          }
+        })
+        .catch(() => {
+          setLoading(false)
+          setMessage(
+            <View style={styles.errorMessage}>
+              <Image
+                source={require('./assets/caution.png')}
+                style={{ width: 20, height: 20 }}
+              />
+              <Text style={{ color: '#FFF', marginLeft: 5 }}>
+                Invalid username or password
+              </Text>
+            </View>
+          )
+          setTimeout(() => {
+            setMessage(false)
+          }, 1500)
+        })
+    } else {
       setMessage(
         <View style={styles.errorMessage}>
-          <Image 
+          <Image
             source={require('./assets/caution.png')}
             style={{ width: 20, height: 20 }}
           />
-          <Text style={{color: '#FFF', marginLeft: 5}}>Please fill all required fields</Text>
+          <Text style={{ color: '#FFF', marginLeft: 5 }}>
+            Please fill all required fields
+          </Text>
         </View>
-      );
+      )
       setTimeout(() => {
-            setMessage(false);
-      }, 1500);
+        setMessage(false)
+      }, 1500)
     }
-  };
+  }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.container}>
-        <View style={styles.companyName}>
-          <Image 
-            source={require('./assets/logo.png')}
-            style={{width: 100, height: 100}}
-          />
-          <Text style={{fontWeight: '800', fontSize: 25, color: '#274C77'}}>
-            EventRain
-          </Text>
-          <Text style={{top: 0}}>
-            The best place for event organization.
-          </Text>
-        </View>
-        <View style={styles.loginBody}>
-          <Text style={{fontWeight: '300', fontSize: 15}}>Login with an exisiting account!</Text>
-          {loading ? (
-            <ActivityIndicator
-              visible={loading}
-              textContent={'Loading...'}
-              textStyle={styles.spinnerTextStyle}
-              size='large'
-            />
-          ) : (
-            <>
-              <TextInput
-                style={styles.input}
-                placeholder="Username"
-                defaultValue={username}
-                onChangeText={(username) => setUsername(username)}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                defaultValue={password}
-                secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
-              />
-              <View style={styles.login}>
-                <Image 
-                source={require('./assets/login.png')}
-                style={{width: 20, height: 20}}
-                />
-                <Button onPress={() => login()}
-                  title="Login"
-                  color={'#274C77'}
-                />
-              </View>
-              {message}
-            </>
-          )}
-        </View>
+    <View style={styles.container}>
+      <View style={styles.companyName}>
+        <Image
+          source={require('./assets/loginImage.png')}
+          style={{ width: 200, height: 200 }}
+        />
+        <Text style={{ fontWeight: '800', fontSize: 25, color: '#00B0FF' }}>
+          EventRain
+        </Text>
+        <Text style={{ top: 0 }}>The best place for event organization.</Text>
       </View>
-    </ScrollView>
-  );
-};
-const styles = StyleSheet.create({
+      <View style={styles.loginBody}>
+        <Text style={{ fontWeight: '300', fontSize: 15 }}>
+          Login with an exisiting account!
+        </Text>
+        {loading ? (
+          <ActivityIndicator
+            visible={loading}
+            textContent={'Loading...'}
+            textStyle={styles.spinnerTextStyle}
+            size='large'
+          />
+        ) : (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder='Username'
+              defaultValue={username}
+              onChangeText={username => setUsername(username)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder='Password'
+              defaultValue={password}
+              secureTextEntry={true}
+              onChangeText={password => setPassword(password)}
+            />
+            <TouchableOpacity style={styles.login} onPress={() => login()}>
+              <Image
+                source={require('./assets/login.png')}
+                style={{ width: 20, height: 20 }}
+              />
+              <Text style={{ color: '#274C77', fontSize: 18, marginLeft: 5 }}>
+                Login
+              </Text>
+            </TouchableOpacity>
+            <Text>{message}</Text>
+          </>
+        )}
+      </View>
+    </View>
+  )
+}
 
+const styles = StyleSheet.create({
   input: {
     padding: 10,
     marginVertical: 8,
@@ -161,25 +171,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
 
   spinnerTextStyle: {
-    color: '#FFF',
+    color: '#FFF'
   },
 
   companyName: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
-    width: '100%'
+    width: '100%',
+    marginTop: 20
   },
 
   login: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 10
   },
 
   errorMessage: {
@@ -200,7 +212,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 70
   }
+})
 
-});
-
-export default Login;
+export default Login

@@ -8,12 +8,6 @@ const Gifts = ({route, navigation}) => {
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
 
-    const seperator = () => {
-        return (
-            <View style={styles.seperator} />
-        )
-    }
-
     useFocusEffect(
         React.useCallback(() => {
           readGifts();
@@ -90,6 +84,41 @@ const Gifts = ({route, navigation}) => {
         )
     }
 
+    const GiftCards = ({ item }) => {
+        return (
+            <View style={styles.giftFlatListBody}>
+                <View style={styles.giftView}>
+                    <View style={styles.leftSide}>
+                        <View>
+                            <Image source={require('./assets/gift.png')} style={{ width: 50, height: 50 }} />
+                        </View>
+                        <View style={styles.giftDescription}>
+                            <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
+                            {item.status === 'available' ? (
+                                <View style={styles.giftStatusAvailable}>
+                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                </View>
+                            ) : (
+                                <View style={styles.giftStatusReserved}>
+                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
+                                </View>
+                            )}
+                        </View>
+                    </View>
+                    {item.status === 'available' ? (
+                        <TouchableOpacity style={styles.unReserveView}  activeOpacity = { 1 } onPress={() => showReserveGiftAlert(item.gift_id, item.name, item.event_id)} >
+                            <Image source={require('./assets/unReserve.png')} style={{ width: 20, height: 20 }} />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity style={styles.lockedGiftView} >
+                            <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
+                        </TouchableOpacity>
+                    )}
+                </View>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.wishlistTitleView}>
@@ -112,38 +141,8 @@ const Gifts = ({route, navigation}) => {
                         style={styles.giftFlatList}
                         data={data.gifts}
                         renderItem={({item}) => (
-                        <View style={styles.giftFlatListBody}>
-                            <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
-                                <View style={styles.leftSide}>
-                                    <View>
-                                        <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
-                                    </View>
-                                    <View style={styles.giftDescription}>
-                                        <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
-                                        {item.status === 'available' ? (
-                                            <View style={styles.giftStatusAvailable}>
-                                                <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                            </View>
-                                        ) : (
-                                            <View style={styles.giftStatusReserved}>
-                                                <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                            </View>
-                                        )}
-                                    </View>
-                                </View>
-                                {item.status === 'available' ? (
-                                    <TouchableOpacity style={styles.unReserveView}  activeOpacity = { 1 } onPress={() => showReserveGiftAlert(item.gift_id, item.name, item.event_id)} >
-                                        <Image source={require('./assets/unReserve.png')} style={{ width: 20, height: 20 }} />
-                                    </TouchableOpacity>
-                                ) : (
-                                    <TouchableOpacity style={styles.lockedGiftView} >
-                                        <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
-                                    </TouchableOpacity>
-                                )}
-                            </View>
-                        </View>
+                            <GiftCards item={item} />
                     )}
-                    ItemSeparatorComponent={seperator}
                     />
                 )}
         </SafeAreaView>
@@ -196,7 +195,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        margin: 8
     },
 
     giftStatusReserved: {
@@ -245,12 +245,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         marginLeft: 5
     },
-
-    seperator: {
-        width: '100%',
-        height: 1,
-        backgroundColor: '#ddd'
-    },
   
     errorMessage: {
         display: 'flex',
@@ -284,6 +278,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
+    },
+
+    giftView: {
+        padding: 15, 
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',  
+        width: '100%',
+        backgroundColor: '#DBDBDB',
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 7 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3
     }
 });
 

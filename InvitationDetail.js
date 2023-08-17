@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5CF87',
+        backgroundColor: '#00B0FF',
         paddingLeft: 10,
         paddingRight: 10,
         paddingTop: 5,

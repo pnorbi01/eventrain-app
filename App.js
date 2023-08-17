@@ -16,6 +16,7 @@ import ReservedGifts from './ReservedGifts';
 import Wishlist from './Wishlist';
 import Guestlist from './Guestlist';
 import MyGuestlist from './MyGuestlist';
+import LandingPage from './LandingPage';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,9 +25,10 @@ const App = () => {
   
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false, headerShown: true, headerLeft: () => <></>}}/>
+      <Stack.Navigator initialRouteName='Landing Page' screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Landing Page" component={LandingPage} />
+        <Stack.Screen name="Login" component={Login} options={{gestureEnabled: false, headerLeft: () => <></>}}/>
+        <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false, headerShown: false, headerLeft: () => <></>}}/>
         <Stack.Screen name="Create Event" component={AddEvent} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Notifications" component={Notifications} />

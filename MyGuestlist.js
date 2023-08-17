@@ -8,12 +8,6 @@ const MyGuestlist = ({route, navigation}) => {
     const [data, setGuest] = useState([]);
     const [message, setMessage] = useState('');
 
-    const seperator = () => {
-        return (
-            <View style={styles.seperator} />
-        )
-    }
-
     useFocusEffect(
         React.useCallback(() => {
           readGuestlist();
@@ -78,6 +72,41 @@ const MyGuestlist = ({route, navigation}) => {
         )
     }
 
+    const GuestCards = ({ item }) => {
+        return (
+            <View style={styles.guestFlatListBody}>
+                <View style={styles.guestView}>
+                    <View style={styles.leftSide}>
+                        <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ item.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                        <View style={styles.guestDetailView}>
+                            <View style={styles.guestData}>
+                                <Text style={{fontWeight: '400', fontSize: 17, marginLeft: 5}}>{item.username}</Text>
+                                {item.level === 'admin' && (
+                                <Image source={require('./assets/verified.png')} style={{width: 15, height: 15, marginLeft: 5}}/>
+                                )}
+                            </View>
+                            <View style={styles.guestDetail}>
+                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>{item.status}</Text>
+                                <Text style={{fontSize: 5, color: '#BBB', marginLeft: 3}}>{'\u2B24'}</Text>
+                                {item.state === 'read' ? (
+                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Seen</Text>
+                                ) : (
+                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Unseen</Text>   
+                                )}
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.editGuestView} >
+                        <TouchableOpacity style={styles.deleteGuest} onPress={() => showDeleteGuestAlert(item.username, item.invited_user_email)}>
+                            <Image source={require('./assets/trashCan.png')} style={{ width: 15, height: 15 }} />
+                            <Text style={{color: '#FFF', fontSize: 12}}>Remove</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.guestTitleView}>
@@ -101,33 +130,8 @@ const MyGuestlist = ({route, navigation}) => {
                 style={styles.guestFlatList}
                 data={data.guest}
                 renderItem={({item}) => (
-                <View style={styles.guestFlatListBody}>
-                    <View style={{padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',  width: '100%'}}>
-                        <View style={styles.leftSide}>
-                            <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ item.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
-                            <View style={styles.guestDetailView}>
-                                <Text style={{fontWeight: '400', fontSize: 17, marginLeft: 5}}>{item.username}</Text>
-                                <View style={styles.guestDetail}>
-                                    <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>{item.status}</Text>
-                                    <Text style={{fontSize: 5, color: '#BBB', marginLeft: 3}}>{'\u2B24'}</Text>
-                                    {item.state === 'read' ? (
-                                    <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Seen</Text>
-                                    ) : (
-                                    <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Unseen</Text>   
-                                    )}
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.editGuestView} >
-                            <TouchableOpacity style={styles.deleteGuest} onPress={() => showDeleteGuestAlert(item.username, item.invited_user_email)}>
-                                <Image source={require('./assets/trashCan.png')} style={{ width: 15, height: 15 }} />
-                                <Text style={{color: '#FFF', fontSize: 12}}>Remove</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            )}
-            ItemSeparatorComponent={seperator}
+                    <GuestCards item={item} />
+                )}
             />
             )}
         </SafeAreaView>
@@ -157,7 +161,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        margin: 8
     },
 
     guestInformation: {
@@ -188,12 +193,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
 
-    seperator: {
-        width: '100%',
-        height: 1,
-        backgroundColor: '#ddd'
-    },
-  
     errorMessage: {
         display: 'flex',
         flexDirection: 'row',
@@ -243,6 +242,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+
+    guestData: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    guestView: {
+        padding: 15, 
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',  
+        width: '100%',
+        backgroundColor: '#DBDBDB',
+        borderRadius: 20,
+        shadowColor: '#171717',
+        shadowOffset: { width: -2, height: 7 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3
     }
 });
 
