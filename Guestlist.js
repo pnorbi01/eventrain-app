@@ -46,7 +46,7 @@ const Guestlist = ({route, navigation}) => {
                         <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ item.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
                         <Text style={{fontWeight: '400', fontSize: 17, marginLeft: 5}}>{item.username}</Text>
                         {item.level === 'admin' && (
-                        <Image source={require('./assets/verified.png')} style={{width: 15, height: 15, marginLeft: 5}}/>
+                        <Image source={require('./assets/verified.png')} style={{width: 15, height: 15, marginLeft: 2}}/>
                         )}
                     </View>
                     <View style={styles.guestStatus} >

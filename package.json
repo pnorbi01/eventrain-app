@@ -15,7 +15,6 @@
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/native-stack": "^6.9.8",
     "@react-navigation/stack": "^6.3.11",
-    "deprecated-react-native-prop-types": "^4.1.0",
     "expo": "~47.0.12",
     "expo-clipboard": "~4.0.1",
     "prop-types": "^15.8.1",

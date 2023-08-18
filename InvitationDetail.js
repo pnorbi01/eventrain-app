@@ -11,7 +11,6 @@ const InvitationDetail = ({route, navigation}) => {
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
     const [isButtonVisible, setIsButtonVisible] = useState(false); 
-    const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalType, setModalType] = useState('');
     const [modalStatus, setModalStatus] = useState('');
@@ -24,7 +23,6 @@ const InvitationDetail = ({route, navigation}) => {
         React.useCallback(() => {
           invitationDetail();
           setNotificationToRead();
-          getLocationFromName(location + "," + street);
           console.log("InvDetail");
         }, [])
     );
@@ -76,22 +74,6 @@ const InvitationDetail = ({route, navigation}) => {
         updateStatus();
         setIsButtonVisible(false);
         showUpdatedStatusAlert();
-    };
-
-    const getLocationFromName = async (name) => {
-        await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(name)}&apiKey=2d884d75579c41d697d23a9d49ec1d3c`, {
-            method: 'GET'
-        }).then(response => {
-            if(response.ok) {
-                response.json()
-                .then(data => {
-                    setCoordinates({latitude: data.features[0].properties.lat, longitude: data.features[0].properties.lon})
-                    console.log(coordinates)
-                })
-            }
-        }).catch(e => {
-            console.error('Error fetching location from name:', e);
-        })
     };
 
     const showUpdatedStatusAlert = () => {
@@ -170,20 +152,26 @@ const InvitationDetail = ({route, navigation}) => {
                     <Text style={styles.data}>My Station</Text>
                     {data.length > 0 && <Text style={styles.value}>{data[0].status}</Text>}
                 </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Guestlist</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Guestlist", { token: token, id: id })}>
-                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate("Guestlist", { token: token, id: id })}>
+                    <View style={styles.cardView}>
+                        <Image source={require('./assets/guestlist.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
+                    </View>
+                </TouchableOpacity>
                 {data && data.length > 0 && data[0].status === 'accepted' && (
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Wishlist</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("Wishlist", { token: token, id: id })}>
-                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate("Wishlist", { token: token, id: id })}>
+                    <View style={styles.cardView}>
+                        <Image source={require('./assets/gift.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the added gifts for the event.</Text>
+                    </View>
+                </TouchableOpacity>
                 )}
+                <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, id: id, name: name, location: location, street: street })}>
+                    <View style={styles.cardView}>
+                        <Image source={require('./assets/map.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
             {isButtonVisible && (
             <View style={styles.choiceView}>
@@ -206,12 +194,6 @@ const InvitationDetail = ({route, navigation}) => {
                 </View>
             </View>
             )}
-            <View style={{marginTop: 15, marginBottom: 10}}>
-                <Text style={{fontSize: 19, fontWeight: 'bold'}}>Check it out on map</Text>
-            </View>
-            <MapView style={{ width: '90%', height: '50%', borderRadius: 5}}>
-                <Marker coordinate={coordinates} title={location + ", " + street} />
-            </MapView>
             <Modal
                 isVisible={isModalVisible}
                 swipeDirection="down"
@@ -426,6 +408,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%'
+    },
+
+    cardView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        backgroundColor: '#ccc',
+        width: '100%',
+        padding: 15,
+        borderRadius: 30,
+        margin: 5
     }
   
 });

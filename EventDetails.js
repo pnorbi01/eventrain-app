@@ -181,19 +181,19 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={styles.data}>Close</Text>
                     <Text style={styles.value}>{eventData.event_close}</Text>
                 </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Guestlist</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id })}>
-                        <Image source={require('./assets/arrowRight.png')} style={{width: 15, height: 15}}/>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id })}>
+                    <View style={styles.cardView}>
+                        <Image source={require('./assets/guestlist.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
             <View style={{padding: 10}}>
                 <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
             </View>
             {data.numberOfGifts === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
+                    <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
                     <Text style={styles.noDataText}>You have no gifts!</Text>
                 </View>
             ) : (
@@ -360,6 +360,18 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 7 },
         shadowOpacity: 0.2,
         shadowRadius: 3
+    },
+
+    cardView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        backgroundColor: '#ccc',
+        width: '100%',
+        padding: 15,
+        borderRadius: 30,
+        margin: 5
     }
   
 });

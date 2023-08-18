@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   TextInput,
   ActivityIndicator,
   Image,

@@ -40,15 +40,69 @@ const PublicEvent = ({route, navigation}) => {
                 let found = false;
                 data.guests.forEach(guest => {
                     if(guest.invited_user_email === email) {
-                        found = true;
+                        if(guest.status === 'joined') {
+                            found = true;
+                        }
+                        else {
+                            found = null;
+                        }
                     }
                 });
+                console.log(found);
                 setInvitedUserEmail(found);
              })
              .catch(err => console.log(err))
            }
            else {
              setMessage('Something went wrong retrieving the gifts')
+           }
+        })
+        .catch(err => console.log(err))
+    }
+
+    const joinParty = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/join-public-event.php?eventId='+ eventData.event_id + '&ownerId=' + eventData.user_id, {
+         method: 'POST',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
+        }
+        }).then(response => {
+           if(response.ok) {
+             response.json()
+             .then(data => {
+                setMessage(data.message);
+                readGuests();
+             })
+             .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong while joining party')
+           }
+        })
+        .catch(err => console.log(err))
+    }
+
+    const quitParty = async () => {
+        await fetch('http://192.168.0.17/EventRain/api/events/quit-public-event.php?eventId='+ eventData.event_id, {
+         method: 'DELETE',
+         headers: {
+           'Accept': 'application/json',
+           'Content-Type': 'application/json',
+           'Token': token
+        }
+        }).then(response => {
+           if(response.ok) {
+             response.json()
+             .then(data => {
+                setMessage(data.message);
+                readGuests();
+             })
+             .catch(err => console.log(err))
+           }
+           else {
+             setMessage('Something went wrong while quiting party')
            }
         })
         .catch(err => console.log(err))
@@ -88,10 +142,12 @@ const PublicEvent = ({route, navigation}) => {
                 <Image source={require('./assets/publicEvent.png')} style={{ width: 200, height: 200 }} />
                 <View style={styles.publicEventTitleView}>
                     <View style={styles.publicEventTitle}>
-                        <Text style={{fontWeight: '500', fontSize: 23}}>Event details</Text>
-                        {!invitedUserEmail && (
-                            <TouchableOpacity style={styles.joinParty}>
-                                <Text style={{color: "#FFF", fontSize: 13, fontWeight: '400'}}>Join party</Text>
+                        <Text style={{fontWeight: '500', fontSize: 18}}>Event details</Text>
+                        {invitedUserEmail !== null && (
+                            <TouchableOpacity onPress={() => invitedUserEmail ? quitParty() : joinParty()} style={invitedUserEmail ? styles.quitParty : styles.joinParty}>
+                                <Text style={{ color: "#FFF", fontSize: 13, fontWeight: '400' }}>
+                                    {invitedUserEmail ? "Quit party" : "Join party"}
+                                </Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -125,23 +181,29 @@ const PublicEvent = ({route, navigation}) => {
                         <Text style={styles.data}>Close</Text>
                         <Text style={styles.value}>{eventData.event_close}</Text>
                     </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, id: id, location: eventData.event_location, street: eventData.event_street })}>
+                        <View style={styles.cardView}>
+                            <Image source={require('./assets/map.png')} style={{width: 50, height: 50}}/>
+                            <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.publicEventTitleView}>
                     <View style={styles.publicEventTitle}>
-                        <Text style={{fontWeight: '500', fontSize: 23}}>Event organizer</Text>
+                        <Text style={{fontWeight: '500', fontSize: 18}}>Event organizer</Text>
                     </View>
                 </View>
                 <View style={styles.organizerView}>
                     <TouchableOpacity activeOpacity={1} onPress={() => toggleModal(eventData.image, eventData.username, eventData.level, owner)}>
                         <View style={styles.organizer}>
                             <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ eventData.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
-                            <Image source={require('./assets/crown.png')} style={{ width: 20, height: 20, position: 'absolute', top: -10, right: -3, transform: [{rotate: '30deg'}]}} />
+                            <Image source={require('./assets/crown.png')} style={{ width: 20, height: 20, position: 'absolute', top: -10, right: -3, transform: [{rotate: '35deg'}]}} />
                         </View>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.publicEventTitleView}>
                     <View style={styles.publicEventTitle}>
-                        <Text style={{fontWeight: '500', fontSize: 23}}>Invited members</Text>
+                        <Text style={{fontWeight: '500', fontSize: 18}}>Invited members</Text>
                         <Text style={{fontWeight: '300', fontSize: 11}}>{data.numberOfGuests} people invited</Text>
                     </View>
                 </View>
@@ -160,11 +222,6 @@ const PublicEvent = ({route, navigation}) => {
                     )}
                     />
                 )}
-                <View style={styles.publicEventTitleView}>
-                    <View style={styles.publicEventTitle}>
-                        <Text style={{fontWeight: '500', fontSize: 23}}>Check out on the map</Text>
-                    </View>
-                </View>
                 <Modal
                     isVisible={isModalVisible}
                     swipeDirection="down"
@@ -384,8 +441,26 @@ const styles = StyleSheet.create({
 
     joinParty: {
         padding: 5,
-        backgroundColor: '#00B0F0',
+        backgroundColor: '#699F4C',
         borderRadius: 10
+    },
+
+    quitParty: {
+        padding: 5,
+        backgroundColor: '#D77165',
+        borderRadius: 10
+    },
+
+    cardView: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        backgroundColor: '#ccc',
+        width: '100%',
+        padding: 15,
+        borderRadius: 30,
+        margin: 5
     }
 });
 
