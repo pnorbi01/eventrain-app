@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
 
 const AccountDetails = ({route, navigation}) => {
 
@@ -42,57 +44,54 @@ const AccountDetails = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/accountInformation.png')} style={{ width: 200, height: 200 }} />
-            <View style={styles.accountTitleView}>
-                <View style={styles.accountTitle}>
-                    <Text style={{fontWeight: '700', fontSize: 30}}>Account details</Text>
-                </View>
-            </View>
-            <View style={styles.accountDetails}>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Username</Text>
-                    {data.length > 0 && <Text style={styles.value}>{data[0].username}</Text>}
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Email</Text>
-                    {data.length > 0 && <Text style={styles.value}>{data[0].email}</Text>}
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Firstname</Text>
-                    {data.length > 0 && <Text style={styles.value}>{data[0].firstname}</Text>}
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Lastname</Text>
-                    {data.length > 0 && <Text style={styles.value}>{data[0].lastname}</Text>}
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Registration Date</Text>
-                    {data.length > 0 && <Text style={styles.value}>{formattedDate}</Text>}
-                </View>
-                {data.length > 0 && data[0].level === 'admin' ? ( 
-                <View style={styles.cardView}>
-                    <Image source={require('./assets/verified.png')} style={{width: 50, height: 50}}/>
-                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is Verified, because is a developer at EventRain.</Text>
-                </View>
-                ) : ( 
-                <View style={styles.cardView}>
-                    <Image source={require('./assets/freeAccount.png')} style={{width: 50, height: 50}}/>
-                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is neither Premium or Verified.</Text>
-                </View>
-                )}
-                <TouchableOpacity onPress={() => navigation.navigate("Token", { token: token })}>
-                    <View style={styles.cardView}>
-                        <Image source={require('./assets/token.png')} style={{width: 50, height: 50}}/>
-                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check your token to be able to update your password.</Text>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <Image source={require('./assets/accountInformation.png')} style={{ width: 200, height: 200 }} />
+                <View style={styles.accountTitleView}>
+                    <View style={styles.accountTitle}>
+                        <Text style={{fontWeight: '700', fontSize: 30}}>Account details</Text>
                     </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("Identification", { token: token })}>
-                    <View style={styles.cardView}>
-                        <Image source={require('./assets/password.png')} style={{width: 50, height: 50}}/>
-                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Update your password by clicking on the card.</Text>
+                </View>
+                <View style={styles.accountDetails}>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Username</Text>
+                        {data.length > 0 && <Text style={styles.value}>{data[0].username}</Text>}
                     </View>
-                </TouchableOpacity>
-            </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Email</Text>
+                        {data.length > 0 && <Text style={styles.value}>{data[0].email}</Text>}
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Firstname</Text>
+                        {data.length > 0 && <Text style={styles.value}>{data[0].firstname}</Text>}
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Lastname</Text>
+                        {data.length > 0 && <Text style={styles.value}>{data[0].lastname}</Text>}
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Registration Date</Text>
+                        {data.length > 0 && <Text style={styles.value}>{formattedDate}</Text>}
+                    </View>
+                    <View style={styles.cardView}>
+                        <Image source={data.length > 0 && data[0].level === 'admin' ? require('./assets/verified.png') : require('./assets/freeAccount.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>
+                            {data.length > 0 && data[0].level === 'admin' ? 'The following account is Verified, because is a developer at EventRain.' : 'The following account is neither Premium or Verified.'}
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("Token", { token: token })}>
+                        <View style={styles.cardView}>
+                            <Image source={require('./assets/token.png')} style={{width: 50, height: 50}}/>
+                            <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check your token to be able to update your password.</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate("Identification", { token: token })}>
+                        <View style={styles.cardView}>
+                            <Image source={require('./assets/password.png')} style={{width: 50, height: 50}}/>
+                            <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Update your password by clicking on the card.</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </SafeAreaView>
   );
 };
@@ -103,6 +102,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start'
+    },
+
+    scrollView: {
+        flexGrow: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width
     },
 
     datas: {

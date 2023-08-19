@@ -94,26 +94,16 @@ const Gifts = ({route, navigation}) => {
                         </View>
                         <View style={styles.giftDescription}>
                             <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
-                            {item.status === 'available' ? (
-                                <View style={styles.giftStatusAvailable}>
-                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                </View>
-                            ) : (
-                                <View style={styles.giftStatusReserved}>
-                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                </View>
-                            )}
+                            <View style={item.status === 'available' ? styles.giftStatusAvailable : styles.giftStatusReserved}>
+                                <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>
+                                    {item.status === 'available' ? item.status : item.status}
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                    {item.status === 'available' ? (
-                        <TouchableOpacity style={styles.unReserveView}  activeOpacity = { 1 } onPress={() => showReserveGiftAlert(item.gift_id, item.name, item.event_id)} >
-                            <Image source={require('./assets/unReserve.png')} style={{ width: 20, height: 20 }} />
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity style={styles.lockedGiftView} >
-                            <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
-                        </TouchableOpacity>
-                    )}
+                    <TouchableOpacity style={item.status === 'available' ? styles.unReserveView : styles.lockedGiftView}  activeOpacity = { 1 } onPress={() => item.status === 'available' && showReserveGiftAlert(item.gift_id, item.name, item.event_id)} >
+                        <Image source={item.status === 'available' ? require('./assets/unReserve.png') :  require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -124,14 +114,16 @@ const Gifts = ({route, navigation}) => {
             <View style={styles.wishlistTitleView}>
                 <View style={styles.wishlistTitle}>
                     <Text style={{fontWeight: '700', fontSize: 30}}>Wishlist</Text>
+                    {data.numberOfGifts > 0 && (
                     <View style={styles.wishlistInformation}>
                         <Text style={{fontWeight: '300', fontSize: 13, color: '#141d26'}}>{data.numberOfGifts} gift(s) added</Text>
                         <Text style={{fontWeight: '300', fontSize: 13, color: '#141d26'}}>{data.reservedGifts} reserved</Text>
                     </View>
+                    )}
                 </View>
             </View>
             <Text>{message}</Text>
-                {data.length === 0 ? (
+                {data.numberOfGifts === 0 ? (
                 <View style={styles.noDataContainer}>
                     <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
                     <Text style={styles.noDataText}>The owner has not given any gifts!</Text>

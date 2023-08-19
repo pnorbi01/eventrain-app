@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Modal from 'react-native-modal';
 
 const EventDetails = ({route, navigation}) => {
 
     const { token, eventData, image, username, email } = route.params;
     const [message, setMessage] = useState('');
     const [data, setData] = useState([]);
+    const [isClosedModalVisible, setClosedModalVisible] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -110,6 +112,25 @@ const EventDetails = ({route, navigation}) => {
         )
     }
 
+    function compareDates(targetDateString) {
+        const targetDate = new Date(targetDateString.replace(/-/g, '/'));
+        const currentDate = new Date();
+
+        if (currentDate.getTime() > targetDate.getTime()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const toggleClosedEventModal = () => {
+        setClosedModalVisible(!isClosedModalVisible);
+    }
+
+    const closeClosedEventModal = () => {
+        setClosedModalVisible(false);
+    }
+
     const GiftCards = ({ item }) => {
         return (
             <View style={styles.giftFlatListBody}>
@@ -120,18 +141,14 @@ const EventDetails = ({route, navigation}) => {
                         </View>
                         <View style={styles.giftDescription}>
                             <Text style={{fontWeight: '400'}}>{item.name}</Text>
-                            {item.status === 'available' ? (
-                                <View style={styles.giftStatusAvailable}>
-                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                </View>
-                            ) : (
-                                <View style={styles.giftStatusReserved}>
-                                    <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>{item.status}</Text>
-                                </View>
-                            )}
+                            <View style={item.status === 'available' ? styles.giftStatusAvailable : styles.giftStatusReserved}>
+                                <Text style={{textAlign: 'center', fontSize: 11, color: '#FFF'}}>
+                                    {item.status === 'available' ? item.status : item.status}
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.deleteView}  activeOpacity = { 1 } onPress={() => showDeleteGiftAlert(item.gift_id, item.name)} >
+                    <TouchableOpacity style={styles.deleteView}  activeOpacity = { 1 } onPress={() => compareDates(eventData.event_close) === true ? toggleClosedEventModal(true) : showDeleteGiftAlert(item.gift_id, item.name)} >
                         <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
                     </TouchableOpacity>
                 </View>
@@ -147,7 +164,7 @@ const EventDetails = ({route, navigation}) => {
             </View>
             <View style={styles.titleView}>
                 <Text style={{fontWeight: '200'}}>EVENT INFORMATION</Text>
-                <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={showDeleteAlert}>
+                <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={() => compareDates(eventData.event_close) === true ? toggleClosedEventModal(true) : showDeleteAlert()}>
                     <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
                     <Text style={{color: '#FFF'}}>Delete</Text>
                 </TouchableOpacity>
@@ -181,7 +198,7 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={styles.data}>Close</Text>
                     <Text style={styles.value}>{eventData.event_close}</Text>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id })}>
+                <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id, close: eventData.event_close })}>
                     <View style={styles.cardView}>
                         <Image source={require('./assets/guestlist.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
@@ -205,6 +222,24 @@ const EventDetails = ({route, navigation}) => {
                     )}
                 />
             )}
+            <Modal
+                isVisible={isClosedModalVisible}
+                swipeDirection="down"
+                onSwipeComplete={closeClosedEventModal}
+                animationIn="slideInUp"
+                animationOut="slideOutDown"
+                animationInTiming={900}
+                animationOutTiming={500}
+                backdropTransitionInTiming={1000}
+                backdropTransitionOutTiming={500}
+                style={styles.modal}
+            >
+                <View style={styles.closedEventModalContent}>
+                    <View style={styles.barIcon} />
+                    <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
+                </View>
+            </Modal>
         </SafeAreaView>
   );
 };
@@ -223,8 +258,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', 
         alignItems: 'center', 
         width: '100%',
-        paddingTop: 9,
-        paddingBottom: 9
+        paddingTop: 5,
+        paddingBottom: 5
     },
 
     data: {
@@ -372,6 +407,33 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 30,
         margin: 5
+    },
+
+    modal: {
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+
+    closedEventModalContent: {
+        backgroundColor: "#141d26",
+        paddingTop: 12,
+        paddingHorizontal: 12,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        minHeight: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    barIcon: {
+        width: 40,
+        height: 5,
+        backgroundColor: "#bbb",
+        borderRadius: 3,
+        position: 'absolute',
+        top: 10
     }
   
 });

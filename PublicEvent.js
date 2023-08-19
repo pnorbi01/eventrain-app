@@ -11,6 +11,7 @@ const PublicEvent = ({route, navigation}) => {
     const [message, setMessage] = useState('');
     const [data, setData] = useState([]);
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isClosedModalVisible, setClosedModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState('');
     const [modalUsername, setModalUsername] = useState('');
     const [modalLevel, setModalLevel] = useState('');
@@ -124,6 +125,25 @@ const PublicEvent = ({route, navigation}) => {
         setModalVisible(false);
     };
 
+    const toggleClosedEventModal = () => {
+        setClosedModalVisible(!isClosedModalVisible);
+    }
+
+    const closeClosedEventModal = () => {
+        setClosedModalVisible(false);
+    }
+
+    function compareDates(targetDateString) {
+        const targetDate = new Date(targetDateString.replace(/-/g, '/'));
+        const currentDate = new Date();
+
+        if (currentDate.getTime() > targetDate.getTime()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     const GiftCards = ({ item }) => {
         return (
             <View style={styles.guestFlatListBody}>
@@ -144,7 +164,16 @@ const PublicEvent = ({route, navigation}) => {
                     <View style={styles.publicEventTitle}>
                         <Text style={{fontWeight: '500', fontSize: 18}}>Event details</Text>
                         {invitedUserEmail !== null && (
-                            <TouchableOpacity onPress={() => invitedUserEmail ? quitParty() : joinParty()} style={invitedUserEmail ? styles.quitParty : styles.joinParty}>
+                            <TouchableOpacity onPress={() => { 
+                                if (compareDates(eventData.event_close)) {
+                                    toggleClosedEventModal(true);
+                                  } else if (invitedUserEmail) {
+                                    quitParty();
+                                  } else {
+                                    joinParty();
+                                  }
+                                }}
+                                style={invitedUserEmail ? styles.quitParty : styles.joinParty}>
                                 <Text style={{ color: "#FFF", fontSize: 13, fontWeight: '400' }}>
                                     {invitedUserEmail ? "Quit party" : "Join party"}
                                 </Text>
@@ -181,7 +210,7 @@ const PublicEvent = ({route, navigation}) => {
                         <Text style={styles.data}>Close</Text>
                         <Text style={styles.value}>{eventData.event_close}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, id: id, location: eventData.event_location, street: eventData.event_street })}>
+                    <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, location: eventData.event_location, street: eventData.event_street })}>
                         <View style={styles.cardView}>
                             <Image source={require('./assets/map.png')} style={{width: 50, height: 50}}/>
                             <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
@@ -247,18 +276,31 @@ const PublicEvent = ({route, navigation}) => {
                                     <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is the owner of the event.</Text>
                                 </View>
                             )}
-                            {modalLevel === 'admin' ? (
-                                <View style={styles.information}>
-                                    <Image source={require('./assets/verified.png')} style={{width: 20, height: 20}}/>
-                                    <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is Verified, because is a developer at EventRain.</Text>
-                                </View>
-                            ) : (
-                                <View style={styles.information}>
-                                    <Image source={require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
-                                    <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is neither Premium or Verified.</Text>
-                                </View>
-                            )}
+                            <View style={styles.information}>
+                                <Image source={modalLevel === 'admin' ? require('./assets/verified.png') : require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
+                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>
+                                    {modalLevel === 'admin' ? 'The following account is Verified, because is a developer at EventRain.' : 'The following account is neither Premium or Verified.'}
+                                </Text>
+                            </View>
                         </View>
+                    </View>
+                </Modal>
+                <Modal
+                    isVisible={isClosedModalVisible}
+                    swipeDirection="down"
+                    onSwipeComplete={closeClosedEventModal}
+                    animationIn="slideInUp"
+                    animationOut="slideOutDown"
+                    animationInTiming={900}
+                    animationOutTiming={500}
+                    backdropTransitionInTiming={1000}
+                    backdropTransitionOutTiming={500}
+                    style={styles.modal}
+                >
+                    <View style={styles.closedEventModalContent}>
+                        <View style={styles.barIcon} />
+                        <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                        <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
                     </View>
                 </Modal>
             </ScrollView>
@@ -461,6 +503,19 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 30,
         margin: 5
+    },
+
+    closedEventModalContent: {
+        backgroundColor: "#141d26",
+        paddingTop: 12,
+        paddingHorizontal: 12,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        minHeight: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

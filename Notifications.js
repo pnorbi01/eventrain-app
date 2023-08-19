@@ -73,10 +73,16 @@ const Notifications = ({route, navigation}) => {
         }
     };
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return formatDistanceToNow(date, { addSuffix: true, locale: enGB });
-    };
+    function getTheDayOfNotification(date) {
+        const options = { month: 'short', day: 'numeric' };
+        const dateString = date;
+        const dateParts = dateString.split(/[- :]/);
+        const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], dateParts[3], dateParts[4], dateParts[5]); // Lokális időben létrehozott dátum
+
+        const formattedNotificationTime = new Intl.DateTimeFormat('en-US', options).format(localDate);
+
+        return formattedNotificationTime;
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -94,18 +100,12 @@ const Notifications = ({route, navigation}) => {
                 style={styles.flat}
                 data={data}
                 renderItem={({item}) => {
-                    const options = { month: 'short', day: 'numeric' };
-                    const formatNotificationTime = new Date(item.date_time);
-                    const formattedNotificationTime = new Intl.DateTimeFormat('en-US', options).format(formatNotificationTime);
+                    const time = getTheDayOfNotification(item.notification_time);
                     return (
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                             <View stlye={styles.circle}>
-                                {isCircleVisible[item.event_id] ? (
-                                    <Image source={require('./assets/circle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
-                                ) : (
-                                    <Image source={require('./assets/readCircle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
-                                )}
+                                <Image source={isCircleVisible[item.event_id] ? require('./assets/circle.png') : require('./assets/readCircle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
                             </View>
                             <TouchableOpacity activeOpacity={ 1 } onPress={() => {navigation.navigate("Invitation Detail", { token: token, id: item.event_id, name: item.event_name, type: item.event_type, status: item.event_status, location: item.event_location, street: item.event_street, start: item.event_start, close: item.event_close })}} style={{width: '100%'}}>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%'}}>
@@ -120,7 +120,7 @@ const Notifications = ({route, navigation}) => {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    {data.length > 0 && <Text style={{color: '#a9a9a9'}}>{formattedNotificationTime}</Text>}
+                                    <Text style={{color: '#a9a9a9'}}>{time}</Text>
                                 </View>
                                 
                             </TouchableOpacity>
@@ -149,29 +149,18 @@ const Notifications = ({route, navigation}) => {
                         <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ modalImage }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                         <Text style={styles.username}>{modalUsername}</Text>
                     </View>
-                    {modalLevel === 'admin' ? (
-                        <View style={styles.accountDescription}>
-                            <View style={styles.information}>
-                                <Image source={require('./assets/verified.png')} style={{width: 20, height: 20}}/>
-                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is Verified, because is a developer at EventRain.</Text>
-                            </View>
-                            <View style={styles.information}>
-                                <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
-                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
-                            </View>
+                    <View style={styles.accountDescription}>
+                        <View style={styles.information}>
+                            <Image source={modalLevel === 'admin' ? require('./assets/verified.png') : require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
+                            <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>
+                                {modalLevel === 'admin' ? 'The following account is Verified, because is a developer at EventRain.' : 'The following account is neither Premium or Verified.'}
+                            </Text>
                         </View>
-                    ) : (
-                    	<View style={styles.accountDescription}>
-                            <View style={styles.information}>
-                                <Image source={require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
-                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is neither Premium or Verified.</Text>
-                            </View>
-                            <View style={styles.information}>
-                                <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
-                                <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
-                            </View>
-                    	</View>
-		            )}
+                        <View style={styles.information}>
+                            <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
+                            <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
+                        </View>
+                    </View>
                 </View>
             </Modal>
         </SafeAreaView>
@@ -258,7 +247,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
-        minHeight: 400,
+        minHeight: 300,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',

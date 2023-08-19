@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import Modal from 'react-native-modal';
 
 const Home = ({ route, navigation }) => {
-  const { token, username, email, image } = route.params
-  const [data, setData] = useState([])
-  const [unreadNotifications, setUnreadNotifications] = useState([])
-  const [message, setMessage] = useState('')
-  const [publicEvents, setPublicEvents] = useState([])
+  const { token, username, email, image } = route.params;
+  const [data, setData] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [message, setMessage] = useState('');
+  const [publicEvents, setPublicEvents] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -95,6 +96,17 @@ const Home = ({ route, navigation }) => {
       .catch(err => console.log(err))
   }
 
+  function compareDates(targetDateString) {
+    const targetDate = new Date(targetDateString.replace(/-/g, '/'));
+    const currentDate = new Date();
+
+    if (currentDate.getTime() > targetDate.getTime()) {
+        return true;
+    } else {
+        return false;
+    }
+  }
+
   const OverviewCards = ({ item }) => {
     return (
       <View style={styles.itemView}>
@@ -108,6 +120,13 @@ const Home = ({ route, navigation }) => {
               {item.event_status}
             </Text>
           </View>
+          {compareDates(item.event_close) === true && (
+          <View style={styles.itemClosed}>
+            <Text style={{ fontSize: 11, color: '#FFF' }}>
+              closed
+            </Text>
+          </View>
+          )}
           <View style={styles.itemDescriptionView}>
             <View style={styles.itemDescription}>
               <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
@@ -143,6 +162,13 @@ const Home = ({ route, navigation }) => {
             source={require('./assets/publicEvents.png')}
             style={{ width: 160, height: 160, position: 'absolute', bottom: 0 }}
           />
+          {compareDates(item.event_close) === true && (
+          <View style={styles.itemClosed}>
+            <Text style={{ fontSize: 11, color: '#FFF' }}>
+              closed
+            </Text>
+          </View>
+          )}
           <View style={styles.itemDescriptionView}>
             <View style={styles.itemDescription}>
               <Text style={{ color: '#FFF', fontWeight: 'bold' }}>
@@ -404,6 +430,18 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     paddingLeft: 6,
     backgroundColor: '#00B0FF',
+    borderRadius: 8
+  },
+
+  itemClosed: {
+    position: 'absolute',
+    top: 5,
+    left: 5,
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingRight: 6,
+    paddingLeft: 6,
+    backgroundColor: '#D77165',
     borderRadius: 8
   }
 })

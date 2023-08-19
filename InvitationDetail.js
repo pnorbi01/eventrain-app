@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import MapView, { Marker } from 'react-native-maps';
 import Modal from 'react-native-modal';
 
 
@@ -12,6 +11,7 @@ const InvitationDetail = ({route, navigation}) => {
     const [message, setMessage] = useState('');
     const [isButtonVisible, setIsButtonVisible] = useState(false); 
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isClosedModalVisible, setClosedModalVisible] = useState(false);
     const [modalType, setModalType] = useState('');
     const [modalStatus, setModalStatus] = useState('');
     const [modalLocation, setModalLocation] = useState('');
@@ -46,6 +46,14 @@ const InvitationDetail = ({route, navigation}) => {
         setModalClose('');
         setModalVisible(false);
     };
+
+    const toggleClosedEventModal = () => {
+        setClosedModalVisible(!isClosedModalVisible);
+    }
+
+    const closeClosedEventModal = () => {
+        setClosedModalVisible(false);
+    }
 
     const handlePress = (value) => {
         const updateStatus = async () => {
@@ -135,6 +143,17 @@ const InvitationDetail = ({route, navigation}) => {
         .catch(err => console.log(err))
     }
 
+    function compareDates(targetDateString) {
+        const targetDate = new Date(targetDateString.replace(/-/g, '/'));
+        const currentDate = new Date();
+
+        if (currentDate.getTime() > targetDate.getTime()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.eventDetailTitleView}>
@@ -159,7 +178,7 @@ const InvitationDetail = ({route, navigation}) => {
                     </View>
                 </TouchableOpacity>
                 {data && data.length > 0 && data[0].status === 'accepted' && (
-                <TouchableOpacity onPress={() => navigation.navigate("Wishlist", { token: token, id: id })}>
+                <TouchableOpacity onPress={() => compareDates(close) === true ? toggleClosedEventModal(true) : navigation.navigate("Wishlist", { token: token, id: id })}>
                     <View style={styles.cardView}>
                         <Image source={require('./assets/gift.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the added gifts for the event.</Text>
@@ -237,6 +256,24 @@ const InvitationDetail = ({route, navigation}) => {
                             <Text style={styles.modalValue}>{modalClose}</Text>
                         </View>
                     </View>
+                </View>
+            </Modal>
+            <Modal
+                isVisible={isClosedModalVisible}
+                swipeDirection="down"
+                onSwipeComplete={closeClosedEventModal}
+                animationIn="slideInUp"
+                animationOut="slideOutDown"
+                animationInTiming={900}
+                animationOutTiming={500}
+                backdropTransitionInTiming={1000}
+                backdropTransitionOutTiming={500}
+                style={styles.modal}
+            >
+                <View style={styles.closedEventModalContent}>
+                    <View style={styles.barIcon} />
+                    <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle gifts as the event has closed.</Text>
                 </View>
             </Modal>
     </SafeAreaView>
@@ -326,6 +363,19 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
         margin: 0,
     },
+
+    closedEventModalContent: {
+        backgroundColor: "#141d26",
+        paddingTop: 12,
+        paddingHorizontal: 12,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        minHeight: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     
     modalContent: {
         backgroundColor: "#141d26",
@@ -386,10 +436,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00B0FF',
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 5,
-        paddingBottom: 5,
+        padding: 5,
         borderRadius: 10
     },
 

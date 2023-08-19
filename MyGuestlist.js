@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Modal from 'react-native-modal';
 
 const MyGuestlist = ({route, navigation}) => {
 
-    const { token, id } = route.params;
+    const { token, id, close } = route.params;
     const [data, setGuest] = useState([]);
     const [message, setMessage] = useState('');
+    const [isClosedModalVisible, setClosedModalVisible] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -72,6 +74,25 @@ const MyGuestlist = ({route, navigation}) => {
         )
     }
 
+    function compareDates(targetDateString) {
+        const targetDate = new Date(targetDateString.replace(/-/g, '/'));
+        const currentDate = new Date();
+
+        if (currentDate.getTime() > targetDate.getTime()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const toggleClosedEventModal = () => {
+        setClosedModalVisible(!isClosedModalVisible);
+    }
+
+    const closeClosedEventModal = () => {
+        setClosedModalVisible(false);
+    }
+
     const GuestCards = ({ item }) => {
         return (
             <View style={styles.guestFlatListBody}>
@@ -88,16 +109,14 @@ const MyGuestlist = ({route, navigation}) => {
                             <View style={styles.guestDetail}>
                                 <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>{item.status}</Text>
                                 <Text style={{fontSize: 5, color: '#BBB', marginLeft: 3}}>{'\u2B24'}</Text>
-                                {item.state === 'read' ? (
-                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Seen</Text>
-                                ) : (
-                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>Unseen</Text>   
-                                )}
+                                <Text style={{fontWeight: '300', fontSize: 12, marginLeft: 5}}>
+                                    {item.state === 'read' ? 'Seen' : 'Unseen'}
+                                </Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.editGuestView} >
-                        <TouchableOpacity style={styles.deleteGuest} onPress={() => showDeleteGuestAlert(item.username, item.invited_user_email)}>
+                        <TouchableOpacity style={styles.deleteGuest} onPress={() => compareDates(close) === true ? toggleClosedEventModal(true) : showDeleteGuestAlert(item.username, item.invited_user_email)}>
                             <Image source={require('./assets/trashCan.png')} style={{ width: 15, height: 15 }} />
                             <Text style={{color: '#FFF', fontSize: 12}}>Remove</Text>
                         </TouchableOpacity>
@@ -134,6 +153,24 @@ const MyGuestlist = ({route, navigation}) => {
                 )}
             />
             )}
+            <Modal
+                isVisible={isClosedModalVisible}
+                swipeDirection="down"
+                onSwipeComplete={closeClosedEventModal}
+                animationIn="slideInUp"
+                animationOut="slideOutDown"
+                animationInTiming={900}
+                animationOutTiming={500}
+                backdropTransitionInTiming={1000}
+                backdropTransitionOutTiming={500}
+                style={styles.modal}
+            >
+                <View style={styles.closedEventModalContent}>
+                    <View style={styles.barIcon} />
+                    <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
+                </View>
+            </Modal>
         </SafeAreaView>
   );
 };
@@ -264,6 +301,33 @@ const styles = StyleSheet.create({
         shadowOffset: { width: -2, height: 7 },
         shadowOpacity: 0.2,
         shadowRadius: 3
+    },
+
+    modal: {
+        justifyContent: "flex-end",
+        margin: 0,
+    },
+
+    closedEventModalContent: {
+        backgroundColor: "#141d26",
+        paddingTop: 12,
+        paddingHorizontal: 12,
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        minHeight: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    barIcon: {
+        width: 40,
+        height: 5,
+        backgroundColor: "#bbb",
+        borderRadius: 3,
+        position: 'absolute',
+        top: 10
     }
 });
 
