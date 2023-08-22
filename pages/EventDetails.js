@@ -13,7 +13,6 @@ const EventDetails = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           readGifts();
-          console.log("gifts");
         }, [])
     );
 
@@ -137,7 +136,7 @@ const EventDetails = ({route, navigation}) => {
                 <View style={styles.giftView}>
                     <View style={styles.leftSide}>
                         <View>
-                            <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
+                            <Image source={require('../assets/images/gift.png')} style={{ width: 45, height: 45 }} />
                         </View>
                         <View style={styles.giftDescription}>
                             <Text style={{fontWeight: '400'}}>{item.name}</Text>
@@ -149,7 +148,7 @@ const EventDetails = ({route, navigation}) => {
                         </View>
                     </View>
                     <TouchableOpacity style={styles.deleteView}  activeOpacity = { 1 } onPress={() => compareDates(eventData.event_close) === true ? toggleClosedEventModal(true) : showDeleteGiftAlert(item.gift_id, item.name)} >
-                        <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                        <Image source={require('../assets/images/trashCan.png')} style={{ width: 20, height: 20 }} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -159,13 +158,13 @@ const EventDetails = ({route, navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.noteText}>
-                <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
+                <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
                 <Text style={{ textAlign: 'left', left: 5 }}>Deleting either event or gift is permanent and irreversible.</Text>
             </View>
             <View style={styles.titleView}>
                 <Text style={{fontWeight: '200'}}>EVENT INFORMATION</Text>
                 <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={() => compareDates(eventData.event_close) === true ? toggleClosedEventModal(true) : showDeleteAlert()}>
-                    <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                    <Image source={require('../assets/images/trashCan.png')} style={{ width: 20, height: 20 }} />
                     <Text style={{color: '#FFF'}}>Delete</Text>
                 </TouchableOpacity>
             </View>
@@ -200,7 +199,7 @@ const EventDetails = ({route, navigation}) => {
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id, close: eventData.event_close })}>
                     <View style={styles.cardView}>
-                        <Image source={require('./assets/guestlist.png')} style={{width: 50, height: 50}}/>
+                        <Image source={require('../assets/images/guestlist.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
                     </View>
                 </TouchableOpacity>
@@ -210,7 +209,7 @@ const EventDetails = ({route, navigation}) => {
             </View>
             {data.numberOfGifts === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
+                    <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
                     <Text style={styles.noDataText}>You have no gifts!</Text>
                 </View>
             ) : (
@@ -236,7 +235,7 @@ const EventDetails = ({route, navigation}) => {
             >
                 <View style={styles.closedEventModalContent}>
                     <View style={styles.barIcon} />
-                    <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                    <Image source={require('../assets/images/locked.png')} style={{width: 50, height: 50}}/>
                     <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
                 </View>
             </Modal>

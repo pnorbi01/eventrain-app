@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 const CustomToast = ({ text }) => {
   return (
     <View style={styles.toastContainer}>
-    <Image source={require('./assets/copied.png')} style={{ width: 25, height: 25 }} />
+    <Image source={require('../assets/images/copied.png')} style={{ width: 25, height: 25 }} />
       <Text style={styles.toastText}>{text}</Text>
     </View>
   );

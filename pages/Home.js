@@ -15,7 +15,6 @@ const Home = ({ route, navigation }) => {
       list()
       readPublicEvents()
       listUnreadNotifications()
-      console.log('Home')
     }, [])
   )
 
@@ -112,7 +111,7 @@ const Home = ({ route, navigation }) => {
       <View style={styles.itemView}>
         <View style={styles.item}>
           <Image
-            source={require('./assets/ownEvents.png')}
+            source={require('../assets/images/ownEvents.png')}
             style={{ width: 200, height: 200 }}
           />
           <View style={styles.itemStatus}>
@@ -134,7 +133,7 @@ const Home = ({ route, navigation }) => {
               </Text>
               <View style={styles.itemLocation}>
                 <Image
-                  source={require('./assets/location.png')}
+                  source={require('../assets/images/location.png')}
                   style={{ width: 17, height: 17 }}
                 />
                 <Text
@@ -159,7 +158,7 @@ const Home = ({ route, navigation }) => {
       <View style={styles.itemView}>
         <View style={styles.item}>
           <Image
-            source={require('./assets/publicEvents.png')}
+            source={require('../assets/images/publicEvents.png')}
             style={{ width: 160, height: 160, position: 'absolute', bottom: 0 }}
           />
           {compareDates(item.event_close) === true && (
@@ -176,7 +175,7 @@ const Home = ({ route, navigation }) => {
               </Text>
               <View style={styles.itemLocation}>
                 <Image
-                  source={require('./assets/location.png')}
+                  source={require('../assets/images/location.png')}
                   style={{ width: 17, height: 17 }}
                 />
                 <Text
@@ -227,7 +226,7 @@ const Home = ({ route, navigation }) => {
           )}
         </TouchableOpacity>
         <Image
-          source={require('./assets/logo.png')}
+          source={require('../assets/images/logo.png')}
           style={{ width: 40, height: 40 }}
         />
         <TouchableOpacity
@@ -241,7 +240,7 @@ const Home = ({ route, navigation }) => {
           }
         >
           <Image
-            source={require('./assets/navCreate.png')}
+            source={require('../assets/images/navCreate.png')}
             style={{ width: 40, height: 40 }}
           />
         </TouchableOpacity>
@@ -253,7 +252,7 @@ const Home = ({ route, navigation }) => {
       {data && data.events && Array.isArray(data.events) && data.events.length === 0 ? (
         <View style={styles.noDataContainer}>
           <Image
-            source={require('./assets/noEvents.png')}
+            source={require('../assets/images/noEvents.png')}
             style={{ width: 80, height: 80, marginBottom: 15 }}
           />
           <Text style={styles.noDataText}>You have no events yet!</Text>
@@ -288,7 +287,7 @@ const Home = ({ route, navigation }) => {
       {publicEvents && publicEvents.events && Array.isArray(publicEvents.events) && publicEvents.events.length === 0 ? (
         <View style={styles.noDataContainer}>
           <Image
-            source={require('./assets/noEvents.png')}
+            source={require('../assets/images/noEvents.png')}
             style={{ width: 80, height: 80, marginBottom: 15 }}
           />
           <Text style={styles.noDataText}>There is no public events yet!</Text>

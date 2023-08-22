@@ -58,7 +58,7 @@ const AddEvent = ({route, navigation}) => {
             setMessage(
               <View style={styles.errorMessage}>
                   <Image
-                  source={require('./assets/caution.png')}
+                  source={require('../assets/images/caution.png')}
                   style={{ width: 20, height: 20 }}
                   />
                   <Text style={{ color: '#FFF', marginLeft: 5 }}>Something went wrong</Text>
@@ -75,7 +75,7 @@ const AddEvent = ({route, navigation}) => {
         setMessage(
           <View style={styles.errorMessage}>
               <Image
-              source={require('./assets/caution.png')}
+              source={require('../assets/images/caution.png')}
               style={{ width: 20, height: 20 }}
               />
               <Text style={{ color: '#FFF', marginLeft: 5 }}>Please fill all fields</Text>
@@ -116,7 +116,7 @@ const AddEvent = ({route, navigation}) => {
             <View style={styles.createEventPageView}>
               <View style={styles.createEventView}>
                 <View style={styles.noteText}>
-                    <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
+                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
                     <Text style={{ textAlign: 'left', left: 5 }}>Gifts are not required part of event creating. Please fill out the fields correctly as instructed in the guide. To see the guide tap on the info icon.</Text>
                 </View>
                 <Text>{message}</Text>
@@ -132,7 +132,7 @@ const AddEvent = ({route, navigation}) => {
                       popover={<Text>e.g. My Birthday</Text>}
                       backgroundColor="#F5CF87"
                       withOverlay={false}>
-                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                     </Tooltip>
                   </View>
                     <View style={styles.radioBtnView}>
@@ -152,7 +152,7 @@ const AddEvent = ({route, navigation}) => {
                         popover={<Text>e.g. Birthday</Text>}
                         backgroundColor="#F5CF87"
                         withOverlay={false}>
-                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
                     <View style={styles.inputView}>
@@ -166,7 +166,7 @@ const AddEvent = ({route, navigation}) => {
                         backgroundColor="#F5CF87"
                         withOverlay={false}
                         width={210}>
-                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
                     <View style={styles.inputView}>
@@ -179,7 +179,7 @@ const AddEvent = ({route, navigation}) => {
                         popover={<Text>e.g. Margit híd</Text>}
                         backgroundColor="#F5CF87"
                         withOverlay={false}>
-                      <Image source={require('./assets/info.png')} style={{ width: 23, height: 23 }} />
+                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
                       <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
@@ -229,7 +229,7 @@ const AddEvent = ({route, navigation}) => {
               </View>
               <View style={styles.createButton}>
                 <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
-                <Image source={require('./assets/createEventArrow.png')} style={{width: 18, height: 18}} />
+                <Image source={require('../assets/images/createEventArrow.png')} style={{width: 18, height: 18}} />
               </View>
             </ScrollView>
           </KeyboardAvoidingView>

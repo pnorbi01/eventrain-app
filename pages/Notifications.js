@@ -26,14 +26,11 @@ const Notifications = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           listNotifications();
-          console.log("Notifik");
         }, [])
     );
 
     const toggleModal = (modalImage, modalUsername, modalLevel, modalRegisteredAt) => {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const formatRegisteredDate = new Date(modalRegisteredAt);
-        const formattedRegisteredDate = new Intl.DateTimeFormat('en-US', options).format(formatRegisteredDate);
+        const formattedRegisteredDate = getTheDayOfNotification(modalRegisteredAt);
         setModalImage(modalImage);
         setModalUsername(modalUsername);
         setModalLevel(modalLevel);
@@ -74,7 +71,7 @@ const Notifications = ({route, navigation}) => {
     };
 
     function getTheDayOfNotification(date) {
-        const options = { month: 'short', day: 'numeric' };
+        const options = { month: 'short', day: 'numeric', year: 'numeric'};
         const dateString = date;
         const dateParts = dateString.split(/[- :]/);
         const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], dateParts[3], dateParts[4], dateParts[5]); // Lokális időben létrehozott dátum
@@ -86,13 +83,13 @@ const Notifications = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/notificationsPage.png')} style={{width: 250, height: 200}}/>
+            <Image source={require('../assets/images/notificationsPage.png')} style={{width: 250, height: 200}}/>
             <View style={styles.notifyTitle}>
                 <Text style={{fontWeight: '200'}}>NOTIFICATIONS</Text>
             </View>
             {data.length === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noNotifications.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
+                    <Image source={require('../assets/images/noNotifications.png')} style={{width: 80, height: 80, marginBottom: 15}}/>
                     <Text style={styles.noDataText}>You have no notifications!</Text>
                 </View>
             ) : (
@@ -105,7 +102,7 @@ const Notifications = ({route, navigation}) => {
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                             <View stlye={styles.circle}>
-                                <Image source={isCircleVisible[item.event_id] ? require('./assets/circle.png') : require('./assets/readCircle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
+                                <Image source={isCircleVisible[item.event_id] ? require('../assets/images/circle.png') : require('../assets/images/readCircle.png')} style={{width: 10, height: 10, marginRight: 5}}/>
                             </View>
                             <TouchableOpacity activeOpacity={ 1 } onPress={() => {navigation.navigate("Invitation Detail", { token: token, id: item.event_id, name: item.event_name, type: item.event_type, status: item.event_status, location: item.event_location, street: item.event_street, start: item.event_start, close: item.event_close })}} style={{width: '100%'}}>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%'}}>
@@ -151,13 +148,13 @@ const Notifications = ({route, navigation}) => {
                     </View>
                     <View style={styles.accountDescription}>
                         <View style={styles.information}>
-                            <Image source={modalLevel === 'admin' ? require('./assets/verified.png') : require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
+                            <Image source={modalLevel === 'admin' ? require('../assets/images/verified.png') : require('../assets/images/freeAccount.png')} style={{width: 20, height: 20}}/>
                             <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>
                                 {modalLevel === 'admin' ? 'The following account is Verified, because is a developer at EventRain.' : 'The following account is neither Premium or Verified.'}
                             </Text>
                         </View>
                         <View style={styles.information}>
-                            <Image source={require('./assets/registeredAt.png')} style={{width: 20, height: 20}}/>
+                            <Image source={require('../assets/images/registeredAt.png')} style={{width: 20, height: 20}}/>
                             <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
                         </View>
                     </View>

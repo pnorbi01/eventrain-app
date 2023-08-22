@@ -21,7 +21,6 @@ const PublicEvent = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
             readGuests();
-          console.log("gifts");
         }, [])
     );
 
@@ -49,7 +48,6 @@ const PublicEvent = ({route, navigation}) => {
                         }
                     }
                 });
-                console.log(found);
                 setInvitedUserEmail(found);
              })
              .catch(err => console.log(err))
@@ -159,7 +157,7 @@ const PublicEvent = ({route, navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-                <Image source={require('./assets/publicEvent.png')} style={{ width: 200, height: 200 }} />
+                <Image source={require('../assets/images/publicEvent.png')} style={{ width: 200, height: 200 }} />
                 <View style={styles.publicEventTitleView}>
                     <View style={styles.publicEventTitle}>
                         <Text style={{fontWeight: '500', fontSize: 18}}>Event details</Text>
@@ -212,7 +210,7 @@ const PublicEvent = ({route, navigation}) => {
                     </View>
                     <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, location: eventData.event_location, street: eventData.event_street })}>
                         <View style={styles.cardView}>
-                            <Image source={require('./assets/map.png')} style={{width: 50, height: 50}}/>
+                            <Image source={require('../assets/images/map.png')} style={{width: 50, height: 50}}/>
                             <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
                         </View>
                     </TouchableOpacity>
@@ -226,7 +224,7 @@ const PublicEvent = ({route, navigation}) => {
                     <TouchableOpacity activeOpacity={1} onPress={() => toggleModal(eventData.image, eventData.username, eventData.level, owner)}>
                         <View style={styles.organizer}>
                             <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+ eventData.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
-                            <Image source={require('./assets/crown.png')} style={{ width: 20, height: 20, position: 'absolute', top: -10, right: -3, transform: [{rotate: '35deg'}]}} />
+                            <Image source={require('../assets/images/crown.png')} style={{ width: 20, height: 20, position: 'absolute', top: -10, right: -3, transform: [{rotate: '35deg'}]}} />
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -238,7 +236,7 @@ const PublicEvent = ({route, navigation}) => {
                 </View>
                 {data && data.guests && Array.isArray(data.guests) && data.guests.length === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noGuests.png')} style={{width: 50, height: 50}}/>
+                    <Image source={require('../assets/images/noGuests.png')} style={{width: 50, height: 50}}/>
                     <Text style={styles.noDataText}>No invited members yet</Text>
                 </View>
                 ) : (
@@ -272,12 +270,12 @@ const PublicEvent = ({route, navigation}) => {
                         <View style={styles.accountDescription}>
                             {owner === 'owner' && (
                                 <View style={styles.information}>
-                                    <Image source={require('./assets/crown.png')} style={{width: 20, height: 20}}/>
+                                    <Image source={require('../assets/images/crown.png')} style={{width: 20, height: 20}}/>
                                     <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>The following account is the owner of the event.</Text>
                                 </View>
                             )}
                             <View style={styles.information}>
-                                <Image source={modalLevel === 'admin' ? require('./assets/verified.png') : require('./assets/freeAccount.png')} style={{width: 20, height: 20}}/>
+                                <Image source={modalLevel === 'admin' ? require('../assets/images/verified.png') : require('../assets/images/freeAccount.png')} style={{width: 20, height: 20}}/>
                                 <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>
                                     {modalLevel === 'admin' ? 'The following account is Verified, because is a developer at EventRain.' : 'The following account is neither Premium or Verified.'}
                                 </Text>
@@ -299,7 +297,7 @@ const PublicEvent = ({route, navigation}) => {
                 >
                     <View style={styles.closedEventModalContent}>
                         <View style={styles.barIcon} />
-                        <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                        <Image source={require('../assets/images/locked.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
                     </View>
                 </Modal>

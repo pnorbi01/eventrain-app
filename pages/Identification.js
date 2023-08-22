@@ -41,7 +41,7 @@ const Identification = ({ route, navigation }) => {
                 setMessage(
                   <View style={styles.errorMessage}>
                     <Image 
-                      source={require('./assets/caution.png')}
+                      source={require('../assets/images/caution.png')}
                       style={{ width: 20, height: 20 }}
                     />
                     <Text style={{color: '#FFF', marginLeft: 5}}>Invalid token</Text>
@@ -58,7 +58,7 @@ const Identification = ({ route, navigation }) => {
               setMessage(
                 <View style={styles.errorMessage}>
                   <Image 
-                    source={require('./assets/caution.png')}
+                    source={require('../assets/images/caution.png')}
                     style={{ width: 20, height: 20 }}
                   />
                   <Text style={{color: '#FFF', marginLeft: 5}}>Invalid token</Text>
@@ -73,7 +73,7 @@ const Identification = ({ route, navigation }) => {
         setMessage(
           <View style={styles.errorMessage}>
             <Image 
-              source={require('./assets/caution.png')}
+              source={require('../assets/images/caution.png')}
               style={{ width: 20, height: 20 }}
             />
             <Text style={{color: '#FFF', marginLeft: 5}}>Please fill all required fields</Text>
@@ -88,11 +88,11 @@ const Identification = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.tokenContainer}>
-                <Image source={require('./assets/identify.png')} style={{ width: 100, height: 100 }} />
+                <Image source={require('../assets/images/identify.png')} style={{ width: 100, height: 100 }} />
             </View>
             <View style={styles.tokenValidation}>
                 <View style={styles.noteText}>
-                    <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
+                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
                     <Text style={{ textAlign: 'left', left: 5 }}>You have to identify yourself with unique token, before you make changes on your password!</Text>
                 </View>
                 <Text style={{ textAlign: 'center', fontWeight: '300', width: '80%' }}>Please enter your unique token below. If you do not know your token, please go to Token tab and check it!</Text>

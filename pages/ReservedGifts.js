@@ -17,7 +17,6 @@ const ReservedGifts = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           readReservedGifts();
-          console.log("reservedGifts");
         }, [])
     );
 
@@ -126,7 +125,7 @@ const ReservedGifts = ({route, navigation}) => {
                 <View style={styles.giftView}>
                     <View style={styles.leftSide}>
                         <View>
-                            <Image source={require('./assets/gift.png')} style={{ width: 45, height: 45 }} />
+                            <Image source={require('../assets/images/gift.png')} style={{ width: 45, height: 45 }} />
                         </View>
                         <View style={styles.giftDescription}>
                             <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
@@ -136,7 +135,7 @@ const ReservedGifts = ({route, navigation}) => {
                         </View>
                     </View>
                     <TouchableOpacity style={styles.lockedGiftView}  activeOpacity = { 1 } onPress={() => showReleaseGiftAlert(item.gift_id, item.name)} >
-                        <Image source={require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
+                        <Image source={require('../assets/images/locked.png')} style={{ width: 20, height: 20 }} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -145,19 +144,19 @@ const ReservedGifts = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/reservedGifts.png')} style={{width: 260, height: 230}}/>
+            <Image source={require('../assets/images/reservedGifts.png')} style={{width: 260, height: 230}}/>
             <View style={styles.reservedGifts}>
                 <Text style={{fontWeight: '200', marginBottom: 15}}>RESERVED GIFTS</Text>
                 {data.length > 0 && (
                 <TouchableOpacity style={styles.clearAllView} activeOpacity = { 1 } onPress={() => showReleaseAllGiftsAlert()}>
-                    <Image source={require('./assets/trashCan.png')} style={{ width: 20, height: 20 }} />
+                    <Image source={require('../assets/images/trashCan.png')} style={{ width: 20, height: 20 }} />
                     <Text style={{color: '#FFF'}}>Release all</Text>
                 </TouchableOpacity>
                 )}
             </View>
                 {data.length === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
+                    <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
                     <Text style={styles.noDataText}>You have no reserved gifts!</Text>
                 </View>
                 ) : (

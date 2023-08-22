@@ -11,7 +11,6 @@ const Gifts = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           readGifts();
-          console.log("Gifts");
         }, [])
     );
 
@@ -58,7 +57,7 @@ const Gifts = ({route, navigation}) => {
         else {
             setMessage(
                 <View style={styles.errorMessage}>
-                    <Image source={require('./assets/caution.png')} style={{ width: 20, height: 20 }}/>
+                    <Image source={require('../assets/images/caution.png')} style={{ width: 20, height: 20 }}/>
                     <Text style={{color: '#FFF', marginLeft: 5}}>You can not reserve more than one gift for the same event.</Text>
                 </View>
             );
@@ -90,7 +89,7 @@ const Gifts = ({route, navigation}) => {
                 <View style={styles.giftView}>
                     <View style={styles.leftSide}>
                         <View>
-                            <Image source={require('./assets/gift.png')} style={{ width: 50, height: 50 }} />
+                            <Image source={require('../assets/images/gift.png')} style={{ width: 50, height: 50 }} />
                         </View>
                         <View style={styles.giftDescription}>
                             <Text style={{fontWeight: '400', fontSize: 17}}>{item.name}</Text>
@@ -102,7 +101,7 @@ const Gifts = ({route, navigation}) => {
                         </View>
                     </View>
                     <TouchableOpacity style={item.status === 'available' ? styles.unReserveView : styles.lockedGiftView}  activeOpacity = { 1 } onPress={() => item.status === 'available' && showReserveGiftAlert(item.gift_id, item.name, item.event_id)} >
-                        <Image source={item.status === 'available' ? require('./assets/unReserve.png') :  require('./assets/locked.png')} style={{ width: 20, height: 20 }} />
+                        <Image source={item.status === 'available' ? require('../assets/images/unReserve.png') :  require('../assets/images/locked.png')} style={{ width: 20, height: 20 }} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -125,7 +124,7 @@ const Gifts = ({route, navigation}) => {
             <Text>{message}</Text>
                 {data.numberOfGifts === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noGifts.png')} style={{width: 80, height: 80}}/>
+                    <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
                     <Text style={styles.noDataText}>The owner has not given any gifts!</Text>
                 </View>
                 ) : (

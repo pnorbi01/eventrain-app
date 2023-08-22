@@ -23,7 +23,6 @@ const InvitationDetail = ({route, navigation}) => {
         React.useCallback(() => {
           invitationDetail();
           setNotificationToRead();
-          console.log("InvDetail");
         }, [])
     );
 
@@ -173,21 +172,21 @@ const InvitationDetail = ({route, navigation}) => {
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate("Guestlist", { token: token, id: id })}>
                     <View style={styles.cardView}>
-                        <Image source={require('./assets/guestlist.png')} style={{width: 50, height: 50}}/>
+                        <Image source={require('../assets/images/guestlist.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
                     </View>
                 </TouchableOpacity>
                 {data && data.length > 0 && data[0].status === 'accepted' && (
                 <TouchableOpacity onPress={() => compareDates(close) === true ? toggleClosedEventModal(true) : navigation.navigate("Wishlist", { token: token, id: id })}>
                     <View style={styles.cardView}>
-                        <Image source={require('./assets/gift.png')} style={{width: 50, height: 50}}/>
+                        <Image source={require('../assets/images/gift.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the added gifts for the event.</Text>
                     </View>
                 </TouchableOpacity>
                 )}
                 <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, id: id, name: name, location: location, street: street })}>
                     <View style={styles.cardView}>
-                        <Image source={require('./assets/map.png')} style={{width: 50, height: 50}}/>
+                        <Image source={require('../assets/images/map.png')} style={{width: 50, height: 50}}/>
                         <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
                     </View>
                 </TouchableOpacity>
@@ -200,13 +199,13 @@ const InvitationDetail = ({route, navigation}) => {
                 <View style={styles.buttonsView}>
                     <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('accepted')}>
                         <View style={styles.choiceBtn}>
-                            <Image source={require('./assets/accept.png')} style={{width: 18, height: 18}}/>
+                            <Image source={require('../assets/images/accept.png')} style={{width: 18, height: 18}}/>
                             <Text style={{color: '#699F4C', fontSize: 18, paddingLeft: 5}}>Accept</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('declined')}>
                         <View style={styles.choiceBtn}>
-                            <Image source={require('./assets/decline.png')} style={{width: 20, height: 20}}/>
+                            <Image source={require('../assets/images/decline.png')} style={{width: 20, height: 20}}/>
                             <Text style={{color: '#D77165', fontSize: 18, paddingLeft: 5}}>Decline</Text>
                         </View>
                     </TouchableOpacity>
@@ -272,7 +271,7 @@ const InvitationDetail = ({route, navigation}) => {
             >
                 <View style={styles.closedEventModalContent}>
                     <View style={styles.barIcon} />
-                    <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                    <Image source={require('../assets/images/locked.png')} style={{width: 50, height: 50}}/>
                     <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle gifts as the event has closed.</Text>
                 </View>
             </Modal>

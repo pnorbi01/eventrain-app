@@ -38,7 +38,7 @@ const Password = ({route, navigation}) => {
                             setMessage(
                                 <View style={styles.successMessage}>
                                     <Image
-                                    source={require('./assets/updated.png')}
+                                    source={require('../assets/images/updated.png')}
                                     style={{ width: 25, height: 25 }}
                                     />
                                     <Text style={{ color: '#FFF', marginLeft: 5 }}>Your password has been changed successfully!</Text>
@@ -54,7 +54,7 @@ const Password = ({route, navigation}) => {
                     setMessage(
                         <View style={styles.errorMessage}>
                         <Image 
-                            source={require('./assets/caution.png')}
+                            source={require('../assets/images/caution.png')}
                             style={{ width: 20, height: 20 }}
                         />
                         <Text style={{color: '#FFF', marginLeft: 5}}>Wrong old password</Text>
@@ -71,7 +71,7 @@ const Password = ({route, navigation}) => {
                     setMessage(
                     <View style={styles.errorMessage}>
                         <Image 
-                        source={require('./assets/caution.png')}
+                        source={require('../assets/images/caution.png')}
                         style={{ width: 20, height: 20 }}
                         />
                         <Text style={{color: '#FFF', marginLeft: 5}}>Wrong old password</Text>
@@ -86,7 +86,7 @@ const Password = ({route, navigation}) => {
                 setMessage(
                     <View style={styles.errorMessage}>
                     <Image 
-                        source={require('./assets/caution.png')}
+                        source={require('../assets/images/caution.png')}
                         style={{ width: 20, height: 20 }}
                     />
                     <Text style={{color: '#FFF', marginLeft: 5}}>New password must be atleast 8 character length</Text>
@@ -101,7 +101,7 @@ const Password = ({route, navigation}) => {
           setMessage(
             <View style={styles.errorMessage}>
               <Image 
-                source={require('./assets/caution.png')}
+                source={require('../assets/images/caution.png')}
                 style={{ width: 20, height: 20 }}
               />
               <Text style={{color: '#FFF', marginLeft: 5}}>Please fill all required fields</Text>
@@ -115,7 +115,7 @@ const Password = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={require('./assets/password.png')} style={{width: 150, height: 150, top: 10}}/>
+            <Image source={require('../assets/images/password.png')} style={{width: 150, height: 150, top: 10}}/>
             <View style={styles.passwordUpdate}>
                 <Text style={{width: '100%', fontSize: 20, fontWeight: 'bold', marginBottom: 15, textAlign: 'center'}}>Update your password</Text>
                 <View>

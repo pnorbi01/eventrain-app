@@ -13,7 +13,6 @@ const MyGuestlist = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           readGuestlist();
-          console.log("Guestlist");
         }, [])
     );
 
@@ -103,7 +102,7 @@ const MyGuestlist = ({route, navigation}) => {
                             <View style={styles.guestData}>
                                 <Text style={{fontWeight: '400', fontSize: 17, marginLeft: 5}}>{item.username}</Text>
                                 {item.level === 'admin' && (
-                                <Image source={require('./assets/verified.png')} style={{width: 15, height: 15, marginLeft: 2}}/>
+                                <Image source={require('../assets/images/verified.png')} style={{width: 15, height: 15, marginLeft: 2}}/>
                                 )}
                             </View>
                             <View style={styles.guestDetail}>
@@ -117,7 +116,7 @@ const MyGuestlist = ({route, navigation}) => {
                     </View>
                     <View style={styles.editGuestView} >
                         <TouchableOpacity style={styles.deleteGuest} onPress={() => compareDates(close) === true ? toggleClosedEventModal(true) : showDeleteGuestAlert(item.username, item.invited_user_email)}>
-                            <Image source={require('./assets/trashCan.png')} style={{ width: 15, height: 15 }} />
+                            <Image source={require('../assets/images/trashCan.png')} style={{ width: 15, height: 15 }} />
                             <Text style={{color: '#FFF', fontSize: 12}}>Remove</Text>
                         </TouchableOpacity>
                     </View>
@@ -141,7 +140,7 @@ const MyGuestlist = ({route, navigation}) => {
             </View>
             {data.numberOfGuests === 0 ? (
                 <View style={styles.noDataContainer}>
-                    <Image source={require('./assets/noGuests.png')} style={{width: 80, height: 80}}/>
+                    <Image source={require('../assets/images/noGuests.png')} style={{width: 80, height: 80}}/>
                     <Text style={styles.noDataText}>No participants have been included yet</Text>
                 </View>
             ) : (
@@ -167,7 +166,7 @@ const MyGuestlist = ({route, navigation}) => {
             >
                 <View style={styles.closedEventModalContent}>
                     <View style={styles.barIcon} />
-                    <Image source={require('./assets/locked.png')} style={{width: 50, height: 50}}/>
+                    <Image source={require('../assets/images/locked.png')} style={{width: 50, height: 50}}/>
                     <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
                 </View>
             </Modal>

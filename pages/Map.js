@@ -11,7 +11,6 @@ const Profile = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           getLocationFromName(location + "," + street);
-          console.log("Map");
         }, [])
     );
 
@@ -23,7 +22,6 @@ const Profile = ({route, navigation}) => {
                 response.json()
                 .then(data => {
                     setCoordinates({latitude: data.features[0].properties.lat, longitude: data.features[0].properties.lon})
-                    console.log(coordinates)
                 })
             }
         }).catch(e => {

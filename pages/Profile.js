@@ -11,7 +11,6 @@ const Profile = ({route, navigation}) => {
     useFocusEffect(
         React.useCallback(() => {
           listUnreadNotifications();
-          console.log("Profil");
         }, [])
     );
 
@@ -79,7 +78,7 @@ const Profile = ({route, navigation}) => {
             </View>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Notifications", { token: token, email: email })}>
                 <View style={styles.profileBtnView}>
-                    <Image source={require('./assets/notifications.png')} style={{width: 20, height: 20}}/>
+                    <Image source={require('../assets/images/notifications.png')} style={{width: 20, height: 20}}/>
                     <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500', paddingRight: 5}}>Notifications</Text>
                     {unreadNotifications > 0 &&
                     <View style={styles.badge}>
@@ -90,19 +89,19 @@ const Profile = ({route, navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Reserved Gifts", { token: token })}>
                 <View style={styles.profileBtnView}>
-                    <Image source={require('./assets/gifts.png')} style={{width: 20, height: 20}}/>
+                    <Image source={require('../assets/images/gifts.png')} style={{width: 20, height: 20}}/>
                     <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500'}}>Reserved Gifts</Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Account Details", { token: token })}>
                 <View style={styles.profileBtnView}>
-                    <Image source={require('./assets/profile.png')} style={{width: 25, height: 25}}/>
+                    <Image source={require('../assets/images/profile.png')} style={{width: 25, height: 25}}/>
                     <Text style={{fontSize: 18, paddingLeft: 5, fontWeight: '500'}}>Account</Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity style={styles.logoutBtn} onPress={showLogoutAlert}>
                 <View style={styles.profileBtnView}>
-                    <Image source={require('./assets/logout.png')} style={{width: 20, height: 20}}/>
+                    <Image source={require('../assets/images/logout.png')} style={{width: 20, height: 20}}/>
                     <Text style={{ color: '#FFF', fontSize: 18, paddingLeft: 5, fontWeight: '500'}}>Log Out</Text>
                 </View>
             </TouchableOpacity>

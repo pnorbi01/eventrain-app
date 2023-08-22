@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
             setMessage(
               <View style={styles.errorMessage}>
                 <Image
-                  source={require('./assets/caution.png')}
+                  source={require('../assets/images/caution.png')}
                   style={{ width: 20, height: 20 }}
                 />
                 <Text style={{ color: '#FFF', marginLeft: 5 }}>
@@ -71,7 +71,7 @@ const Login = ({ navigation }) => {
           setMessage(
             <View style={styles.errorMessage}>
               <Image
-                source={require('./assets/caution.png')}
+                source={require('../assets/images/caution.png')}
                 style={{ width: 20, height: 20 }}
               />
               <Text style={{ color: '#FFF', marginLeft: 5 }}>
@@ -87,7 +87,7 @@ const Login = ({ navigation }) => {
       setMessage(
         <View style={styles.errorMessage}>
           <Image
-            source={require('./assets/caution.png')}
+            source={require('../assets/images/caution.png')}
             style={{ width: 20, height: 20 }}
           />
           <Text style={{ color: '#FFF', marginLeft: 5 }}>
@@ -105,7 +105,7 @@ const Login = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.companyName}>
         <Image
-          source={require('./assets/loginImage.png')}
+          source={require('../assets/images/loginImage.png')}
           style={{ width: 200, height: 200 }}
         />
         <Text style={{ fontWeight: '800', fontSize: 25, color: '#00B0FF' }}>
@@ -141,7 +141,7 @@ const Login = ({ navigation }) => {
             />
             <TouchableOpacity style={styles.login} onPress={() => login()}>
               <Image
-                source={require('./assets/login.png')}
+                source={require('../assets/images/login.png')}
                 style={{ width: 20, height: 20 }}
               />
               <Text style={{ color: '#274C77', fontSize: 18, marginLeft: 5 }}>

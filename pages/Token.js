@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-root-toast';
 import * as Clipboard from 'expo-clipboard';
-import CustomToast from './CustomToast';
+import CustomToast from '../components/CustomToast';
 
 const Token = ({ route, navigation }) => {
     const { token } = route.params;
@@ -62,7 +62,7 @@ const Token = ({ route, navigation }) => {
                 setMessage(
                 <View style={styles.errorMessage}>
                     <Image
-                    source={require('./assets/caution.png')}
+                    source={require('../assets/images/caution.png')}
                     style={{ width: 20, height: 20 }}
                     />
                     <Text style={{ color: '#FFF', marginLeft: 5 }}>Token not found</Text>
@@ -74,7 +74,7 @@ const Token = ({ route, navigation }) => {
             setMessage(
                 <View style={styles.errorMessage}>
                 <Image
-                    source={require('./assets/caution.png')}
+                    source={require('../assets/images/caution.png')}
                     style={{ width: 20, height: 20 }}
                 />
                 <Text style={{ color: '#FFF', marginLeft: 5 }}>Invalid password</Text>
@@ -87,7 +87,7 @@ const Token = ({ route, navigation }) => {
             setMessage(
             <View style={styles.errorMessage}>
                 <Image
-                source={require('./assets/caution.png')}
+                source={require('../assets/images/caution.png')}
                 style={{ width: 20, height: 20 }}
                 />
                 <Text style={{ color: '#FFF', marginLeft: 5 }}>An error occurred</Text>
@@ -99,7 +99,7 @@ const Token = ({ route, navigation }) => {
         setMessage(
             <View style={styles.errorMessage}>
             <Image
-                source={require('./assets/caution.png')}
+                source={require('../assets/images/caution.png')}
                 style={{ width: 20, height: 20 }}
             />
             <Text style={{ color: '#FFF', marginLeft: 5 }}>Please fill all required fields</Text>
@@ -114,11 +114,11 @@ const Token = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.tokenContainer}>
-                <Image source={require('./assets/token.png')} style={{ width: 100, height: 100, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }} />
+                <Image source={require('../assets/images/token.png')} style={{ width: 100, height: 100, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }} />
             </View>
             <View style={styles.tokenValidation}>
                 <View style={styles.noteText}>
-                    <Image source={require('./assets/note.png')} style={{ width: 35, height: 35 }} />
+                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
                     <Text style={{ textAlign: 'left', left: 5 }}>Note that, if you logout once the token will be deleted, and you will get a new one on your next login!</Text>
                 </View>
                 <Text style={{ textAlign: 'center', fontWeight: '300' }}>Please enter your password to be able to see your current token.</Text>
