@@ -20,7 +20,7 @@ const Notifications = ({route, navigation}) => {
     const [modalImage, setModalImage] = useState('');
     const [modalUsername, setModalUsername] = useState('');
     const [modalLevel, setModalLevel] = useState('');
-    const [formattedRegisteredDate, setFormattedRegisteredDate] = useState('');
+    const [modalRegisteredAt, setModalRegisteredAt] = useState('');
 
 
     useFocusEffect(
@@ -30,11 +30,10 @@ const Notifications = ({route, navigation}) => {
     );
 
     const toggleModal = (modalImage, modalUsername, modalLevel, modalRegisteredAt) => {
-        const formattedRegisteredDate = getTheDayOfNotification(modalRegisteredAt);
         setModalImage(modalImage);
         setModalUsername(modalUsername);
         setModalLevel(modalLevel);
-        setFormattedRegisteredDate(formattedRegisteredDate);
+        setModalRegisteredAt(modalRegisteredAt);
         setModalVisible(!isModalVisible);
     };
 
@@ -42,12 +41,12 @@ const Notifications = ({route, navigation}) => {
         setModalImage('');
         setModalUsername('');
         setModalLevel('');
-        setFormattedRegisteredDate('');
+        setModalRegisteredAt('');
         setModalVisible(false);
     };
 
     const listNotifications = async () => {
-        const response = await fetch('http://192.168.0.17/EventRain/api/events/read-notifications.php', {
+        const response = await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-notifications.php', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -70,17 +69,6 @@ const Notifications = ({route, navigation}) => {
         }
     };
 
-    function getTheDayOfNotification(date) {
-        const options = { month: 'short', day: 'numeric', year: 'numeric'};
-        const dateString = date;
-        const dateParts = dateString.split(/[- :]/);
-        const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], dateParts[3], dateParts[4], dateParts[5]); // Lokális időben létrehozott dátum
-
-        const formattedNotificationTime = new Intl.DateTimeFormat('en-US', options).format(localDate);
-
-        return formattedNotificationTime;
-    }
-
     return (
         <SafeAreaView style={styles.container}>
             <Image source={require('../assets/images/notificationsPage.png')} style={{width: 250, height: 200}}/>
@@ -97,7 +85,7 @@ const Notifications = ({route, navigation}) => {
                 style={styles.flat}
                 data={data}
                 renderItem={({item}) => {
-                    const time = getTheDayOfNotification(item.notification_time);
+                    const notificationTime = new Date(item.notification_time).toLocaleDateString("en-GB");
                     return (
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -117,7 +105,7 @@ const Notifications = ({route, navigation}) => {
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <Text style={{color: '#a9a9a9'}}>{time}</Text>
+                                    <Text style={{color: '#a9a9a9'}}>{notificationTime}</Text>
                                 </View>
                                 
                             </TouchableOpacity>
@@ -155,7 +143,7 @@ const Notifications = ({route, navigation}) => {
                         </View>
                         <View style={styles.information}>
                             <Image source={require('../assets/images/registeredAt.png')} style={{width: 20, height: 20}}/>
-                            <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {formattedRegisteredDate}</Text>
+                            <Text style={{color: '#FFF', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Registered in: {modalRegisteredAt}</Text>
                         </View>
                     </View>
                 </View>

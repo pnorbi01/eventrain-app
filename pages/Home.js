@@ -19,7 +19,7 @@ const Home = ({ route, navigation }) => {
   )
 
   const list = async () => {
-    await fetch('http://192.168.0.17/EventRain/api/events/read.php', {
+    await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read.php', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -44,7 +44,7 @@ const Home = ({ route, navigation }) => {
   }
 
   const readPublicEvents = async () => {
-    await fetch('http://192.168.0.17/EventRain/api/events/read-public-events.php', {
+    await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-public-events.php', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -70,7 +70,7 @@ const Home = ({ route, navigation }) => {
 
   const listUnreadNotifications = async () => {
     await fetch(
-      'http://192.168.0.17/EventRain/api/events/unread-notifications.php',
+      'https://printf.stud.vts.su.ac.rs/EventRain/api/events/unread-notifications.php',
       {
         method: 'POST',
         headers: {

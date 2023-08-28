@@ -17,7 +17,7 @@ const MyGuestlist = ({route, navigation}) => {
     );
 
     const readGuestlist = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-guestlist.php?eventId='+ id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-guestlist.php?eventId='+ id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -40,7 +40,7 @@ const MyGuestlist = ({route, navigation}) => {
     }
 
     const deleteGuest = async (email) => {
-        await fetch('http://192.168.0.17/EventRain/api/events/remove-guest-from-list.php?eventId=' + id + '&guest=' + email, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/remove-guest-from-list.php?eventId=' + id + '&guest=' + email, {
             method: 'DELETE',
             headers: {
             'Token': token

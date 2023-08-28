@@ -17,7 +17,7 @@ const EventDetails = ({route, navigation}) => {
     );
 
     const deleteEvent = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/delete.php?eventId=' + eventData.event_id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/delete.php?eventId=' + eventData.event_id, {
             method: 'DELETE',
             headers: {
             'Token': token
@@ -40,7 +40,7 @@ const EventDetails = ({route, navigation}) => {
     }
 
     const readGifts = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-gifts.php?eventId='+ eventData.event_id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-gifts.php?eventId='+ eventData.event_id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -63,7 +63,7 @@ const EventDetails = ({route, navigation}) => {
     }
 
     const deleteGift = async (giftId) => {
-        await fetch('http://192.168.0.17/EventRain/api/events/delete-gift.php?eventId=' + eventData.event_id + '&giftId=' + giftId, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/delete-gift.php?eventId=' + eventData.event_id + '&giftId=' + giftId, {
             method: 'DELETE',
             headers: {
             'Token': token

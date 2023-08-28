@@ -38,7 +38,7 @@ const Token = ({ route, navigation }) => {
         startLoading();
 
         try {
-            const response = await fetch('http://192.168.0.17/EventRain/api/events/check-token.php', {
+            const response = await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/check-token.php', {
             method: 'POST',
             body: JSON.stringify({
                 password: password,

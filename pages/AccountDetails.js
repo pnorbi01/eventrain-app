@@ -17,7 +17,7 @@ const AccountDetails = ({route, navigation}) => {
     );
 
     const readAccountInformation = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-account-information.php', {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-account-information.php', {
          method: 'POST',
          headers: {
            'Accept': 'application/json',

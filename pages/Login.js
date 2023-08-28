@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
     if (username.trim().length != 0 && password.trim().length != 0) {
       startLoading()
 
-      await fetch('http://192.168.0.17/EventRain/api/login.php', {
+      await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/login.php', {
         method: 'POST',
         body: JSON.stringify({
           username: username,

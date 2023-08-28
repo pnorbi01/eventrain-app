@@ -25,7 +25,7 @@ const PublicEvent = ({route, navigation}) => {
     );
 
     const readGuests = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-public-event-guests.php?eventId='+ eventData.event_id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-public-event-guests.php?eventId='+ eventData.event_id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -60,7 +60,7 @@ const PublicEvent = ({route, navigation}) => {
     }
 
     const joinParty = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/join-public-event.php?eventId='+ eventData.event_id + '&ownerId=' + eventData.user_id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/join-public-event.php?eventId='+ eventData.event_id + '&ownerId=' + eventData.user_id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -84,7 +84,7 @@ const PublicEvent = ({route, navigation}) => {
     }
 
     const quitParty = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/quit-public-event.php?eventId='+ eventData.event_id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/quit-public-event.php?eventId='+ eventData.event_id, {
          method: 'DELETE',
          headers: {
            'Accept': 'application/json',

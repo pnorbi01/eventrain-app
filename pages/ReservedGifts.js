@@ -21,7 +21,7 @@ const ReservedGifts = ({route, navigation}) => {
     );
 
     const readReservedGifts = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-reserved-gifts.php', {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-reserved-gifts.php', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -44,7 +44,7 @@ const ReservedGifts = ({route, navigation}) => {
     }
 
     const releaseGift = async (giftId) => {
-        await fetch('http://192.168.0.17/EventRain/api/events/release-gift.php?giftId=' + giftId, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/release-gift.php?giftId=' + giftId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -68,7 +68,7 @@ const ReservedGifts = ({route, navigation}) => {
     }
 
     const releaseAllGifts = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/release-all-reserved-gifts.php' , {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/release-all-reserved-gifts.php' , {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',

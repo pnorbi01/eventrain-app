@@ -18,7 +18,7 @@ const Password = ({route, navigation}) => {
             if(newPassword.trim().length > 7) {
             startLoading();
         
-                await fetch('http://192.168.0.17/EventRain/api/events/change-password.php', {
+                await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/change-password.php', {
                 method: 'POST',
                 body: JSON.stringify({
                     currentPassword: currentPassword,

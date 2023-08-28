@@ -56,7 +56,7 @@ const InvitationDetail = ({route, navigation}) => {
 
     const handlePress = (value) => {
         const updateStatus = async () => {
-            await fetch('http://192.168.0.17/EventRain/api/events/update-status.php?eventId=' + id + '&status=' + value, {
+            await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/update-status.php?eventId=' + id + '&status=' + value, {
             method: 'PUT',
             headers: {
             'Accept': 'application/json',
@@ -95,7 +95,7 @@ const InvitationDetail = ({route, navigation}) => {
     }
 
     const invitationDetail = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/invitation-detail.php?eventId=' + id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/invitation-detail.php?eventId=' + id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -119,7 +119,7 @@ const InvitationDetail = ({route, navigation}) => {
     }
 
     const setNotificationToRead = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/set-notification-to-read.php?eventId=' + id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/set-notification-to-read.php?eventId=' + id, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',

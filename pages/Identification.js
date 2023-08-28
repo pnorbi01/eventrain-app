@@ -15,7 +15,7 @@ const Identification = ({ route, navigation }) => {
       if (specifiedToken.trim().length != 0) {
         startLoading();
   
-          await fetch('http://192.168.0.17/EventRain/api/events/identification.php', {
+          await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/identification.php', {
             method: 'POST',
             body: JSON.stringify({
               specifiedToken: specifiedToken

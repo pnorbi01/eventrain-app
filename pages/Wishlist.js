@@ -15,7 +15,7 @@ const Gifts = ({route, navigation}) => {
     );
 
     const readGifts = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/read-gifts.php?eventId='+ id, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/read-gifts.php?eventId='+ id, {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
@@ -38,7 +38,7 @@ const Gifts = ({route, navigation}) => {
     }
 
     const reserveGift = async (giftId, eventId) => {
-        await fetch('http://192.168.0.17/EventRain/api/events/reserve-gift.php?giftId=' + giftId + '&eventId=' + eventId, {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/reserve-gift.php?giftId=' + giftId + '&eventId=' + eventId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',

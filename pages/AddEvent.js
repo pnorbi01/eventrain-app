@@ -24,7 +24,7 @@ const AddEvent = ({route, navigation}) => {
 
     const add = async () => {
       if(name.trim().length != 0 && type.trim().length != 0 && status.trim().length != 0 && location.trim().length != 0 && street.trim().length != 0) {
-       await fetch('http://192.168.0.17/EventRain/api/events/create.php', {
+       await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/create.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -37,8 +37,8 @@ const AddEvent = ({route, navigation}) => {
           eventStatus: status,
           eventLocation: location,
           eventStreet: street,
-          eventStart: start,
-          eventDeadline: deadline,
+          eventStart: start.toISOString().slice(0, 19).replace('T', ' '),
+          eventDeadline: deadline.toISOString().slice(0, 19).replace('T', ' '),
           gifts: gifts
 
         })

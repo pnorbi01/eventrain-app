@@ -15,7 +15,7 @@ const Profile = ({route, navigation}) => {
     );
 
     const logout = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/logout.php', {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/logout.php', {
           method: 'POST',
           headers: {
             'Token': token
@@ -48,7 +48,7 @@ const Profile = ({route, navigation}) => {
     }
 
     const listUnreadNotifications = async () => {
-        await fetch('http://192.168.0.17/EventRain/api/events/unread-notifications.php', {
+        await fetch('https://printf.stud.vts.su.ac.rs/EventRain/api/events/unread-notifications.php', {
          method: 'POST',
          headers: {
            'Accept': 'application/json',
