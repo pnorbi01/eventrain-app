@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import Modal from 'react-native-modal';
 
 const Home = ({ route, navigation }) => {
   const { token, username, email, image } = route.params;
@@ -140,7 +139,7 @@ const Home = ({ route, navigation }) => {
                   style={{
                     color: '#00B0FF',
                     fontWeight: '500',
-                    fontSize: '11'
+                    fontSize: 11
                   }}
                 >
                   {item.event_location}
@@ -182,7 +181,7 @@ const Home = ({ route, navigation }) => {
                   style={{
                     color: '#00B0FF',
                     fontWeight: '500',
-                    fontSize: '11'
+                    fontSize: 11
                   }}
                 >
                   {item.event_location}

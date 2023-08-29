@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import Moment from 'moment';
 
 const { width } = Dimensions.get('window');
 
@@ -9,6 +10,9 @@ const AccountDetails = ({route, navigation}) => {
     const { token } = route.params;
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
+    const formattedDate = data.length > 0 ? Moment(data[0].registered_at).format('DD MMM, YYYY') : "";
+    Moment.locale('en');
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -38,9 +42,7 @@ const AccountDetails = ({route, navigation}) => {
          })
          .catch(err => console.log(err))
     }
-
-    const formattedDate = data.length > 0 ? new Date(data[0].registered_at).toLocaleDateString("en-GB") : "";
-
+    
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>

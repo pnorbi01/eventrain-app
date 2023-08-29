@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
+import Moment from 'moment';
 
 
 const seperator = () => {
@@ -21,6 +22,7 @@ const Notifications = ({route, navigation}) => {
     const [modalUsername, setModalUsername] = useState('');
     const [modalLevel, setModalLevel] = useState('');
     const [modalRegisteredAt, setModalRegisteredAt] = useState('');
+    Moment.locale('en');
 
 
     useFocusEffect(
@@ -33,7 +35,7 @@ const Notifications = ({route, navigation}) => {
         setModalImage(modalImage);
         setModalUsername(modalUsername);
         setModalLevel(modalLevel);
-        setModalRegisteredAt(modalRegisteredAt);
+        setModalRegisteredAt(Moment(modalRegisteredAt).format('DD MMM, YYYY'));
         setModalVisible(!isModalVisible);
     };
 
@@ -85,7 +87,7 @@ const Notifications = ({route, navigation}) => {
                 style={styles.flat}
                 data={data}
                 renderItem={({item}) => {
-                    const notificationTime = new Date(item.notification_time).toLocaleDateString("en-GB");
+                    const notificationTime = Moment(item.notification_time).fromNow();
                     return (
                     <View style={styles.flatView}>
                         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
