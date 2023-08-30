@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
+import CheckInternet from './CheckInternet';
 
 
 const InvitationDetail = ({route, navigation}) => {
@@ -18,6 +19,7 @@ const InvitationDetail = ({route, navigation}) => {
     const [modalStreet, setModalStreet] = useState('');
     const [modalStart, setModalStart] = useState('');
     const [modalClose, setModalClose] = useState('');
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -155,126 +157,129 @@ const InvitationDetail = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.eventDetailTitleView}>
-                <View style={styles.eventDetailTitle}>
-                    <Text style={{fontWeight: '700', fontSize: 30}}>{name}</Text>
-                    <View>
-                        <TouchableOpacity style={styles.moreInfo} onPress={() => toggleModal(type, status, location, street, start, close)}>
-                            <Text style={{color: '#000', fontSize: 12}}>More info</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-            <View style={styles.accountDetails}>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>My Station</Text>
-                    {data.length > 0 && <Text style={styles.value}>{data[0].status}</Text>}
-                </View>
-                <TouchableOpacity onPress={() => navigation.navigate("Guestlist", { token: token, id: id })}>
-                    <View style={styles.cardView}>
-                        <Image source={require('../assets/images/guestlist.png')} style={{width: 50, height: 50}}/>
-                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
-                    </View>
-                </TouchableOpacity>
-                {data && data.length > 0 && data[0].status === 'accepted' && (
-                <TouchableOpacity onPress={() => compareDates(close) === true ? toggleClosedEventModal(true) : navigation.navigate("Wishlist", { token: token, id: id })}>
-                    <View style={styles.cardView}>
-                        <Image source={require('../assets/images/gift.png')} style={{width: 50, height: 50}}/>
-                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the added gifts for the event.</Text>
-                    </View>
-                </TouchableOpacity>
-                )}
-                <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, id: id, name: name, location: location, street: street })}>
-                    <View style={styles.cardView}>
-                        <Image source={require('../assets/images/map.png')} style={{width: 50, height: 50}}/>
-                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            {isButtonVisible && (
-            <View style={styles.choiceView}>
-                <View style={styles.text}>
-                    <Text style={{textAlign: 'center', fontWeight: '300'}}>Please, let your friend know your choice as soon as possible!</Text>
-                </View>
-                <View style={styles.buttonsView}>
-                    <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('accepted')}>
-                        <View style={styles.choiceBtn}>
-                            <Image source={require('../assets/images/accept.png')} style={{width: 18, height: 18}}/>
-                            <Text style={{color: '#699F4C', fontSize: 18, paddingLeft: 5}}>Accept</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('declined')}>
-                        <View style={styles.choiceBtn}>
-                            <Image source={require('../assets/images/decline.png')} style={{width: 20, height: 20}}/>
-                            <Text style={{color: '#D77165', fontSize: 18, paddingLeft: 5}}>Decline</Text>
-                        </View>
+        <View style={styles.eventDetailTitleView}>
+            <View style={styles.eventDetailTitle}>
+                <Text style={{fontWeight: '700', fontSize: 30}}>{name}</Text>
+                <View>
+                    <TouchableOpacity style={styles.moreInfo} onPress={() => toggleModal(type, status, location, street, start, close)}>
+                        <Text style={{color: '#000', fontSize: 12}}>More info</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+        </View>
+        <View style={styles.accountDetails}>
+            <View style={styles.datas}>
+                <Text style={styles.data}>My Station</Text>
+                {data.length > 0 && <Text style={styles.value}>{data[0].status}</Text>}
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("Guestlist", { token: token, id: id })}>
+                <View style={styles.cardView}>
+                    <Image source={require('../assets/images/guestlist.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
+                </View>
+            </TouchableOpacity>
+            {data && data.length > 0 && data[0].status === 'accepted' && (
+            <TouchableOpacity onPress={() => compareDates(close) === true ? toggleClosedEventModal(true) : navigation.navigate("Wishlist", { token: token, id: id })}>
+                <View style={styles.cardView}>
+                    <Image source={require('../assets/images/gift.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the added gifts for the event.</Text>
+                </View>
+            </TouchableOpacity>
             )}
-            <Modal
-                isVisible={isModalVisible}
-                swipeDirection="down"
-                onSwipeComplete={closeModal}
-                animationIn="slideInUp"
-                animationOut="slideOutDown"
-                animationInTiming={900}
-                animationOutTiming={500}
-                backdropTransitionInTiming={1000}
-                backdropTransitionOutTiming={500}
-                style={styles.modal}
-            >
-                <View style={styles.modalContent}>
-                    <View style={styles.barIcon} />
-                    <View style={styles.eventInformation}>
-                        <View style={styles.modalTitle}>
-                            <Text style={{fontWeight: '700', fontSize: 30, color: '#bbb'}}>Further details</Text>
-                        </View>
-                        <View style={styles.datas}>
-                            <Text style={styles.modalData}>Type</Text>
-                            <Text style={styles.modalValue}>{modalType}</Text>
-                        </View>
-                        <View style={styles.datas}>
-                            <Text style={styles.modalData}>Status</Text>
-                            <Text style={styles.modalValue}>{modalStatus}</Text>
-                        </View>
-                        <View style={styles.datas}>
-                            <Text style={styles.modalData}>Location</Text>
-                            <Text style={styles.modalValue}>{modalLocation}</Text>
-                        </View>
-                        <View style={styles.datas}>
-                            <Text style={styles.modalData}>Street</Text>
-                            <Text style={styles.modalValue}>{modalStreet}</Text>
-                        </View>
-                        <View style={styles.datas}>
-                            <Text style={styles.modalData}>Start</Text>
-                            <Text style={styles.modalValue}>{modalStart}</Text>
-                        </View>
-                        <View style={styles.datas}>
-                            <Text style={styles.modalData}>Close</Text>
-                            <Text style={styles.modalValue}>{modalClose}</Text>
-                        </View>
+            <TouchableOpacity onPress={() => navigation.navigate("Map", { token: token, id: id, name: name, location: location, street: street })}>
+                <View style={styles.cardView}>
+                    <Image source={require('../assets/images/map.png')} style={{width: 50, height: 50}}/>
+                    <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the exact location of the event on the map.</Text>
+                </View>
+            </TouchableOpacity>
+        </View>
+        {isButtonVisible && (
+        <View style={styles.choiceView}>
+            <View style={styles.text}>
+                <Text style={{textAlign: 'center', fontWeight: '300'}}>Please, let your friend know your choice as soon as possible!</Text>
+            </View>
+            <View style={styles.buttonsView}>
+                <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('accepted')}>
+                    <View style={styles.choiceBtn}>
+                        <Image source={require('../assets/images/accept.png')} style={{width: 18, height: 18}}/>
+                        <Text style={{color: '#699F4C', fontSize: 18, paddingLeft: 5}}>Accept</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.choiceBtnView} onPress={() => handlePress('declined')}>
+                    <View style={styles.choiceBtn}>
+                        <Image source={require('../assets/images/decline.png')} style={{width: 20, height: 20}}/>
+                        <Text style={{color: '#D77165', fontSize: 18, paddingLeft: 5}}>Decline</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </View>
+        )}
+        <Modal
+            isVisible={isModalVisible}
+            swipeDirection="down"
+            onSwipeComplete={closeModal}
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            animationInTiming={900}
+            animationOutTiming={500}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={500}
+            style={styles.modal}
+        >
+            <View style={styles.modalContent}>
+                <View style={styles.barIcon} />
+                <View style={styles.eventInformation}>
+                    <View style={styles.modalTitle}>
+                        <Text style={{fontWeight: '700', fontSize: 30, color: '#bbb'}}>Further details</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.modalData}>Type</Text>
+                        <Text style={styles.modalValue}>{modalType}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.modalData}>Status</Text>
+                        <Text style={styles.modalValue}>{modalStatus}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.modalData}>Location</Text>
+                        <Text style={styles.modalValue}>{modalLocation}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.modalData}>Street</Text>
+                        <Text style={styles.modalValue}>{modalStreet}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.modalData}>Start</Text>
+                        <Text style={styles.modalValue}>{modalStart}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.modalData}>Close</Text>
+                        <Text style={styles.modalValue}>{modalClose}</Text>
                     </View>
                 </View>
-            </Modal>
-            <Modal
-                isVisible={isClosedModalVisible}
-                swipeDirection="down"
-                onSwipeComplete={closeClosedEventModal}
-                animationIn="slideInUp"
-                animationOut="slideOutDown"
-                animationInTiming={900}
-                animationOutTiming={500}
-                backdropTransitionInTiming={1000}
-                backdropTransitionOutTiming={500}
-                style={styles.modal}
-            >
-                <View style={styles.closedEventModalContent}>
-                    <View style={styles.barIcon} />
-                    <Image source={require('../assets/images/locked.png')} style={{width: 50, height: 50}}/>
-                    <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle gifts as the event has closed.</Text>
-                </View>
-            </Modal>
+            </View>
+        </Modal>
+        <Modal
+            isVisible={isClosedModalVisible}
+            swipeDirection="down"
+            onSwipeComplete={closeClosedEventModal}
+            animationIn="slideInUp"
+            animationOut="slideOutDown"
+            animationInTiming={900}
+            animationOutTiming={500}
+            backdropTransitionInTiming={1000}
+            backdropTransitionOutTiming={500}
+            style={styles.modal}
+        >
+            <View style={styles.closedEventModalContent}>
+                <View style={styles.barIcon} />
+                <Image source={require('../assets/images/locked.png')} style={{width: 50, height: 50}}/>
+                <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle gifts as the event has closed.</Text>
+            </View>
+        </Modal>
+        {isConnected === false ? (
+          <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+        ) : null }
     </SafeAreaView>
   );
 };

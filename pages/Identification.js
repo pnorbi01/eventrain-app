@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import CheckInternet from './CheckInternet';
 
 const Identification = ({ route, navigation }) => {
     const { token } = route.params;
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [specifiedToken, setSpecifiedToken] = useState('');
+    const [isConnected, setIsConnected] = useState(false);
 
     const startLoading = () => {
         setLoading(true);
@@ -115,6 +117,9 @@ const Identification = ({ route, navigation }) => {
                 )}
             </View>
             {message}
+            {isConnected === false ? (
+              <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
     );
 };

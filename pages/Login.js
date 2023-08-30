@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -8,13 +8,15 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native'
+import CheckInternet from './CheckInternet';
 
 const Login = ({ navigation }) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [token, setToken] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const startLoading = () => {
     setLoading(true)
@@ -75,7 +77,7 @@ const Login = ({ navigation }) => {
                 style={{ width: 20, height: 20 }}
               />
               <Text style={{ color: '#FFF', marginLeft: 5 }}>
-                Invalid username or password
+                Error. Check your internet connectivity.
               </Text>
             </View>
           )
@@ -103,55 +105,58 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.companyName}>
-        <Image
-          source={require('../assets/images/loginImage.png')}
-          style={{ width: 200, height: 200 }}
-        />
-        <Text style={{ fontWeight: '800', fontSize: 25, color: '#00B0FF' }}>
-          EventRain
-        </Text>
-        <Text style={{ top: 0 }}>The best place for event organization.</Text>
-      </View>
-      <View style={styles.loginBody}>
-        <Text style={{ fontWeight: '300', fontSize: 15 }}>
-          Login with an exisiting account!
-        </Text>
-        {loading ? (
-          <ActivityIndicator
-            visible={loading}
-            textContent={'Loading...'}
-            textStyle={styles.spinnerTextStyle}
-            size='large'
+        <View style={styles.companyName}>
+          <Image
+            source={require('../assets/images/loginImage.png')}
+            style={{ width: 200, height: 200 }}
           />
-        ) : (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder='Username'
-              defaultValue={username}
-              onChangeText={username => setUsername(username)}
+          <Text style={{ fontWeight: '800', fontSize: 25, color: '#00B0FF' }}>
+            EventRain
+          </Text>
+          <Text style={{ top: 0 }}>The best place for event organization.</Text>
+        </View>
+        <View style={styles.loginBody}>
+          <Text style={{ fontWeight: '300', fontSize: 15 }}>
+            Login with an exisiting account!
+          </Text>
+          {loading ? (
+            <ActivityIndicator
+              visible={loading}
+              textContent={'Loading...'}
+              textStyle={styles.spinnerTextStyle}
+              size='large'
             />
-            <TextInput
-              style={styles.input}
-              placeholder='Password'
-              defaultValue={password}
-              secureTextEntry={true}
-              onChangeText={password => setPassword(password)}
-            />
-            <TouchableOpacity style={styles.login} onPress={() => login()}>
-              <Image
-                source={require('../assets/images/login.png')}
-                style={{ width: 20, height: 20 }}
+          ) : (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder='Username'
+                defaultValue={username}
+                onChangeText={username => setUsername(username)}
               />
-              <Text style={{ color: '#274C77', fontSize: 18, marginLeft: 5 }}>
-                Login
-              </Text>
-            </TouchableOpacity>
-            <Text>{message}</Text>
-          </>
-        )}
-      </View>
+              <TextInput
+                style={styles.input}
+                placeholder='Password'
+                defaultValue={password}
+                secureTextEntry={true}
+                onChangeText={password => setPassword(password)}
+              />
+              <TouchableOpacity style={styles.login} onPress={() => login()}>
+                <Image
+                  source={require('../assets/images/login.png')}
+                  style={{ width: 20, height: 20 }}
+                />
+                <Text style={{ color: '#274C77', fontSize: 18, marginLeft: 5 }}>
+                  Login
+                </Text>
+              </TouchableOpacity>
+              <Text>{message}</Text>
+            </>
+          )}
+        </View>
+        {isConnected === false ? (
+          <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+        ) : null }
     </View>
   )
 }

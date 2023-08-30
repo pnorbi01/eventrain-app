@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import CheckInternet from './CheckInternet';
 
 const Guestlist = ({route, navigation}) => {
 
     const { token, id } = route.params;
     const [data, setGuest] = useState([]);
     const [message, setMessage] = useState('');
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -60,20 +62,23 @@ const Guestlist = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.guestTitleView}>
                 <View style={styles.guestTitle}>
-                    <Text style={{fontWeight: '700', fontSize: 30}}>Guestlist</Text>
+                    <Text style={{ fontWeight: '700', fontSize: 30 }}>Guestlist</Text>
                     <View style={styles.guestInformation}>
-                        <Text style={{fontWeight: '300', fontSize: 13, color: '#141d26'}}>Overall Participants: {data.numberOfGuests}</Text>
-                        <Text style={{fontWeight: '300', fontSize: 13, color: '#141d26'}}>Attending Participants: {data.attendingGuests}</Text>
+                        <Text style={{ fontWeight: '300', fontSize: 13, color: '#141d26' }}>Overall Participants: {data.numberOfGuests}</Text>
+                        <Text style={{ fontWeight: '300', fontSize: 13, color: '#141d26' }}>Attending Participants: {data.attendingGuests}</Text>
                     </View>
                 </View>
             </View>
             <FlatList
                 style={styles.guestFlatList}
                 data={data.guest}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                     <GuestCards item={item} />
-            )}
+                )}
             />
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };

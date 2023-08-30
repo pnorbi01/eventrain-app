@@ -19,6 +19,7 @@ import MyGuestlist from './pages/MyGuestlist';
 import LandingPage from './pages/LandingPage';
 import PublicEvent from './pages/PublicEvent';
 import Map from './pages/Map';
+import CheckInternet from './pages/CheckInternet';
 
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +30,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Landing Page' screenOptions={{headerShown: false}}>
         <Stack.Screen name="Landing Page" component={LandingPage} />
+        <Stack.Screen name="CheckInternet" component={CheckInternet}  options={{gestureEnabled: false, headerLeft: () => <></>}} />
         <Stack.Screen name="Login" component={Login} options={{gestureEnabled: false, headerLeft: () => <></>}}/>
         <Stack.Screen name="Home" component={Home} options={{gestureEnabled: false, headerShown: false, headerLeft: () => <></>}}/>
         <Stack.Screen name="Create Event" component={AddEvent} />

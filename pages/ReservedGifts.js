@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import CheckInternet from './CheckInternet';
 
 const ReservedGifts = ({route, navigation}) => {
 
     const { token } = route.params;
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
+    const [isConnected, setIsConnected] = useState(false)
 
     const seperator = () => {
         return (
@@ -154,20 +156,23 @@ const ReservedGifts = ({route, navigation}) => {
                 </TouchableOpacity>
                 )}
             </View>
-                {data.length === 0 ? (
-                <View style={styles.noDataContainer}>
-                    <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
-                    <Text style={styles.noDataText}>You have no reserved gifts!</Text>
-                </View>
-                ) : (
-                    <FlatList
-                        style={styles.giftFlatList}
-                        data={data}
-                        renderItem={({item}) => (
-                            <ReservedGiftCards item={item} />
-                    )}
-                    />
+            {data.length === 0 ? (
+            <View style={styles.noDataContainer}>
+                <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
+                <Text style={styles.noDataText}>You have no reserved gifts!</Text>
+            </View>
+            ) : (
+                <FlatList
+                    style={styles.giftFlatList}
+                    data={data}
+                    renderItem={({item}) => (
+                        <ReservedGiftCards item={item} />
                 )}
+                />
+            )}
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import CheckInternet from './CheckInternet';
 
 const Gifts = ({route, navigation}) => {
 
     const { token, id } = route.params;
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -136,6 +138,9 @@ const Gifts = ({route, navigation}) => {
                     )}
                     />
                 )}
+                {isConnected === false ? (
+                <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+                ) : null }
         </SafeAreaView>
   );
 };

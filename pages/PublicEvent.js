@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, ScrollView, Dimensions } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
+import CheckInternet from './CheckInternet';
 
 const { width } = Dimensions.get('window');
 
@@ -17,6 +18,7 @@ const PublicEvent = ({route, navigation}) => {
     const [modalLevel, setModalLevel] = useState('');
     const [owner, setOwner] = useState('owner');
     const [invitedUserEmail, setInvitedUserEmail] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -165,11 +167,11 @@ const PublicEvent = ({route, navigation}) => {
                             <TouchableOpacity onPress={() => { 
                                 if (compareDates(eventData.event_close)) {
                                     toggleClosedEventModal(true);
-                                  } else if (invitedUserEmail) {
+                                } else if (invitedUserEmail) {
                                     quitParty();
-                                  } else {
+                                } else {
                                     joinParty();
-                                  }
+                                }
                                 }}
                                 style={invitedUserEmail ? styles.quitParty : styles.joinParty}>
                                 <Text style={{ color: "#FFF", fontSize: 13, fontWeight: '400' }}>
@@ -302,6 +304,9 @@ const PublicEvent = ({route, navigation}) => {
                     </View>
                 </Modal>
             </ScrollView>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };

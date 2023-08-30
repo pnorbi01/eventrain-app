@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Moment from 'moment';
+import CheckInternet from './CheckInternet';
 
 const { width } = Dimensions.get('window');
 
@@ -11,6 +12,7 @@ const AccountDetails = ({route, navigation}) => {
     const [data, setData] = useState([]);
     const [message, setMessage] = useState('');
     const formattedDate = data.length > 0 ? Moment(data[0].registered_at).format('DD MMM, YYYY') : "";
+    const [isConnected, setIsConnected] = useState(false);
     Moment.locale('en');
 
 
@@ -93,6 +95,9 @@ const AccountDetails = ({route, navigation}) => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };

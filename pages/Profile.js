@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import CheckInternet from './CheckInternet';
 
 const Profile = ({route, navigation}) => {
 
     const { token, username, email, image } = route.params;
     const [unreadNotifications, setUnreadNotifications] = useState([]);
     const [message, setMessage] = useState('');
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -73,7 +75,7 @@ const Profile = ({route, navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.profileContainer}>
-            <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+                <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                 <Text style={{fontWeight: 'bold', fontSize: 17, paddingTop: 10}}>{username}</Text>
             </View>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Notifications", { token: token, email: email })}>
@@ -105,6 +107,9 @@ const Profile = ({route, navigation}) => {
                     <Text style={{ color: '#FFF', fontSize: 18, paddingLeft: 5, fontWeight: '500'}}>Log Out</Text>
                 </View>
             </TouchableOpacity>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };
@@ -161,6 +166,10 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingBottom: 5,
         borderRadius: 50
+    },
+
+    spinnerTextStyle: {
+        color: '#FFF'
     }
   
 });

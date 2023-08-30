@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import CheckInternet from './CheckInternet';
 
 const Home = ({ route, navigation }) => {
   const { token, username, email, image } = route.params;
@@ -8,6 +9,7 @@ const Home = ({ route, navigation }) => {
   const [unreadNotifications, setUnreadNotifications] = useState([]);
   const [message, setMessage] = useState('');
   const [publicEvents, setPublicEvents] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -314,6 +316,9 @@ const Home = ({ route, navigation }) => {
           )}
         />
       )}
+      {isConnected === false ? (
+          <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+      ) : null }
     </SafeAreaView>
   )
 }
@@ -323,7 +328,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 
   profile: {

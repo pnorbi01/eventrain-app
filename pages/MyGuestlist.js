@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
+import CheckInternet from './CheckInternet';
 
 const MyGuestlist = ({route, navigation}) => {
 
@@ -9,6 +10,7 @@ const MyGuestlist = ({route, navigation}) => {
     const [data, setGuest] = useState([]);
     const [message, setMessage] = useState('');
     const [isClosedModalVisible, setClosedModalVisible] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -170,6 +172,9 @@ const MyGuestlist = ({route, navigation}) => {
                     <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
                 </View>
             </Modal>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };

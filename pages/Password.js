@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, Button } from 'react-native';
+import CheckInternet from './CheckInternet';
 
 const Password = ({route, navigation}) => {
 
@@ -8,6 +9,7 @@ const Password = ({route, navigation}) => {
     const [newPassword, setNewPassword] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
 
     const startLoading = () => {
         setLoading(true);
@@ -138,6 +140,9 @@ const Password = ({route, navigation}) => {
                 <Button onPress={() => changePassword()} title="Change my password" />
                 {message}
             </View>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };

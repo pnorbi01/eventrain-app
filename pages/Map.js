@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
+import CheckInternet from './CheckInternet';
 
-const Profile = ({route, navigation}) => {
+const Map = ({route, navigation}) => {
 
     const { token, id, name, location, street } = route.params;
     const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+    const [isConnected, setIsConnected] = useState(false);
+    const [message, setMessage] = useState('');
 
     useFocusEffect(
         React.useCallback(() => {
@@ -23,9 +26,15 @@ const Profile = ({route, navigation}) => {
                 .then(data => {
                     setCoordinates({latitude: data.features[0].properties.lat, longitude: data.features[0].properties.lon})
                 })
+                .catch(e => {
+                    setMessage('The location of the following event is invalid.');
+                })
+            }
+            else {
+                setMessage('No location data found.');
             }
         }).catch(e => {
-            console.error('Error fetching location from name:', e);
+            setMessage('Something went wrong. Check your internet connectivity.');
         })
     };
 
@@ -36,9 +45,18 @@ const Profile = ({route, navigation}) => {
                     <Text style={{fontWeight: '700', fontSize: 30}}>Map</Text>
                 </View>
             </View>
-            <MapView style={{ width: '90%', height: '70%', borderRadius: 20}}>
+            {message !== '' && (
+                <View style={styles.noteText}>
+                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
+                    <Text style={{ textAlign: 'left', left: 5 }}>{message}</Text>
+                </View>
+            )}
+            <MapView style={{ width: '90%', height: '60%', borderRadius: 20}}>
                 <Marker coordinate={coordinates} title={location + ", " + street} />
             </MapView>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };
@@ -67,7 +85,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
     },
+
+    noteText: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '90%',
+        padding: 20,
+        backgroundColor: '#F5CF87',
+        borderRadius: 25,
+        marginBottom: 10
+    }
   
 });
 
-export default Profile;
+export default Map;

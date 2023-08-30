@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, Sa
 import Toast from 'react-native-root-toast';
 import * as Clipboard from 'expo-clipboard';
 import CustomToast from '../components/CustomToast';
+import CheckInternet from './CheckInternet';
 
 const Token = ({ route, navigation }) => {
     const { token } = route.params;
@@ -10,6 +11,7 @@ const Token = ({ route, navigation }) => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [displayedToken, setDisplayedToken] = useState('');
+    const [isConnected, setIsConnected] = useState(false)
 
     const startLoading = () => {
         setLoading(true);
@@ -147,6 +149,9 @@ const Token = ({ route, navigation }) => {
                 ) : null}
             </View>
             <Text>{message}</Text>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
     );
 };

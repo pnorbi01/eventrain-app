@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, Alert, TouchableOpacity, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
+import CheckInternet from './CheckInternet';
 
 const EventDetails = ({route, navigation}) => {
 
@@ -9,6 +10,7 @@ const EventDetails = ({route, navigation}) => {
     const [message, setMessage] = useState('');
     const [data, setData] = useState([]);
     const [isClosedModalVisible, setClosedModalVisible] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -157,70 +159,70 @@ const EventDetails = ({route, navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.noteText}>
-                <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
-                <Text style={{ textAlign: 'left', left: 5 }}>Deleting either event or gift is permanent and irreversible.</Text>
-            </View>
-            <View style={styles.titleView}>
-                <Text style={{fontWeight: '200'}}>EVENT INFORMATION</Text>
-                <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={() => compareDates(eventData.event_close) === true ? toggleClosedEventModal(true) : showDeleteAlert()}>
-                    <Image source={require('../assets/images/trashCan.png')} style={{ width: 20, height: 20 }} />
-                    <Text style={{color: '#FFF'}}>Delete</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.eventDetails}>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Name</Text>
-                    <Text style={styles.value}>{eventData.event_name}</Text>
+                <View style={styles.noteText}>
+                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
+                    <Text style={{ textAlign: 'left', left: 5 }}>Deleting either event or gift is permanent and irreversible.</Text>
                 </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Status</Text>
-                    <Text style={styles.value}>{eventData.event_status}</Text>
+                <View style={styles.titleView}>
+                    <Text style={{fontWeight: '200'}}>EVENT INFORMATION</Text>
+                    <TouchableOpacity style={styles.deleteView} activeOpacity = { 1 } onPress={() => compareDates(eventData.event_close) === true ? toggleClosedEventModal(true) : showDeleteAlert()}>
+                        <Image source={require('../assets/images/trashCan.png')} style={{ width: 20, height: 20 }} />
+                        <Text style={{color: '#FFF'}}>Delete</Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Type</Text>
-                    <Text style={styles.value}>{eventData.event_type}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Location</Text>
-                    <Text style={styles.value}>{eventData.event_location}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Street</Text>
-                    <Text style={styles.value}>{eventData.event_street}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Start</Text>
-                    <Text style={styles.value}>{eventData.event_start}</Text>
-                </View>
-                <View style={styles.datas}>
-                    <Text style={styles.data}>Close</Text>
-                    <Text style={styles.value}>{eventData.event_close}</Text>
-                </View>
-                <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id, close: eventData.event_close })}>
-                    <View style={styles.cardView}>
-                        <Image source={require('../assets/images/guestlist.png')} style={{width: 50, height: 50}}/>
-                        <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
+                <View style={styles.eventDetails}>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Name</Text>
+                        <Text style={styles.value}>{eventData.event_name}</Text>
                     </View>
-                </TouchableOpacity>
-            </View>
-            <View style={{padding: 10}}>
-                <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
-            </View>
-            {data.numberOfGifts === 0 ? (
-                <View style={styles.noDataContainer}>
-                    <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
-                    <Text style={styles.noDataText}>You have no gifts!</Text>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Status</Text>
+                        <Text style={styles.value}>{eventData.event_status}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Type</Text>
+                        <Text style={styles.value}>{eventData.event_type}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Location</Text>
+                        <Text style={styles.value}>{eventData.event_location}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Street</Text>
+                        <Text style={styles.value}>{eventData.event_street}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Start</Text>
+                        <Text style={styles.value}>{eventData.event_start}</Text>
+                    </View>
+                    <View style={styles.datas}>
+                        <Text style={styles.data}>Close</Text>
+                        <Text style={styles.value}>{eventData.event_close}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("My Guestlist", { token: token, id: eventData.event_id, close: eventData.event_close })}>
+                        <View style={styles.cardView}>
+                            <Image source={require('../assets/images/guestlist.png')} style={{width: 50, height: 50}}/>
+                            <Text style={{color: '#000', marginLeft: 10, fontWeight: '500', flexShrink: 1}}>Check out the invited members to the following event.</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
-            ) : (
-                <FlatList
-                    style={styles.giftFlatList}
-                    data={data.gifts}
-                    renderItem={({item}) => (
-                        <GiftCards item={item} />
-                    )}
-                />
-            )}
+                <View style={{padding: 10}}>
+                    <Text style={{fontSize: 13}}>Your gifts for the selected event will appear below</Text>
+                </View>
+                {data.numberOfGifts === 0 ? (
+                    <View style={styles.noDataContainer}>
+                        <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
+                        <Text style={styles.noDataText}>You have no gifts!</Text>
+                    </View>
+                ) : (
+                    <FlatList
+                        style={styles.giftFlatList}
+                        data={data.gifts}
+                        renderItem={({item}) => (
+                            <GiftCards item={item} />
+                        )}
+                    />
+                )}
             <Modal
                 isVisible={isClosedModalVisible}
                 swipeDirection="down"
@@ -239,6 +241,9 @@ const EventDetails = ({route, navigation}) => {
                     <Text style={{color: '#FFF', fontWeight: 'bold', marginTop: 10, textAlign: 'center'}}>You are unable to handle the request as the event has closed.</Text>
                 </View>
             </Modal>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };
@@ -284,7 +289,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         width: '100%',
         padding: 30,
-        paddingTop: 20
+        paddingTop: 20,
     },
 
     noteText: {

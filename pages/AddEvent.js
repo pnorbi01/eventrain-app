@@ -3,6 +3,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { Card, Tooltip } from 'react-native-elements';
+import CheckInternet from './CheckInternet';
 
 const { width } = Dimensions.get('window');
 
@@ -21,6 +22,7 @@ const AddEvent = ({route, navigation}) => {
     const [status, setStatus] = useState('public');
     const [inputFields, setInputFields] = useState([]);
     const [gifts, setGifts] = useState(Array(inputFields.length).fill(''));
+    const [isConnected, setIsConnected] = useState(false);
 
     const add = async () => {
       if(name.trim().length != 0 && type.trim().length != 0 && status.trim().length != 0 && location.trim().length != 0 && street.trim().length != 0) {
@@ -111,128 +113,131 @@ const AddEvent = ({route, navigation}) => {
 
     return (
       <View style={styles.container}>
-        <KeyboardAvoidingView style={{ flexGrow: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled keyboardVerticalOffset={1}>
-          <ScrollView contentContainerStyle={styles.scrollView}>
-            <View style={styles.createEventPageView}>
-              <View style={styles.createEventView}>
-                <View style={styles.noteText}>
-                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
-                    <Text style={{ textAlign: 'left', left: 5 }}>Gifts are not required part of event creating. Please fill out the fields correctly as instructed in the guide. To see the guide tap on the info icon.</Text>
+          <KeyboardAvoidingView style={{ flexGrow: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled keyboardVerticalOffset={1}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+              <View style={styles.createEventPageView}>
+                <View style={styles.createEventView}>
+                  <View style={styles.noteText}>
+                      <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
+                      <Text style={{ textAlign: 'left', left: 5 }}>Gifts are not required part of event creating. Please fill out the fields correctly as instructed in the guide. To see the guide tap on the info icon.</Text>
+                  </View>
+                  <Text>{message}</Text>
                 </View>
-                <Text>{message}</Text>
-              </View>
-                <View style={styles.inputContainer}>
-                  <View style={styles.inputView}>
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Event's name"
-                      onChangeText={(name) => setName(name)}
-                    />
-                    <Tooltip
-                      popover={<Text>e.g. My Birthday</Text>}
-                      backgroundColor="#F5CF87"
-                      withOverlay={false}>
-                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
-                    </Tooltip>
-                  </View>
-                    <View style={styles.radioBtnView}>
-                      <Text style={{fontSize: 18, marginBottom: 10}}>Select the status of your event</Text>
-                      <RadioButton.Group onValueChange={newValue => setStatus(newValue)} value={status}>
-                        <RadioButton.Item label="Public" value="public" />
-                        <RadioButton.Item label="Private" value="private" />
-                      </RadioButton.Group>
-                    </View>
+                  <View style={styles.inputContainer}>
                     <View style={styles.inputView}>
                       <TextInput
                         style={styles.input}
-                        placeholder="Event's type"
-                        onChangeText={(type) => setType(type)}
+                        placeholder="Event's name"
+                        onChangeText={(name) => setName(name)}
                       />
                       <Tooltip
-                        popover={<Text>e.g. Birthday</Text>}
+                        popover={<Text>e.g. My Birthday</Text>}
                         backgroundColor="#F5CF87"
                         withOverlay={false}>
-                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
+                        <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
-                    <View style={styles.inputView}>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Event's location"
-                        onChangeText={(location) => setLocation(location)}
-                      />
-                      <Tooltip
-                        popover={<Text>e.g. Magyarország, Budapest</Text>}
-                        backgroundColor="#F5CF87"
-                        withOverlay={false}
-                        width={210}>
-                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
-                      </Tooltip>
-                    </View>
-                    <View style={styles.inputView}>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Event's street"
-                        onChangeText={(street) => setStreet(street)}
-                      />
-                      <Tooltip
-                        popover={<Text>e.g. Margit híd</Text>}
-                        backgroundColor="#F5CF87"
-                        withOverlay={false}>
-                      <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
-                      </Tooltip>
-                    </View>
-                      <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
-                      {openStart && (
-                        <DateTimePicker
-                          testID="dateTimePicker"
-                          value={start}
-                          mode={'datetime'}
-                          is24Hour={true}
-                          display="default"
-                          onChange={onChangeStart}
-                        />
-                      )}
-                      <Button onPress={() => setOpenDeadline(true)} title="Pick the deadline of event" />
-                      {openDeadline && (
-                        <DateTimePicker
-                          testID="dateTimePicker"
-                          value={deadline}
-                          mode={'datetime'}
-                          is24Hour={true}
-                          display="default"
-                          onChange={onChangeDeadline}
-                        />
-                      )}
-                  </View>
-                  <View style={styles.giftContainer}>
-                    <Button title="Add Gift" onPress={addInputField} />
-                    {inputFields.map((value, index) => (
-                      <Card key={index} containerStyle={{ padding: 10}}>
+                      <View style={styles.radioBtnView}>
+                        <Text style={{fontSize: 18, marginBottom: 10}}>Select the status of your event</Text>
+                        <RadioButton.Group onValueChange={newValue => setStatus(newValue)} value={status}>
+                          <RadioButton.Item label="Public" value="public" />
+                          <RadioButton.Item label="Private" value="private" />
+                        </RadioButton.Group>
+                      </View>
+                      <View style={styles.inputView}>
                         <TextInput
-                          placeholder={`Gift ${index + 1}`}
-                          value={value}
-                          onChangeText={(text) => {
-                            const updatedFields = [...inputFields];
-                            updatedFields[index] = text;
-                            setInputFields(updatedFields);
-
-                            const updatedGifts = [...gifts];
-                            updatedGifts[index] = text;
-                            setGifts(updatedGifts);
-                          }}
+                          style={styles.input}
+                          placeholder="Event's type"
+                          onChangeText={(type) => setType(type)}
                         />
-                        <Button title="Remove gift" color="#D77165" onPress={() => removeInputField(index)} />
-                      </Card>
-                    ))}
-                  </View>
-              </View>
-              <View style={styles.createButton}>
-                <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
-                <Image source={require('../assets/images/createEventArrow.png')} style={{width: 18, height: 18}} />
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
+                        <Tooltip
+                          popover={<Text>e.g. Birthday</Text>}
+                          backgroundColor="#F5CF87"
+                          withOverlay={false}>
+                        <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
+                        </Tooltip>
+                      </View>
+                      <View style={styles.inputView}>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="Event's location"
+                          onChangeText={(location) => setLocation(location)}
+                        />
+                        <Tooltip
+                          popover={<Text>e.g. Magyarország, Budapest</Text>}
+                          backgroundColor="#F5CF87"
+                          withOverlay={false}
+                          width={210}>
+                        <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
+                        </Tooltip>
+                      </View>
+                      <View style={styles.inputView}>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="Event's street"
+                          onChangeText={(street) => setStreet(street)}
+                        />
+                        <Tooltip
+                          popover={<Text>e.g. Margit híd</Text>}
+                          backgroundColor="#F5CF87"
+                          withOverlay={false}>
+                        <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
+                        </Tooltip>
+                      </View>
+                        <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
+                        {openStart && (
+                          <DateTimePicker
+                            testID="dateTimePicker"
+                            value={start}
+                            mode={'datetime'}
+                            is24Hour={true}
+                            display="default"
+                            onChange={onChangeStart}
+                          />
+                        )}
+                        <Button onPress={() => setOpenDeadline(true)} title="Pick the deadline of event" />
+                        {openDeadline && (
+                          <DateTimePicker
+                            testID="dateTimePicker"
+                            value={deadline}
+                            mode={'datetime'}
+                            is24Hour={true}
+                            display="default"
+                            onChange={onChangeDeadline}
+                          />
+                        )}
+                    </View>
+                    <View style={styles.giftContainer}>
+                      <Button title="Add Gift" onPress={addInputField} />
+                      {inputFields.map((value, index) => (
+                        <Card key={index} containerStyle={{ padding: 10}}>
+                          <TextInput
+                            placeholder={`Gift ${index + 1}`}
+                            value={value}
+                            onChangeText={(text) => {
+                              const updatedFields = [...inputFields];
+                              updatedFields[index] = text;
+                              setInputFields(updatedFields);
+
+                              const updatedGifts = [...gifts];
+                              updatedGifts[index] = text;
+                              setGifts(updatedGifts);
+                            }}
+                          />
+                          <Button title="Remove gift" color="#D77165" onPress={() => removeInputField(index)} />
+                        </Card>
+                      ))}
+                    </View>
+                </View>
+                <View style={styles.createButton}>
+                  <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
+                  <Image source={require('../assets/images/createEventArrow.png')} style={{width: 18, height: 18}} />
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
+            {isConnected === false ? (
+              <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </View>
     );
   };

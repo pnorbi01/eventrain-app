@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, SafeAreaView, TouchableOpacity, FlatList
 import { useFocusEffect } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import Moment from 'moment';
+import CheckInternet from './CheckInternet';
 
 
 const seperator = () => {
@@ -22,6 +23,7 @@ const Notifications = ({route, navigation}) => {
     const [modalUsername, setModalUsername] = useState('');
     const [modalLevel, setModalLevel] = useState('');
     const [modalRegisteredAt, setModalRegisteredAt] = useState('');
+    const [isConnected, setIsConnected] = useState(false);
     Moment.locale('en');
 
 
@@ -150,6 +152,9 @@ const Notifications = ({route, navigation}) => {
                     </View>
                 </View>
             </Modal>
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };
