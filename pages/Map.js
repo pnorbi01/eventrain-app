@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, View, Text, Image } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { StyleSheet, SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
 import CheckInternet from './CheckInternet';
@@ -10,10 +10,11 @@ const Map = ({route, navigation}) => {
     const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
     const [isConnected, setIsConnected] = useState(false);
     const [message, setMessage] = useState('');
+    const map = useRef(null);
 
     useFocusEffect(
         React.useCallback(() => {
-          getLocationFromName(location + "," + street);
+            getLocationFromName(location + "," + street);
         }, [])
     );
 
@@ -38,6 +39,15 @@ const Map = ({route, navigation}) => {
         })
     };
 
+    const zoomInToMarker = () => {
+        map?.current?.animateToRegion({
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+        });
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.mapContainer}>
@@ -51,9 +61,14 @@ const Map = ({route, navigation}) => {
                     <Text style={{ textAlign: 'left', left: 5 }}>{message}</Text>
                 </View>
             )}
-            <MapView style={{ width: '90%', height: '60%', borderRadius: 20}}>
+            <MapView ref={map} style={{ width: '90%', height: '60%', borderRadius: 20}}>
                 <Marker coordinate={coordinates} title={location + ", " + street} />
             </MapView>
+            {message === '' && (
+                <TouchableOpacity style={styles.zoom} onPress={zoomInToMarker} >
+                    <Text style={{color: '#FFF', fontWeight: '600'}}>Zoom into Marker</Text>
+                </TouchableOpacity>
+            )}
             {isConnected === false ? (
             <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
             ) : null }
@@ -96,6 +111,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5CF87',
         borderRadius: 25,
         marginBottom: 10
+    },
+
+    zoom: {
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
+        marginTop: 20,
+        borderWidth: 1,
+        borderRadius: 50,
+        borderColor: '#00B0FF',
+        backgroundColor: '#00B0FF'
     }
   
 });
