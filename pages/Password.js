@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, Button } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, Image, TextInput, Button, TouchableOpacity } from 'react-native';
 import CheckInternet from './CheckInternet';
 
 const Password = ({route, navigation}) => {
@@ -137,8 +137,10 @@ const Password = ({route, navigation}) => {
                 secureTextEntry={true}
                 onChangeText={(newPassword) => setNewPassword(newPassword)}
                 />
-                <Button onPress={() => changePassword()} title="Change my password" />
-                {message}
+                <TouchableOpacity onPress={() => changePassword()}>
+                    <Text style={{color: '#00B0FF', fontSize: 18}}>Change my password</Text>
+                </TouchableOpacity>
+                <Text>{message}</Text>
             </View>
             {isConnected === false ? (
             <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />

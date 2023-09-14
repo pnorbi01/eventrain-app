@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Dimensions, TextInput, ActivityIndicator, Image, SafeAreaView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
 import CheckInternet from './CheckInternet';
+
+const { width } = Dimensions.get('window');
 
 const Identification = ({ route, navigation }) => {
     const { token } = route.params;
@@ -89,34 +91,42 @@ const Identification = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.tokenContainer}>
-                <Image source={require('../assets/images/identify.png')} style={{ width: 100, height: 100 }} />
-            </View>
-            <View style={styles.tokenValidation}>
-                <View style={styles.noteText}>
-                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
-                    <Text style={{ textAlign: 'left', left: 5 }}>You have to identify yourself with unique token, before you make changes on your password!</Text>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <View style={styles.tokenContainer}>
+                    <Image source={require('../assets/images/identify.png')} style={{ width: 100, height: 100 }} />
                 </View>
-                <Text style={{ textAlign: 'center', fontWeight: '300', width: '80%' }}>Please enter your unique token below. If you do not know your token, please go to Token tab and check it!</Text>
-                <TextInput
-                style={styles.input}
-                placeholder="Unique Token"
-                defaultValue={specifiedToken}
-                onChangeText={(specifiedToken) => setSpecifiedToken(specifiedToken)}
-                />
-                {loading ? (
-                <ActivityIndicator
-                    visible={loading}
-                    textContent={'Loading...'}
-                    textStyle={styles.spinnerTextStyle}
-                    size='large'
-                    multiline={true}
-                />
-                ) : (
-                <Button onPress={() => identification()} title="Identify" />
-                )}
-            </View>
-            {message}
+                <View style={styles.tokenValidation}>
+                    <View style={styles.noteText}>
+                        <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
+                        <Text style={{ textAlign: 'left', left: 5 }}>You have to identify yourself with unique token, before you make changes on your password!</Text>
+                    </View>
+                    <View style={styles.helpView}>
+                      <Text style={{ textAlign: 'center', fontWeight: '300', width: '80%'}}>Please enter your unique token below. If you do not know your token, please go to Token tab and check it!</Text>
+                    </View>
+                    <TextInput
+                    style={styles.input}
+                    placeholder="Unique Token"
+                    defaultValue={specifiedToken}
+                    onChangeText={(specifiedToken) => setSpecifiedToken(specifiedToken)}
+                    />
+                    {loading ? (
+                    <ActivityIndicator
+                        visible={loading}
+                        textContent={'Loading...'}
+                        textStyle={styles.spinnerTextStyle}
+                        size='large'
+                        multiline={true}
+                    />
+                    ) : (
+                    <TouchableOpacity onPress={() => identification()}>
+                      <Text style={{color: '#00B0FF', fontSize: 18}}>Identify</Text>
+                    </TouchableOpacity>
+                    )}
+                </View>
+              {message}
+              </ScrollView>
+            </KeyboardAvoidingView>
             {isConnected === false ? (
               <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
             ) : null }
@@ -136,10 +146,25 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start'
     },
 
+    scrollView: {
+      flexGrow: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      width
+  },
+
     tokenContainer: {
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+
+    helpView: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
 
     tokenValidation: {

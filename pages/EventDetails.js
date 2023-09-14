@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5CF87',
         borderRadius: 25,
         marginBottom: 10,
-        marginTop: 10
+        marginTop: 30
     },
 
     titleView: {

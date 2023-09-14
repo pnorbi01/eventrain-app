@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Button, TextInput, ActivityIndicator, Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ActivityIndicator, KeyboardAvoidingView, Dimensions, ScrollView, Image, SafeAreaView, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-root-toast';
 import * as Clipboard from 'expo-clipboard';
 import CustomToast from '../components/CustomToast';
 import CheckInternet from './CheckInternet';
+
+const { width } = Dimensions.get('window');
 
 const Token = ({ route, navigation }) => {
     const { token } = route.params;
@@ -115,40 +117,46 @@ const Token = ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.tokenContainer}>
-                <Image source={require('../assets/images/token.png')} style={{ width: 100, height: 100, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }} />
-            </View>
-            <View style={styles.tokenValidation}>
-                <View style={styles.noteText}>
-                    <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
-                    <Text style={{ textAlign: 'left', left: 5 }}>Note that, if you logout once the token will be deleted, and you will get a new one on your next login!</Text>
-                </View>
-                <Text style={{ textAlign: 'center', fontWeight: '300' }}>Please enter your password to be able to see your current token.</Text>
-                <TextInput
-                style={styles.input}
-                placeholder="Password"
-                defaultValue={password}
-                secureTextEntry={true}
-                onChangeText={(password) => setPassword(password)}
-                />
-                {loading ? (
-                <ActivityIndicator
-                    visible={loading}
-                    textContent={'Loading...'}
-                    textStyle={styles.spinnerTextStyle}
-                    size='large'
-                />
-                ) : (
-                <Button onPress={() => checkToken()} title="Show my token" />
-                )}
-                {displayedToken ? (
-                    <TouchableOpacity style={styles.tokenView} onPress={() => copyToClipboard()}>
-                        <Text style={styles.tokenText}>{displayedToken}</Text>
-                        <Text style={styles.tokenInfo}>Copy your token by tapping on it.</Text>
-                    </TouchableOpacity>
-                ) : null}
-            </View>
-            <Text>{message}</Text>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    <View style={styles.tokenContainer}>
+                        <Image source={require('../assets/images/token.png')} style={{ width: 100, height: 100, shadowColor: '#171717', shadowOffset: {width: -2, height: 7}, shadowOpacity: 0.2, shadowRadius: 3 }} />
+                    </View>
+                    <View style={styles.tokenValidation}>
+                        <View style={styles.noteText}>
+                            <Image source={require('../assets/images/note.png')} style={{ width: 35, height: 35 }} />
+                            <Text style={{ textAlign: 'left', left: 5 }}>Note that, if you logout once the token will be deleted, and you will get a new one on your next login!</Text>
+                        </View>
+                        <Text style={{ textAlign: 'center', fontWeight: '300' }}>Please enter your password to be able to see your current token.</Text>
+                        <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        defaultValue={password}
+                        secureTextEntry={true}
+                        onChangeText={(password) => setPassword(password)}
+                        />
+                        {loading ? (
+                        <ActivityIndicator
+                            visible={loading}
+                            textContent={'Loading...'}
+                            textStyle={styles.spinnerTextStyle}
+                            size='large'
+                        />
+                        ) : (
+                        <TouchableOpacity onPress={() => checkToken()}>
+                            <Text style={{color: '#00B0FF', fontSize: 18}}>Show my token</Text>
+                        </TouchableOpacity>
+                        )}
+                        {displayedToken ? (
+                            <TouchableOpacity style={styles.tokenView} onPress={() => copyToClipboard()}>
+                                <Text style={styles.tokenText}>{displayedToken}</Text>
+                                <Text style={styles.tokenInfo}>Copy your token by tapping on it.</Text>
+                            </TouchableOpacity>
+                        ) : null}
+                    </View>
+                    <Text>{message}</Text>
+                </ScrollView>
+            </KeyboardAvoidingView>
             {isConnected === false ? (
             <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
             ) : null }
@@ -166,6 +174,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start'
+    },
+
+    scrollView: {
+        flexGrow: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width
     },
 
     tokenContainer: {

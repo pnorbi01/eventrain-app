@@ -167,7 +167,7 @@ const InvitationDetail = ({route, navigation}) => {
                 </View>
             </View>
         </View>
-        <View style={styles.accountDetails}>
+        <View style={styles.cards}>
             <View style={styles.datas}>
                 <Text style={styles.data}>My Station</Text>
                 {data.length > 0 && <Text style={styles.value}>{data[0].status}</Text>}
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
         color: '#A9A9A9'
     },
 
-    accountDetails: {
+    cards: {
         display: 'flex', 
         flexDirection: 'column', 
         justifyContent: 'center', 

@@ -76,7 +76,7 @@ const Profile = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.profileContainer}>
                 <Image source={{ uri: 'https://printf.stud.vts.su.ac.rs/EventRain/assets/images/profile-pictures/'+image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-                <Text style={{fontWeight: 'bold', fontSize: 17, paddingTop: 10}}>{username}</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 17}}>{username}</Text>
             </View>
             <TouchableOpacity style={styles.profileBtnContainer} onPress={() => navigation.navigate("Notifications", { token: token, email: email })}>
                 <View style={styles.profileBtnView}>
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     },
 
     profileContainer: {
+        marginTop: 10,
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',

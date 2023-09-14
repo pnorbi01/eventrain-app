@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, Image, TouchableOpacity, Dimensions, FlatList, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import CheckInternet from './CheckInternet';
+
+const { width } = Dimensions.get('window');
 
 const Gifts = ({route, navigation}) => {
 
@@ -124,23 +126,23 @@ const Gifts = ({route, navigation}) => {
                 </View>
             </View>
             <Text>{message}</Text>
-                {data.numberOfGifts === 0 ? (
-                <View style={styles.noDataContainer}>
-                    <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
-                    <Text style={styles.noDataText}>The owner has not given any gifts!</Text>
-                </View>
-                ) : (
-                    <FlatList
-                        style={styles.giftFlatList}
-                        data={data.gifts}
-                        renderItem={({item}) => (
-                            <GiftCards item={item} />
-                    )}
-                    />
+            {data.numberOfGifts === 0 ? (
+            <View style={styles.noDataContainer}>
+                <Image source={require('../assets/images/noGifts.png')} style={{width: 80, height: 80}}/>
+                <Text style={styles.noDataText}>The owner has not given any gifts!</Text>
+            </View>
+            ) : (
+                <FlatList
+                    style={styles.giftFlatList}
+                    data={data.gifts}
+                    renderItem={({item}) => (
+                        <GiftCards item={item} />
                 )}
-                {isConnected === false ? (
-                <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
-                ) : null }
+                />
+            )}
+            {isConnected === false ? (
+            <CheckInternet isConnected={isConnected} setIsConnected={setIsConnected} />
+            ) : null }
         </SafeAreaView>
   );
 };
@@ -249,7 +251,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 10,
         backgroundColor: '#D77165',
-        borderRadius: 20
+        borderRadius: 20,
+        flexShrink: 1,
+        width: width
     },
 
     wishlistInformation: {

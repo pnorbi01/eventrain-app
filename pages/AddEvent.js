@@ -1,6 +1,6 @@
 import React,  { useState, } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, Button, TextInput, Image, ScrollView, Dimensions, KeyboardAvoidingView, TouchableOpacity, Platform } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { Card, Tooltip } from 'react-native-elements';
 import CheckInternet from './CheckInternet';
@@ -113,7 +113,7 @@ const AddEvent = ({route, navigation}) => {
 
     return (
       <View style={styles.container}>
-          <KeyboardAvoidingView style={{ flexGrow: 1, flexDirection: 'column',justifyContent: 'center',}} behavior="padding" enabled keyboardVerticalOffset={1}>
+          <KeyboardAvoidingView  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <ScrollView contentContainerStyle={styles.scrollView}>
               <View style={styles.createEventPageView}>
                 <View style={styles.createEventView}>
@@ -133,7 +133,9 @@ const AddEvent = ({route, navigation}) => {
                       <Tooltip
                         popover={<Text>e.g. My Birthday</Text>}
                         backgroundColor="#F5CF87"
-                        withOverlay={false}>
+                        withOverlay={false}
+                        width={200}
+                        height={60}>
                         <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                       </Tooltip>
                     </View>
@@ -153,7 +155,9 @@ const AddEvent = ({route, navigation}) => {
                         <Tooltip
                           popover={<Text>e.g. Birthday</Text>}
                           backgroundColor="#F5CF87"
-                          withOverlay={false}>
+                          withOverlay={false}
+                          width={200}
+                          height={60}>
                         <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                         </Tooltip>
                       </View>
@@ -164,10 +168,11 @@ const AddEvent = ({route, navigation}) => {
                           onChangeText={(location) => setLocation(location)}
                         />
                         <Tooltip
-                          popover={<Text>e.g. Magyarország, Budapest</Text>}
+                          popover={<Text>e.g. Hungary, Budapest</Text>}
                           backgroundColor="#F5CF87"
                           withOverlay={false}
-                          width={210}>
+                          width={250}
+                          height={60}>
                         <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                         </Tooltip>
                       </View>
@@ -178,13 +183,17 @@ const AddEvent = ({route, navigation}) => {
                           onChangeText={(street) => setStreet(street)}
                         />
                         <Tooltip
-                          popover={<Text>e.g. Margit híd</Text>}
+                          popover={<Text>e.g. Margit bridge</Text>}
                           backgroundColor="#F5CF87"
-                          withOverlay={false}>
+                          withOverlay={false}
+                          width={200}
+                          height={60}>
                         <Image source={require('../assets/images/info.png')} style={{ width: 23, height: 23 }} />
                         </Tooltip>
                       </View>
-                        <Button onPress={() => setOpenStart(true)} title="Pick the start date of event" />
+                      <TouchableOpacity onPress={() => setOpenStart(true)} style={styles.datePickerView}>
+                        <Text style={{color: '#00B0FF', fontSize: 18}}>Pick the start date of event</Text>
+                      </TouchableOpacity>
                         {openStart && (
                           <DateTimePicker
                             testID="dateTimePicker"
@@ -195,7 +204,9 @@ const AddEvent = ({route, navigation}) => {
                             onChange={onChangeStart}
                           />
                         )}
-                        <Button onPress={() => setOpenDeadline(true)} title="Pick the deadline of event" />
+                        <TouchableOpacity onPress={() => setOpenDeadline(true)} style={styles.datePickerView}>
+                          <Text style={{color: '#00B0FF', fontSize: 18}}>Pick the deadline of event</Text>
+                        </TouchableOpacity>
                         {openDeadline && (
                           <DateTimePicker
                             testID="dateTimePicker"
@@ -208,7 +219,11 @@ const AddEvent = ({route, navigation}) => {
                         )}
                     </View>
                     <View style={styles.giftContainer}>
-                      <Button title="Add Gift" onPress={addInputField} />
+                      <TouchableOpacity onPress={addInputField}>
+                            <Text style={{ color: '#00B0FF', fontSize: 18}}>
+                              Add New Gift
+                            </Text>
+                      </TouchableOpacity>
                       {inputFields.map((value, index) => (
                         <Card key={index} containerStyle={{ padding: 10}}>
                           <TextInput
@@ -224,15 +239,20 @@ const AddEvent = ({route, navigation}) => {
                               setGifts(updatedGifts);
                             }}
                           />
-                          <Button title="Remove gift" color="#D77165" onPress={() => removeInputField(index)} />
+                          <TouchableOpacity onPress={() => removeInputField(index)}>
+                            <Text style={{ color: '#D77165', fontSize: 18}}>
+                              Remove gift
+                            </Text>
+                          </TouchableOpacity>
                         </Card>
                       ))}
                     </View>
                 </View>
-                <View style={styles.createButton}>
-                  <Button onPress={() => add()} title="Create event" color={'#699F4C'} />
-                  <Image source={require('../assets/images/createEventArrow.png')} style={{width: 18, height: 18}} />
-                </View>
+                <TouchableOpacity style={styles.createButton} onPress={() => add()}>
+                  <Text style={{ color: '#699F4C', fontSize: 18}}>
+                    Create event
+                  </Text>
+              </TouchableOpacity>
               </ScrollView>
             </KeyboardAvoidingView>
             {isConnected === false ? (
@@ -256,6 +276,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width
+  },
+
+  datePickerView: {
+    paddingLeft: 13,
+    paddingBottom: 5
   },
 
   createEventView: {
