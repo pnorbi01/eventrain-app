@@ -19,7 +19,7 @@ const Map = ({route, navigation}) => {
     );
 
     const getLocationFromName = async (name) => {
-        await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(name)}&apiKey=2d884d75579c41d697d23a9d49ec1d3c`, {
+        await fetch(`https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(name)}&apiKey=apiKey`, {
             method: 'GET'
         }).then(response => {
             if(response.ok) {
